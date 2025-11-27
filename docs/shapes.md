@@ -1,4 +1,4 @@
-# Shapes and layout
+# Data representation
 
 ## Structure of an XLA Op
 
