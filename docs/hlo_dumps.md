@@ -233,7 +233,7 @@ It's useful in cases where you have one format, but need the other for
 debugging.
 
 Learn to use it:
-[XLA Tooling documentation: hlo-opt](tools.md#hlo-opt-convert-hlo-module-formats).
+[XLA Tooling documentation: hlo-opt](tools.md#hlo-opt_convert_hlo_module_formats).
 
 ### Replay
 
