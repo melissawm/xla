@@ -17,21 +17,26 @@ the accelerator’s HBM for the requested operation. These operations are
 typically user initiated buffer allocations via
 [`jax.device_put`](https://docs.jax.dev/en/latest/_autosummary/jax.device_put.html)
 or allocations for program outputs. These failures stem from a couple of
-reasons: - Out of Memory (OOM) - The user is trying to allocate a chunk of
-memory that is larger than the total amount of free memory available on the
-TPU’s HBM. - Memory Fragmentation - The allocation fails because **no single
-contiguous free block** in the memory space is large enough to satisfy the
-requested size. The total amount of free memory is sufficient for the
-allocation, but it is scattered across the memory space in small, non-contiguous
-blocks.
+reasons:
+
+- Out of Memory (OOM)
+  - The user is trying to allocate a chunk of memory that is larger than the
+  total amount of free memory available on the TPU’s HBM.
+- Memory Fragmentation
+  - The allocation fails because **no single contiguous free block** in the
+  memory space is large enough to satisfy the requested size. The total amount
+  of free memory is sufficient for the allocation, but it is scattered across
+  the memory space in small, non-contiguous blocks.
 
 The TPU runtime has a number of mechanisms in-place to retry allocation failures
-including: - If there are queued deallocations, the runtime retries failed
-allocations, - On OOMs caused by a fragmentation the runtime can automatically
-trigger a defragmentation and a retry. - The TPU runtime prioritizes buffer
-allocations over keeping programs loaded. If a buffer allocation fails due to
-insufficient HBM, the system will evict loaded TPU programs until enough memory
-is available for the buffer.
+including:
+
+- If there are queued deallocations, the runtime retries failed allocations,
+- On OOMs caused by a fragmentation the runtime can automatically trigger a
+  defragmentation and a retry.
+- The TPU runtime prioritizes buffer allocations over keeping programs loaded.
+  If a buffer allocation fails due to insufficient HBM, the system will evict
+  loaded TPU programs until enough memory is available for the buffer.
 
 So an error encountered after the above mitigations typically require user
 action.

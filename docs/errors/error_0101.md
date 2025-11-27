@@ -14,12 +14,15 @@ XlaRuntimeError: RESOURCE_EXHAUSTED: Error loading program 'jit_embedding_pipeli
 
 This error indicates that the XLA runtime on a TPU device failed to load a
 compiled XLA program executable into the TPU's HBM. It typically occurs for one
-of the following reasons: - Program Size Exceeds Available HBM: The compiled XLA
-program, including its instructions, static data, and any embedded constants, is
-larger than the total amount of free HBM currently available on the specific TPU
-core(s) where the program is being loaded. - HBM Fragmentation: While the total
-free HBM on the device might be sufficient in aggregate, it is not available in
-a single, contiguous block large enough to fit the entire program.
+of the following reasons:
+
+- Program Size Exceeds Available HBM: The compiled XLA program, including its
+  instructions, static data, and any embedded constants, is larger than the
+  total amount of free HBM currently available on the specific TPU core(s) where
+  the program is being loaded.
+- HBM Fragmentation: While the total free HBM on the device might be sufficient
+  in aggregate, it is not available in a single, contiguous block large enough
+  to fit the entire program.
 
 It's important to understand how the TPU runtime prioritizes memory. Buffer
 allocations are privileged over loaded programs. If a buffer allocation fails,
