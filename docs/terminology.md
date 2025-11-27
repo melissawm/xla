@@ -1,4 +1,4 @@
-# XLA Terminology
+# Terminology
 
 There are several terms that are used in the context of XLA, MLIR, LLVM, and
 other related technologies. Below is a partial list of these terms and their

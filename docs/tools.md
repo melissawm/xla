@@ -1,4 +1,4 @@
-# XLA Tooling
+# Tooling
 
 The XLA development workflow is usually centered around
 [HLO](./operation_semantics) IR, which represents isolated functional
