@@ -1,4 +1,4 @@
-# Shapes and layout
+# Data representation
 
 The XLA `ShapeProto` proto
 ([xla_data.proto](https://github.com/openxla/xla/tree/main/xla/xla_data.proto))
