@@ -1,0 +1,99 @@
+root: index
+parts:
+  - caption: Getting started
+    # These should be in alphabetical order unless otherwise noted.
+    chapters:
+    # This is the default tab for the Getting started section.
+    - title: Overview
+      file: index
+    - title: Operation semantics
+      file: operation_semantics
+    - title: XLA architecture
+      file: architecture
+    - title: XLA terminology
+      file: terminology
+    - title: HLO to Thunks
+      file: hlo_to_thunks
+  - caption: Developer details
+    # These should be in alphabetical order unless otherwise noted.
+    chapters:
+    - title: Aliasing
+      file: aliasing
+    - title: Async HLO instructions
+      file: async_ops
+    - title: Broadcasting
+      file: broadcasting
+    - title: Copybara quirks
+      file: copybara
+    - title: Determinism
+      file: determinism
+    - title: Effort Levels
+      file: effort_levels
+    - title: Emitters
+      file: emitters
+    - title: Error Codes
+      file: error_codes
+    - title: Errors Overview
+      file: errors_overview
+    - title: Hermetic CUDA overview
+      file: hermetic_cuda
+    - title: Indexing Analysis
+      file: indexing
+    - title: LHS Cost Model
+      file: lhs_cost_model
+    - title: Multi-host HLO runner
+      file: tools_multihost_hlo_runner
+    - title: Persisted autotuning
+      file: persisted_autotuning
+    - title: Shapes and layout
+      file: shapes
+    - title: SparseCore
+      file: sparsecore
+    - title: Testing HLO passes
+      file: test_hlo_passes
+    - title: Tiled layout
+      file: tiled_layout
+    - title: Using LSP autocompletion
+      file: lsp
+    - title: Writing custom calls
+      file: custom_call
+    - title: XLA Flags guidance
+      file: flags_guidance
+    - title: XLA Tooling
+      file: tools
+  - caption: Debugging
+    chapters:
+    # This is the default tab for the Debugging section.
+    - title: Dump HLO Computations
+      file: hlo_dumps
+  - caption: Contributing
+    # These should be in alphabetical order unless otherwise noted.
+    chapters:
+    # This is the default tab for the Contributing section.
+    - title: Contributing
+      file: contributing
+    - title: Build from source
+      file: build_from_source
+    - title: Develop a new backend for XLA
+      file: developing_new_backend
+    - title: Developer guide
+      file: developer_guide
+  - caption: PJRT Plugins
+    chapters:
+    - title: Develop a new PJRT plugin
+      file: pjrt_integration
+    - title: PJRT C++ API Overview
+      file: cpp_api_overview
+    - title: PJRT Examples
+      file: examples
+  - caption: Using XLA in TensorFlow
+    # These should be in alphabetical order unless otherwise noted.
+    chapters:
+    - title: Using XLA in TensorFlow
+      file: tf2xla
+    - title: Use tfcompile
+      file: tfcompile
+    - title: Autoclustering tutorial
+      file: tutorials/autoclustering_xla
+    - title: Use XLA with tf.function
+      file: tutorials/jit_compile
