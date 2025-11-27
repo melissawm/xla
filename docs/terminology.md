@@ -66,3 +66,9 @@ definitions.
         have
         [LLVM IR emitters](https://github.com/openxla/xla/tree/main/xla/service/llvm_ir)
         for targeting specific hardware.
+-   **Thunk**
+    -   In XLA, a [Thunk](hlo_to_thunks.md) is an abstraction of a
+        self-contained unit of work that the runtime executes. It might be a
+        compiled kernel launch, specific operation, library call, control-flow
+        construct, collective communication, and so on. A _Thunk Sequence_
+        represents the entire executable for a specific backend.
