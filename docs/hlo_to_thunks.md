@@ -12,7 +12,7 @@ We start with pre-optimization HLO module. Pre-optimization HLO does not contain
 operations (*ops*) that are considered internal to XLA, such as `fusion` or
 `bitcast`. Ops don't have a layout at this stage, or if they do, it will be
 ignored. Pre-optimization HLO is usually produced by higher-level frameworks
-like TensorFlow and JAX. When using the XLA flag `-xla_dump_to`, the
+like TensorFlow and JAX. When using the XLA flag `--xla_dump_to`, the
 pre-optimization HLO is dumped to a file with file name suffix
 “before_optimizations.txt”.
 
@@ -116,10 +116,10 @@ Finally we run `CopyInsertion` where copies are added to ensure that in-place
 operations don't overwrite data that is still needed elsewhere.
 
 At the end of optimization, the optimized HLO is dumped if using the flag
-`-xla_dump_to` to a file that has the file name suffix
+`--xla_dump_to` to a file that has the file name suffix
 "after_optimizations.txt". If you want to dump the HLO after intermediate
 passes that actually change the HloModule, you can use the flag
-`-xla_dump_hlo_pass_re=.*` (or a specific regular expression to restrict it to
+`--xla_dump_hlo_pass_re=.*` (or a specific regular expression to restrict it to
 certain passes).
 
 ## Scheduling
