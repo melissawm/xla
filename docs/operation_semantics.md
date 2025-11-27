@@ -1860,9 +1860,9 @@ batch_group_count, precision_config, preferred_element_type)`**
 
 Increasing levels of controls are available for `Conv`:
 
--   [ConvWithGeneralPadding](#ConvWithGeneralPadding)
--   [ConvWithGeneralDimensions](#ConvWithGeneralDimensions)
--   [ConvGeneral](#ConvGeneral)
+-   [ConvWithGeneralPadding](#convwithgeneralpadding)
+-   [ConvWithGeneralDimensions](#convwithgeneraldimensions)
+-   [ConvGeneral](#convgeneral)
 -   [ConvGeneralDilated](#convgeneraldilated)
 
 Let n be the number of spatial dimensions. The `lhs` argument is an

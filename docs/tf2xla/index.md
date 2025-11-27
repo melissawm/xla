@@ -157,7 +157,7 @@ After the dumping is performed, you can find the following files in
 `/tmp/generated`:
 
 -   `module_XXXX.*_optimizations.txt` Generated
-    [XLA programs](./operation_semantics.md), one per each compiled cluster.
+    [XLA programs](../operation_semantics.md), one per each compiled cluster.
     Attaching those when submitting XLA bug reports is extremely helpful!
 
 -   `module_XXXX.ir-*.ll` Generated files in
