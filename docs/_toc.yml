@@ -1,4 +1,5 @@
-root: index
+root: newindex
+format: jb-book
 parts:
   - caption: Getting started
     # These should be in alphabetical order unless otherwise noted.
@@ -6,94 +7,103 @@ parts:
     # This is the default tab for the Getting started section.
     - title: Overview
       file: index
-    - title: Operation semantics
-      file: operation_semantics
     - title: XLA architecture
       file: architecture
-    - title: XLA terminology
+    - title: Terminology
       file: terminology
-    - title: HLO to Thunks
+    - title: Tooling
+      file: tools
+    - title: From HLO to Thunks
       file: hlo_to_thunks
-  - caption: Developer details
+  - caption: Advanced topics
     # These should be in alphabetical order unless otherwise noted.
     chapters:
+    - title: Operation semantics
+      file: operation_semantics
+    - title: Data representation
+      file: shapes
+      sections:
+        - file: broadcasting
+        - file: indexing
+        - file: tiled_layout
+    - title: Performance
+      file: performance
+      sections:
+        - title: LHS Cost Model
+          file: lhs_cost_model
+        - title: Effort Levels
+          file: effort_levels
+    - title: XLA:GPU
+      file: xla_gpu
+      sections:
+        - title: XLA:GPU Architecture Overview
+          file: gpu_architecture
+        - file: emitters
+        - file: persisted_autotuning
+        - title: Multi-host HLO runner
+          file: tools_multihost_hlo_runner
+    - title: Determinism
+      file: determinism
     - title: Aliasing
       file: aliasing
     - title: Async HLO instructions
       file: async_ops
-    - title: Broadcasting
-      file: broadcasting
-    - title: Copybara quirks
-      file: copybara
-    - title: Determinism
-      file: determinism
-    - title: Effort Levels
-      file: effort_levels
-    - title: Emitters
-      file: emitters
-    - title: Error Codes
-      file: error_codes
-    - title: Errors Overview
-      file: errors_overview
-    - title: Hermetic CUDA overview
-      file: hermetic_cuda
-    - title: Indexing Analysis
-      file: indexing
-    - title: LHS Cost Model
-      file: lhs_cost_model
-    - title: Multi-host HLO runner
-      file: tools_multihost_hlo_runner
-    - title: Persisted autotuning
-      file: persisted_autotuning
-    - title: Shapes and layout
-      file: shapes
-    - title: SparseCore
-      file: sparsecore
-    - title: Testing HLO passes
-      file: test_hlo_passes
-    - title: Tiled layout
-      file: tiled_layout
-    - title: Using LSP autocompletion
-      file: lsp
     - title: Writing custom calls
       file: custom_call
-    - title: XLA Flags guidance
-      file: flags_guidance
-    - title: XLA Tooling
-      file: tools
+    - title: SparseCore
+      file: sparsecore
+    - title: Using LSP autocompletion
+      file: lsp
   - caption: Debugging
     chapters:
     # This is the default tab for the Debugging section.
     - title: Dump HLO Computations
       file: hlo_dumps
+    - title: Errors Overview
+      file: errors_overview
+    - title: Error Codes
+      file: error_codes
+      sections:
+      - file: errors/error_0100
+      - file: errors/error_0101
+      - file: errors/error_0102
+  - caption: Reference
+    chapters:
+    - title: XLA Flags guidance
+      file: flags_guidance
+    - title: HLO Passes
+      file: hlo_passes
+    - title: Testing HLO passes
+      file: test_hlo_passes
   - caption: Contributing
     # These should be in alphabetical order unless otherwise noted.
     chapters:
     # This is the default tab for the Contributing section.
     - title: Contributing
       file: contributing
+    - title: Developer guide
+      file: developer_guide
     - title: Build from source
       file: build_from_source
     - title: Develop a new backend for XLA
       file: developing_new_backend
-    - title: Developer guide
-      file: developer_guide
+    - title: Copybara quirks
+      file: copybara
   - caption: PJRT Plugins
     chapters:
+    - file: pjrt/index
     - title: Develop a new PJRT plugin
-      file: pjrt_integration
+      file: pjrt/pjrt_integration
     - title: PJRT C++ API Overview
-      file: cpp_api_overview
+      file: pjrt/cpp_api_overview
     - title: PJRT Examples
-      file: examples
+      file: pjrt/examples
   - caption: Using XLA in TensorFlow
     # These should be in alphabetical order unless otherwise noted.
     chapters:
     - title: Using XLA in TensorFlow
-      file: tf2xla
-    - title: Use tfcompile
-      file: tfcompile
+      file: tf2xla/index
     - title: Autoclustering tutorial
-      file: tutorials/autoclustering_xla
+      file: tf2xla/tutorials/autoclustering_xla
     - title: Use XLA with tf.function
-      file: tutorials/jit_compile
+      file: tf2xla/tutorials/jit_compile
