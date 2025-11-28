@@ -98,12 +98,17 @@ parts:
       file: pjrt/cpp_api_overview
     - title: PJRT Examples
       file: pjrt/examples
-  - caption: Using XLA in TensorFlow
+  - caption: Using XLA in other ecosystems
     # These should be in alphabetical order unless otherwise noted.
     chapters:
     - title: Using XLA in TensorFlow
       file: tf2xla/index
-    - title: Autoclustering tutorial
-      file: tf2xla/tutorials/autoclustering_xla
-    - title: Use XLA with tf.function
-      file: tf2xla/tutorials/jit_compile
+      sections:
+        - title: Autoclustering tutorial
+          file: tf2xla/tutorials/autoclustering_xla
+        - title: Use XLA with tf.function
+          file: tf2xla/tutorials/jit_compile
+    - title: Using XLA in JAX
+      url: https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html
+    - title: Using XLA in PyTorch
+      url: https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html
