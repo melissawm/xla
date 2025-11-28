@@ -1,0 +1,786 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>XLA: Optimizing Compiler for Machine Learning &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tf2xla/index';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Classifying CIFAR-10 with XLA" href="tutorials/autoclustering_xla.html" />
+    <link rel="prev" title="PJRT Examples" href="../pjrt/examples.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparsecore.html">SparseCore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lsp.html">Using LSP autocompletion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../error_codes.html">Error Codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_0102.html">Error code: 0102</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Using XLA in TensorFlow</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/tf2xla/index.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>XLA: Optimizing Compiler for Machine Learning</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enable-xla-for-tensorflow-models">Enable XLA for TensorFlow models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-compilation-with-tf-function-jit-compile-true">Explicit compilation with <code class="docutils literal notranslate"><span class="pre">tf.function(jit_compile=True)</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-with-keras">Usage with Keras</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-with-distributed-strategy">Usage with distributed strategy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto-clustering">Auto-clustering</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-compiled-programs">Inspect compiled programs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducible-bug-reports">Reproducible bug reports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xla-frontends">XLA Frontends</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#talks">Talks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-xla-from-tf-using-jit-compile-true">Using XLA from TF using <code class="docutils literal notranslate"><span class="pre">jit_compile=True</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#xla-overview">XLA Overview</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="xla-optimizing-compiler-for-machine-learning">
+<h1>XLA: Optimizing Compiler for Machine Learning<a class="headerlink" href="#xla-optimizing-compiler-for-machine-learning" title="Link to this heading">#</a></h1>
+<p><a class="reference external" href="https://openxla.org">OpenXLA</a> is a domain-specific compiler for linear
+algebra that can accelerate TensorFlow models with potentially no source code
+changes.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>When a TensorFlow program is run, all of the operations are executed
+individually by the TensorFlow executor. Each TensorFlow operation has a
+precompiled GPU kernel implementation that the executor dispatches to.</p>
+<p>XLA provides an alternative mode of running models: it compiles the TensorFlow
+graph into a sequence of computation kernels generated specifically for the
+given model. Because these kernels are unique to the model, they can exploit
+model-specific information for optimization. For example, let’s look at an
+optimization XLA does in the context of a simple TensorFlow computation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">model_fn</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_sum</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">z</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Run without XLA, the graph launches three kernels: one for the multiplication,
+one for the addition and one for the reduction. However, XLA can optimize the
+graph so that it computes the result in a single kernel launch. It does this by
+“fusing” the addition, multiplication and reduction into a single GPU kernel.
+Moreover, this fused operation does not write out the intermediate values
+produced by <code class="docutils literal notranslate"><span class="pre">y*z</span></code> and <code class="docutils literal notranslate"><span class="pre">x+y*z</span></code> to memory; instead it “streams” the results of
+these intermediate computations directly to their users while keeping them
+entirely in GPU registers. Fusion is XLA’s single most important optimization.
+Memory bandwidth is typically the scarcest resource on hardware accelerators, so
+removing memory operations is one of the best ways to improve performance.</p>
+</section>
+<section id="enable-xla-for-tensorflow-models">
+<h2>Enable XLA for TensorFlow models<a class="headerlink" href="#enable-xla-for-tensorflow-models" title="Link to this heading">#</a></h2>
+<section id="explicit-compilation-with-tf-function-jit-compile-true">
+<h3>Explicit compilation with <code class="docutils literal notranslate"><span class="pre">tf.function(jit_compile=True)</span></code><a class="headerlink" href="#explicit-compilation-with-tf-function-jit-compile-true" title="Link to this heading">#</a></h3>
+<p>Explicit compilation API offers a fine-grained control for choosing which
+functions should be compiled. For example, the following TensorFlow function
+which performs the MNIST training is compiled with XLA:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@tf</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">jit_compile</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">train_mnist</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+    <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">tf</span><span class="o">.</span><span class="n">GradientTape</span><span class="p">()</span> <span class="k">as</span> <span class="n">tape</span><span class="p">:</span>
+      <span class="n">predicted_labels</span> <span class="o">=</span> <span class="n">layer</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+      <span class="n">loss</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">reduce_mean</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">sparse_softmax_cross_entropy_with_logits</span><span class="p">(</span>
+          <span class="n">logits</span><span class="o">=</span><span class="n">predicted_labels</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">labels</span>
+      <span class="p">))</span>
+    <span class="n">layer_variables</span> <span class="o">=</span> <span class="n">layer</span><span class="o">.</span><span class="n">trainable_variables</span>
+    <span class="n">grads</span> <span class="o">=</span> <span class="n">tape</span><span class="o">.</span><span class="n">gradient</span><span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">layer_variables</span><span class="p">)</span>
+    <span class="n">optimizer</span><span class="o">.</span><span class="n">apply_gradients</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">grads</span><span class="p">,</span> <span class="n">layer_variables</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">jit_compile</span></code> API has <em>must-compile</em> semantics: either the entire
+function is compiled with XLA, or an <code class="docutils literal notranslate"><span class="pre">errors.InvalidArgumentError</span></code> exception is
+thrown. XLA can not currently compile functions where dimensions are not
+<em>inferrable</em>: that is, if it’s not possible to infer the dimensions of all
+tensors without running the entire computation. For example, the following
+function will not compile:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">not_compilable</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">tf</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Shapes can vary across the runs though:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@tf</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">jit_compile</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">recompiled_on_launch</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+  <span class="k">return</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span>
+
+<span class="n">recompiled_on_launch</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">]),</span> <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">]))</span>
+<span class="n">recompiled_on_launch</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">]),</span> <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">]))</span>
+</pre></div>
+</div>
+<p>Note: Nesting behavior: the function will be compiled if at least one function
+in its call stack has <code class="docutils literal notranslate"><span class="pre">jit_compile=True</span></code>.</p>
+<p>See the <a class="reference internal" href="tutorials/jit_compile.html"><span class="std std-doc">tutorial colab</span></a> for a more detailed
+usage example, and a
+<a class="reference external" href="https://www.youtube.com/watch?v=cPAD9vLKE0c">tutorial video</a> on
+<code class="docutils literal notranslate"><span class="pre">jit_compile=True</span></code> usage.</p>
+</section>
+<section id="usage-with-keras">
+<h3>Usage with Keras<a class="headerlink" href="#usage-with-keras" title="Link to this heading">#</a></h3>
+<p>For Keras models, <code class="docutils literal notranslate"><span class="pre">jit_compile=True</span></code> can be set as an argument to
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/keras/Model#compile"><code class="docutils literal notranslate"><span class="pre">model.compile</span></code></a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">optimizer</span><span class="o">=</span><span class="s2">&quot;adam&quot;</span><span class="p">,</span> <span class="n">jit_compile</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="usage-with-distributed-strategy">
+<h3>Usage with distributed strategy<a class="headerlink" href="#usage-with-distributed-strategy" title="Link to this heading">#</a></h3>
+<p>XLA:GPU can be used with TF distributed strategy
+(<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/distribute/MirroredStrategy"><code class="docutils literal notranslate"><span class="pre">MirroredStrategy</span></code></a>
+or
+<a class="reference external" href="https://www.tensorflow.org/api_docs/python/tf/distribute/experimental/MultiWorkerMirroredStrategy"><code class="docutils literal notranslate"><span class="pre">MultiWorkerMirroredStrategy</span></code></a>)
+by annotating step function with <code class="docutils literal notranslate"><span class="pre">jit_compile=True</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@tf</span><span class="o">.</span><span class="n">function</span><span class="p">(</span><span class="n">jit_compile</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">step_fn</span><span class="p">():</span>
+  <span class="n">t</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">100</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tf</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+  <span class="n">ctx</span> <span class="o">=</span> <span class="n">tf</span><span class="o">.</span><span class="n">distribute</span><span class="o">.</span><span class="n">get_replica_context</span><span class="p">()</span>
+  <span class="k">return</span> <span class="n">ctx</span><span class="o">.</span><span class="n">all_reduce</span><span class="p">(</span><span class="n">tf</span><span class="o">.</span><span class="n">distribute</span><span class="o">.</span><span class="n">ReduceOp</span><span class="o">.</span><span class="n">SUM</span><span class="p">,</span> <span class="n">t</span><span class="p">)</span>
+
+<span class="nd">@tf</span><span class="o">.</span><span class="n">function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_fn</span><span class="p">():</span>
+  <span class="k">return</span> <span class="n">strategy</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">step_fn</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="auto-clustering">
+<h3>Auto-clustering<a class="headerlink" href="#auto-clustering" title="Link to this heading">#</a></h3>
+<p>A simple way to start using XLA in TensorFlow models without any changes is to
+enable <em>auto-clustering</em>, which automatically finds <em>clusters</em> (connected
+subgraphs) within the TensorFlow functions which can be compiled and executed
+using XLA. Auto-clustering on GPU can be enabled by setting the <code class="docutils literal notranslate"><span class="pre">TF_XLA_FLAGS</span></code>
+environment variable:</p>
+<p>Note: In TF2, only the code inside <code class="docutils literal notranslate"><span class="pre">tf.function</span></code> will be clustered.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ TF_XLA_FLAGS=--tf_xla_auto_jit=2 path/to/your/tf/program
+</pre></div>
+</div>
+<p>Auto-clustering is currently optimized for GPU workloads, but it can also be
+enabled on CPU by additionally using the flag <code class="docutils literal notranslate"><span class="pre">--tf_xla_cpu_global_jit</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ TF_XLA_FLAGS=&quot;--tf_xla_auto_jit=2 --tf_xla_cpu_global_jit&quot; path/to/your/program
+</pre></div>
+</div>
+<p>Note: Auto-clustering support on CPU and on multi-GPU environments is
+experimental.</p>
+<p>For a detailed usage example see the
+<a class="reference internal" href="tutorials/autoclustering_xla.html"><span class="std std-doc">auto-clustering tutorial colab</span></a>.</p>
+</section>
+</section>
+<section id="inspect-compiled-programs">
+<h2>Inspect compiled programs<a class="headerlink" href="#inspect-compiled-programs" title="Link to this heading">#</a></h2>
+<p>XLA provides introspection facilities which let you inspect the generated
+programs. To dump the generated programs, use the environment variable
+<code class="docutils literal notranslate"><span class="pre">XLA_FLAGS</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ XLA_FLAGS=&quot;--xla_dump_to=/tmp/generated&quot; TF_XLA_FLAGS=&quot;--tf_xla_auto_jit=2&quot; my/tensorflow/program
+</pre></div>
+</div>
+<p>After the dumping is performed, you can find the following files in
+<code class="docutils literal notranslate"><span class="pre">/tmp/generated</span></code>:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">module_XXXX.*_optimizations.txt</span></code> Generated
+<a class="reference internal" href="../operation_semantics.html"><span class="std std-doc">XLA programs</span></a>, one per each compiled cluster.
+Attaching those when submitting XLA bug reports is extremely helpful!</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">module_XXXX.ir-*.ll</span></code> Generated files in
+<a class="reference external" href="https://llvm.org/docs/LangRef.html">LLVM</a> intermediate representation, with
+<a class="reference external" href="https://llvm.org/docs/NVPTXUsage.html">NVPTX</a> intrinsics.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">module_XXXX.ptx</span></code> Generated
+<a class="reference external" href="https://docs.nvidia.com/cuda/parallel-thread-execution/index.html">PTX</a>
+files.</p></li>
+</ul>
+<p>You can also dump the graph visualizing the embedding of XLA clusters inside of
+the TensorFlow graph with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ TF_DUMP_GRAPH_PREFIX=/tmp/generated TF_XLA_FLAGS=&quot;--tf_xla_clustering_debug&quot;
+</pre></div>
+</div>
+</section>
+<section id="reproducible-bug-reports">
+<h2>Reproducible bug reports<a class="headerlink" href="#reproducible-bug-reports" title="Link to this heading">#</a></h2>
+<p>A bug report is much easier to reproduce if it includes dumps for the generated
+XLA programs and the used auto-clustering embedding.
+To generate them for a TensorFlow program running with auto-clustering, launch:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ TF_DUMP_GRAPH_PREFIX=/tmp/generated \
+  TF_XLA_FLAGS=&quot;--tf_xla_clustering_debug --tf_xla_auto_jit=2&quot; \
+  XLA_FLAGS=&quot;--xla_dump_hlo_as_text --xla_dump_to=/tmp/generated&quot; \
+    my/tensorflow/program&quot;
+</pre></div>
+</div>
+<p>When filing bugs, attach the contents of the <code class="docutils literal notranslate"><span class="pre">/tmp/generated</span></code> directory
+(referenced above).</p>
+<p>If possible, try to isolate
+a bug to a single XLA program by using the
+<a class="reference external" href="https://github.com/tensorflow/tensorflow/blob/master/tensorflow/compiler/xla/tools/run_hlo_module_main.cc"><code class="docutils literal notranslate"><span class="pre">run_hlo_module</span></code></a>
+and iteratively running it on generated programs.</p>
+</section>
+<section id="further-reading">
+<h2>Further reading<a class="headerlink" href="#further-reading" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://openxla.org">OpenXLA Documentation</a> OpenXLA Documentation</p></li>
+<li><p><a class="reference internal" href="#./known_issues.md"><span class="xref myst">Known Issues</span></a> List of known issues with XLA+TF</p></li>
+<li><p><a class="reference external" href="https://developers.googleblog.com/2017/03/xla-tensorflow-compiled.html">XLA - TensorFlow, Compiled</a>:
+Read on Google Developers Blog</p></li>
+<li><p>Check out the
+<a class="reference external" href="https://github.com/openxla/xla">XLA source</a>
+on Github!</p></li>
+</ul>
+</section>
+<section id="xla-frontends">
+<h2>XLA Frontends<a class="headerlink" href="#xla-frontends" title="Link to this heading">#</a></h2>
+<p>Apart from TensorFlow, XLA programs can be generated by:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/google/jax">JAX</a>: Composable transformations of
+Python+NumPy programs</p></li>
+<li><p><a class="reference external" href="https://github.com/JuliaTPU/XLA.jl">Julia</a>: The Julia language for
+scientific computing</p></li>
+<li><p><a class="reference external" href="https://github.com/pytorch/xla">PyTorch</a>: PyTorch framework</p></li>
+<li><p><a class="reference external" href="https://github.com/elixir-nx/nx">Nx</a>: Numerical computing library for the
+Elixir programming language</p></li>
+</ul>
+</section>
+<section id="talks">
+<h2>Talks<a class="headerlink" href="#talks" title="Link to this heading">#</a></h2>
+<section id="using-xla-from-tf-using-jit-compile-true">
+<h3>Using XLA from TF using <code class="docutils literal notranslate"><span class="pre">jit_compile=True</span></code><a class="headerlink" href="#using-xla-from-tf-using-jit-compile-true" title="Link to this heading">#</a></h3>
+<iframe frameborder="0" allow="accelerometer; autoplay;
+encrypted-media; gyroscope; picture-in-picture; fullscreen" width="640" height="360"
+src="https://www.youtube.com/embed/cPAD9vLKE0c?origin=https%3A%2F%2Fwww.tensorflow.org&amp;autohide=1&amp;showinfo=0&amp;video-id=kAOanJczHA0&amp;enablejsapi=1&amp;widgetid=1" id="widget2" data-title="YouTube video player"></iframe>
+</section>
+<section id="xla-overview">
+<h3>XLA Overview<a class="headerlink" href="#xla-overview" title="Link to this heading">#</a></h3>
+<iframe frameborder="0" allow="accelerometer; autoplay;
+encrypted-media; gyroscope; picture-in-picture; fullscreen" width="640" height="360"
+src="https://www.youtube.com/embed/kAOanJczHA0?origin=https%3A%2F%2Fwww.tensorflow.org&amp;autohide=1&amp;showinfo=0&amp;video-id=kAOanJczHA0&amp;enablejsapi=1&amp;widgetid=1"
+id="widget2" data-title="YouTube video player"></iframe>
+</section>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./tf2xla"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../pjrt/examples.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">PJRT Examples</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tutorials/autoclustering_xla.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Classifying CIFAR-10 with XLA</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#enable-xla-for-tensorflow-models">Enable XLA for TensorFlow models</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#explicit-compilation-with-tf-function-jit-compile-true">Explicit compilation with <code class="docutils literal notranslate"><span class="pre">tf.function(jit_compile=True)</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-with-keras">Usage with Keras</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#usage-with-distributed-strategy">Usage with distributed strategy</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto-clustering">Auto-clustering</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspect-compiled-programs">Inspect compiled programs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducible-bug-reports">Reproducible bug reports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#further-reading">Further reading</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xla-frontends">XLA Frontends</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#talks">Talks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-xla-from-tf-using-jit-compile-true">Using XLA from TF using <code class="docutils literal notranslate"><span class="pre">jit_compile=True</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#xla-overview">XLA Overview</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

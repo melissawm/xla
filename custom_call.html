@@ -1,0 +1,985 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>XLA Custom Calls &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'custom_call';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="A deep dive into SparseCore for Large Embedding Models (LEM)" href="sparsecore.html" />
+    <link rel="prev" title="Async HLO Instructions" href="async_ops.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="error_codes.html">Error Codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/custom_call.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>XLA Custom Calls</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jax-xla-custom-calls">JAX + XLA Custom Calls</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xla-ffi-binding">XLA FFI Binding</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#returning-errors-from-custom-calls">Returning Errors From Custom Calls</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-arguments-and-results">Buffer Arguments And Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constrained-buffer-arguments-and-results">Constrained Buffer Arguments And Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variadic-arguments-and-results">Variadic Arguments And Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user-defined-enum-attributes">User-Defined Enum Attributes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#binding-all-custom-call-attributes">Binding All Custom Call Attributes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user-defined-struct-attributes">User-defined Struct Attributes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-custom-call-on-cpu">Create a custom call on CPU</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-custom-call-on-gpu">Create a custom call on GPU</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#passing-tuples-to-custom-calls">Passing tuples to custom calls</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tuple-outputs-as-temp-buffers">Tuple outputs as temp buffers</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="xla-custom-calls">
+<h1>XLA Custom Calls<a class="headerlink" href="#xla-custom-calls" title="Link to this heading">#</a></h1>
+<p>This document describes how to write and use XLA custom calls using XLA FFI
+library. Custom call is a mechanism to describe an external “operation” in the
+HLO module to the XLA compiler (at compile time), and XLA FFI is a mechanism to
+register implementation of such operations with XLA (at run time). FFI stands
+for “foreign function interface” and it is a set of C APIs that define a binary
+interface (ABI) for XLA to call into external code written in other programming
+languages. XLA provides header-only bindings for XLA FFI written in C++, which
+hides all the low level details of underlying C APIs from the end user.</p>
+<blockquote>
+<div><p><strong>Caution:</strong> The custom-call API/ABI uses PJRT-style versioning (major, minor),
+however at this point it is still experimental and can be broken at any time.
+Once API/ABI is finalized we intend to provide stability guarantees
+similar to PJRT.</p>
+</div></blockquote>
+<blockquote>
+<div><p><strong>Caution</strong> The HLO-visible names of functions registered with the custom-call
+macros API do not respect C++ namespaces. As a result, accidental collisions
+from functions registered by different libraries are entirely possible! The
+API will reject such duplicate registrations, but to avoid issues in large
+projects the safest option is to either fully namespace-qualify all references
+to the functions in both the <code class="docutils literal notranslate"><span class="pre">XLA_REGISTER_CUSTOM_CALL</span></code> registration macros
+and custom call target references or to use C-style namespacing directly in
+the function name.</p>
+</div></blockquote>
+<section id="jax-xla-custom-calls">
+<h2>JAX + XLA Custom Calls<a class="headerlink" href="#jax-xla-custom-calls" title="Link to this heading">#</a></h2>
+<p>See <a class="reference external" href="https://jax.readthedocs.io/en/latest/ffi.html">JAX documentation</a> for
+end to end examples of integrating custom calls and XLA FFI with JAX.</p>
+</section>
+<section id="xla-ffi-binding">
+<h2>XLA FFI Binding<a class="headerlink" href="#xla-ffi-binding" title="Link to this heading">#</a></h2>
+<p>XLA FFI binding is a compile-time specification of the custom call signature:
+custom call arguments, attributes and their types, and additional parameters
+passed via the execution context (i.e., gpu stream for GPU backend). XLA FFI
+binding can be bound to any C++ callable (function pointer, lambda, etc.) with
+compatible <code class="docutils literal notranslate"><span class="pre">operator()</span></code> signature. Constructed handler decodes XLA FFI call
+frame (defined by the stable C API), type check all parameters, and forward
+decoded results to the user-defined callback.</p>
+<p>XLA FFI binding heavily relies on template metaprogramming to be be able to
+compile constructed handler to the most efficient machine code. Run time
+overheads are in order of a couple of nanoseconds for each custom call
+parameter.</p>
+<p>XLA FFI customization points implemented as template specializations, and
+users can define how to decode their custom types, i.e., it is possible
+to define custom decoding for user-defined <code class="docutils literal notranslate"><span class="pre">enum</span> <span class="pre">class</span></code> types.</p>
+<section id="returning-errors-from-custom-calls">
+<h3>Returning Errors From Custom Calls<a class="headerlink" href="#returning-errors-from-custom-calls" title="Link to this heading">#</a></h3>
+<p>Custom call implementations must return <code class="docutils literal notranslate"><span class="pre">xla::ffi::Error</span></code> value to signal
+success or error to XLA runtime. It is similar to <code class="docutils literal notranslate"><span class="pre">absl::Status</span></code>, and has
+the same set of error codes. We do not use <code class="docutils literal notranslate"><span class="pre">absl::Status</span></code> because it does
+not have a stable ABI and it would be unsafe to pass it between dynamically
+loaded custom call library, and XLA itself.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Handler that always returns an error.</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">always_error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">().</span><span class="n">To</span><span class="p">(</span>
+<span class="w">    </span><span class="p">[]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">Error</span><span class="p">(</span><span class="n">ErrorCode</span><span class="o">::</span><span class="n">kInternal</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Oops!&quot;</span><span class="p">);</span><span class="w"> </span><span class="p">});</span>
+
+<span class="c1">// Handler that always returns a success.</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">always_success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">().</span><span class="n">To</span><span class="p">(</span>
+<span class="w">    </span><span class="p">[]()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">Error</span><span class="o">::</span><span class="n">Success</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="buffer-arguments-and-results">
+<h3>Buffer Arguments And Results<a class="headerlink" href="#buffer-arguments-and-results" title="Link to this heading">#</a></h3>
+<p>XLA uses destination passing style for results: custom calls (or any other XLA
+operations for that matter) do not allocate memory for results, and instead
+write into destinations passed by XLA runtime. XLA uses static buffer
+assignment, and allocates buffers for all values based on their live ranges at
+compile time.</p>
+<p>Results passed to FFI handlers wrapped into a <code class="docutils literal notranslate"><span class="pre">Result&lt;T&gt;</span></code> template, that
+has a pointer-like semantics: <code class="docutils literal notranslate"><span class="pre">operator-&gt;</span></code> gives access to the underlying
+parameter.</p>
+<p><code class="docutils literal notranslate"><span class="pre">AnyBuffer</span></code> arguments and results gives access to custom call buffer parameters
+of any data type. This is useful when custom call has a generic implementation
+that works for multiple data types, and custom call implementation does run time
+dispatching based on data type. <code class="docutils literal notranslate"><span class="pre">AnyBuffer</span></code> gives access to the buffer data
+type, dimensions, and a pointer to the buffer itself.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>%0 = &quot;stablehlo.custom_call&quot;(%arg0) {
+  call_target_name = &quot;foo&quot;,
+  api_version = 4 : i32
+} : (tensor&lt;2x2xf32&gt;) -&gt; tensor&lt;2x2xf32&gt;
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Buffers of any number of dimensions and data type.</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">().</span><span class="n">Arg</span><span class="o">&lt;</span><span class="n">AnyBuffer</span><span class="o">&gt;</span><span class="p">().</span><span class="n">Ret</span><span class="o">&lt;</span><span class="n">AnyBuffer</span><span class="o">&gt;</span><span class="p">().</span><span class="n">To</span><span class="p">(</span>
+<span class="w">    </span><span class="p">[](</span><span class="n">AnyBuffer</span><span class="w"> </span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="n">Result</span><span class="o">&lt;</span><span class="n">AnyBuffer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">res</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">arg_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="p">.</span><span class="n">untyped_data</span><span class="p">();</span>
+<span class="w">      </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">res_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">res</span><span class="o">-&gt;</span><span class="n">untyped_data</span><span class="p">();</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">Error</span><span class="o">::</span><span class="n">Success</span><span class="p">();</span>
+<span class="w">    </span><span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="constrained-buffer-arguments-and-results">
+<h3>Constrained Buffer Arguments And Results<a class="headerlink" href="#constrained-buffer-arguments-and-results" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">Buffer</span></code> allows to add constraints on the buffer data type and number of
+dimensions, and they will be automatically checked by the handler and return
+an error to XLA runtime, if run time arguments do not match the FFI handler
+signature.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Buffers of any number of dimensions and F32 data type.</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">().</span><span class="n">Arg</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&lt;</span><span class="n">F32</span><span class="o">&gt;&gt;</span><span class="p">().</span><span class="n">Ret</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&lt;</span><span class="n">F32</span><span class="o">&gt;&gt;</span><span class="p">().</span><span class="n">To</span><span class="p">(</span>
+<span class="w">    </span><span class="p">[](</span><span class="n">Buffer</span><span class="o">&lt;</span><span class="n">F32</span><span class="o">&gt;</span><span class="w"> </span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="n">Result</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&lt;</span><span class="n">F32</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">res</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">arg_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="p">.</span><span class="n">typed_data</span><span class="p">();</span>
+<span class="w">      </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">res_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">res</span><span class="o">-&gt;</span><span class="n">typed_data</span><span class="p">();</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">Error</span><span class="o">::</span><span class="n">Success</span><span class="p">();</span>
+<span class="w">    </span><span class="p">});</span>
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="c1">// Buffers of number of dimensions 2 and F32 data type.</span>
+<span class="k">auto</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">().</span><span class="n">Arg</span><span class="o">&lt;</span><span class="n">BufferR2</span><span class="o">&lt;</span><span class="n">F32</span><span class="o">&gt;&gt;</span><span class="p">().</span><span class="n">Ret</span><span class="o">&lt;</span><span class="n">BufferR2</span><span class="o">&lt;</span><span class="n">F32</span><span class="o">&gt;&gt;</span><span class="p">().</span><span class="n">To</span><span class="p">(</span>
+<span class="w">    </span><span class="p">[](</span><span class="n">BufferR2</span><span class="o">&lt;</span><span class="n">F32</span><span class="o">&gt;</span><span class="w"> </span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="n">Result</span><span class="o">&lt;</span><span class="n">BufferR2</span><span class="o">&lt;</span><span class="n">F32</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">res</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">arg_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">arg</span><span class="p">.</span><span class="n">typed_data</span><span class="p">();</span>
+<span class="w">      </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">res_data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">res</span><span class="o">-&gt;</span><span class="n">typed_data</span><span class="p">();</span>
+<span class="w">      </span><span class="k">return</span><span class="w"> </span><span class="n">Error</span><span class="o">::</span><span class="n">Success</span><span class="p">();</span>
+<span class="w">    </span><span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="variadic-arguments-and-results">
+<h3>Variadic Arguments And Results<a class="headerlink" href="#variadic-arguments-and-results" title="Link to this heading">#</a></h3>
+<p>If the number of arguments and result can be different in different instances of
+a custom call, they can be decoded at run time using <code class="docutils literal notranslate"><span class="pre">RemainingArgs</span></code> and
+<code class="docutils literal notranslate"><span class="pre">RemainingRets</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>auto handler = Ffi::Bind().RemainingArgs().RemainingRets().To(
+    [](RemainingArgs args, RemainingRets results) -&gt; Error {
+      ErrorOr&lt;AnyBuffer&gt; arg = args.get&lt;AnyBuffer&gt;(0);
+      ErrorOr&lt;Result&lt;AnyBuffer&gt;&gt; res = results.get&lt;AnyBuffer&gt;(0);
+
+      if (!arg.has_value()) {
+        return Error(ErrorCode::kInternal, arg.error());
+      }
+
+      if (!res.has_value()) {
+        return Error(ErrorCode::kInternal, res.error());
+      }
+
+      return Error::Success();
+    });
+</pre></div>
+</div>
+<p>Variadic arguments and results can be declared after regular arguments and
+results, however binding regular arguments and results after variadic one is
+illegal.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span>
+<span class="w">    </span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="n">Arg</span><span class="o">&lt;</span><span class="n">AnyBuffer</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="n">RemainingArgs</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="n">Ret</span><span class="o">&lt;</span><span class="n">AnyBuffer</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="n">RemainingRets</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="n">To</span><span class="p">([](</span><span class="n">AnyBuffer</span><span class="w"> </span><span class="n">arg</span><span class="p">,</span><span class="w"> </span><span class="n">RemainingArgs</span><span class="w"> </span><span class="n">args</span><span class="p">,</span><span class="w"> </span><span class="n">AnyBuffer</span><span class="w"> </span><span class="n">ret</span><span class="p">,</span>
+<span class="w">               </span><span class="n">RemainingRets</span><span class="w"> </span><span class="n">results</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Error</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">Error</span><span class="o">::</span><span class="n">Success</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">#</a></h3>
+<p>XLA FFI supports automatic decoding of <code class="docutils literal notranslate"><span class="pre">mlir::DictionaryAttr</span></code> passed as a
+<code class="docutils literal notranslate"><span class="pre">custom_call</span></code> <code class="docutils literal notranslate"><span class="pre">backend_config</span></code> into FFI handler arguments.</p>
+<p>Note: See <a class="reference external" href="https://github.com/openxla/stablehlo/blob/main/rfcs/20240312-standardize-customcallop.md">stablehlo RFC</a>
+for details, and <code class="docutils literal notranslate"><span class="pre">stablehlo.custom_call</span></code> operation specification.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>%0 = &quot;stablehlo.custom_call&quot;(%arg0) {
+  call_target_name = &quot;foo&quot;,
+  backend_config= {
+    i32 = 42 : i32,
+    str = &quot;string&quot;
+  },
+  api_version = 4 : i32
+} : (tensor&lt;f32&gt;) -&gt; tensor&lt;f32&gt;
+</pre></div>
+</div>
+<p>In this example custom call has a single buffer argument and two attributes, and
+XLA FFI can automatically decode them and pass to the user-defined callable.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">()</span>
+<span class="w">  </span><span class="p">.</span><span class="n">Arg</span><span class="o">&lt;</span><span class="n">BufferR0</span><span class="o">&lt;</span><span class="n">F32</span><span class="o">&gt;&gt;</span><span class="p">()</span>
+<span class="w">  </span><span class="p">.</span><span class="n">Attr</span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;i32&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="n">Attr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;str&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="p">.</span><span class="n">To</span><span class="p">([](</span><span class="n">BufferR0</span><span class="o">&lt;</span><span class="n">F32</span><span class="o">&gt;</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="n">i32</span><span class="p">,</span><span class="w"> </span><span class="n">std</span><span class="o">::</span><span class="n">string_view</span><span class="w"> </span><span class="n">str</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Error</span><span class="o">::</span><span class="n">Success</span><span class="p">();</span>
+<span class="w">  </span><span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="user-defined-enum-attributes">
+<h3>User-Defined Enum Attributes<a class="headerlink" href="#user-defined-enum-attributes" title="Link to this heading">#</a></h3>
+<p>XLA FFI can automatically decode integral MLIR attributes into user-defined
+enums. Enum class must have the same underlying integral type, and decoding
+has to be explicitly registered with XLA FFI.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>%0 = &quot;stablehlo.custom_call&quot;(%arg0) {
+  call_target_name = &quot;foo&quot;,
+  backend_config= {
+    command = 0 : i32
+  },
+  api_version = 4 : i32
+} : (tensor&lt;f32&gt;) -&gt; tensor&lt;f32&gt;
+</pre></div>
+</div>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">enum</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">Command</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="kt">int32_t</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">kAdd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">  </span><span class="n">kMul</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="p">};</span>
+
+<span class="n">XLA_FFI_REGISTER_ENUM_ATTR_DECODING</span><span class="p">(</span><span class="n">Command</span><span class="p">);</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">().</span><span class="n">Attr</span><span class="o">&lt;</span><span class="n">Command</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;command&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">(</span>
+<span class="w">    </span><span class="p">[](</span><span class="n">Command</span><span class="w"> </span><span class="n">command</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Error</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">Error</span><span class="o">::</span><span class="n">Success</span><span class="p">();</span><span class="w"> </span><span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="binding-all-custom-call-attributes">
+<h3>Binding All Custom Call Attributes<a class="headerlink" href="#binding-all-custom-call-attributes" title="Link to this heading">#</a></h3>
+<p>It is possible to get access to all custom call attributes as a dictionary
+and lazily decode only the attributes that are needed at run time.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">().</span><span class="n">Attrs</span><span class="p">().</span><span class="n">To</span><span class="p">([](</span><span class="n">Dictionary</span><span class="w"> </span><span class="n">attrs</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">ErrorOr</span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="w"> </span><span class="n">i32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">attrs</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="kt">int32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;i32&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Error</span><span class="o">::</span><span class="n">Success</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</section>
+<section id="user-defined-struct-attributes">
+<h3>User-defined Struct Attributes<a class="headerlink" href="#user-defined-struct-attributes" title="Link to this heading">#</a></h3>
+<p>XLA FFI can decode dictionary attributes into user-defined structs.</p>
+<div class="highlight-mlir notranslate"><div class="highlight"><pre><span></span>%0 = &quot;stablehlo.custom_call&quot;(%arg0) {
+  call_target_name = &quot;foo&quot;,
+  backend_config= {
+    range = { lo = 0 : i64, hi = 42 : i64 }
+  },
+  api_version = 4 : i32
+} : (tensor&lt;f32&gt;) -&gt; tensor&lt;f32&gt;
+</pre></div>
+</div>
+<p>In example above <code class="docutils literal notranslate"><span class="pre">range</span></code> is an <code class="docutils literal notranslate"><span class="pre">mlir::DictionaryAttr</span></code> attribute, and instead
+of accessing dictionary fields by name, it can be automatically decoded as
+a C++ struct. Decoding has to be explicitly registered with a
+<code class="docutils literal notranslate"><span class="pre">XLA_FFI_REGISTER_STRUCT_ATTR_DECODING</span></code> macro (behind the scene it defines
+a template specialization in <code class="docutils literal notranslate"><span class="pre">::xla::ffi</span></code> namespace, thus macro must be added to
+the global namespace).</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">Range</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">lo</span><span class="p">;</span>
+<span class="w">  </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">hi</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">XLA_FFI_REGISTER_STRUCT_ATTR_DECODING</span><span class="p">(</span><span class="n">Range</span><span class="p">,</span><span class="w"> </span><span class="n">StructMember</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;lo&quot;</span><span class="p">),</span>
+<span class="w">                                             </span><span class="n">StructMember</span><span class="o">&lt;</span><span class="kt">int64_t</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;hi&quot;</span><span class="p">));</span>
+
+<span class="k">auto</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">().</span><span class="n">Attr</span><span class="o">&lt;</span><span class="n">Range</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;range&quot;</span><span class="p">).</span><span class="n">To</span><span class="p">([](</span><span class="n">Range</span><span class="w"> </span><span class="n">range</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Error</span><span class="p">{</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Error</span><span class="o">::</span><span class="n">Success</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+<p>Custom attributes can be loaded from a dictionary, just like any other
+attribute. In example below, all custom call attributes decoded as a
+<code class="docutils literal notranslate"><span class="pre">Dictionary</span></code>, and a <code class="docutils literal notranslate"><span class="pre">range</span></code> can be accessed by name.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">auto</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">().</span><span class="n">Attrs</span><span class="p">().</span><span class="n">To</span><span class="p">([](</span><span class="n">Dictionary</span><span class="w"> </span><span class="n">attrs</span><span class="p">)</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Error</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">ErrorOr</span><span class="o">&lt;</span><span class="n">Range</span><span class="o">&gt;</span><span class="w"> </span><span class="n">range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">attrs</span><span class="p">.</span><span class="n">get</span><span class="o">&lt;</span><span class="n">Range</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;range&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="n">Error</span><span class="o">::</span><span class="n">Success</span><span class="p">();</span>
+<span class="p">});</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="create-a-custom-call-on-cpu">
+<h2>Create a custom call on CPU<a class="headerlink" href="#create-a-custom-call-on-cpu" title="Link to this heading">#</a></h2>
+<p>You can create an HLO instruction that represents a custom call via XLA’s client
+API. For example, the following code uses a custom call to compute <code class="docutils literal notranslate"><span class="pre">A[i]</span> <span class="pre">=</span> <span class="pre">B[i</span> <span class="pre">%</span> <span class="pre">128]+</span> <span class="pre">C[i]</span></code> on the CPU. (Of course you could – and should! – do this
+with regular HLO.)</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;xla/client/xla_builder.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;xla/service/custom_call_target_registry.h&quot;</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">do_it</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">xla</span><span class="o">::</span><span class="n">XlaBuilder</span><span class="w"> </span><span class="n">b</span><span class="p">(</span><span class="s">&quot;do_it&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">xla</span><span class="o">::</span><span class="n">XlaOp</span><span class="w"> </span><span class="n">param0</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">xla</span><span class="o">::</span><span class="n">Parameter</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">xla</span><span class="o">::</span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeShape</span><span class="p">(</span><span class="n">xla</span><span class="o">::</span><span class="n">F32</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">128</span><span class="p">}),</span><span class="w"> </span><span class="s">&quot;p0&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">xla</span><span class="o">::</span><span class="n">XlaOp</span><span class="w"> </span><span class="n">param1</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">xla</span><span class="o">::</span><span class="n">Parameter</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">xla</span><span class="o">::</span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeShape</span><span class="p">(</span><span class="n">xla</span><span class="o">::</span><span class="n">F32</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">2048</span><span class="p">}),</span><span class="w"> </span><span class="s">&quot;p1&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">xla</span><span class="o">::</span><span class="n">XlaOp</span><span class="w"> </span><span class="n">custom_call</span><span class="w"> </span><span class="o">=</span>
+<span class="w">      </span><span class="n">xla</span><span class="o">::</span><span class="n">CustomCall</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;do_custom_call&quot;</span><span class="p">,</span><span class="w"> </span><span class="cm">/*operands=*/</span><span class="p">{</span><span class="n">param0</span><span class="p">,</span><span class="w"> </span><span class="n">param1</span><span class="p">},</span>
+<span class="w">        </span><span class="cm">/*shape=*/</span><span class="n">xla</span><span class="o">::</span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeShape</span><span class="p">(</span><span class="n">xla</span><span class="o">::</span><span class="n">F32</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">2048</span><span class="p">}),</span>
+<span class="w">        </span><span class="cm">/*opaque=*/</span><span class="s">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="cm">/*has_side_effect=*/</span><span class="nb">false</span><span class="p">,</span>
+<span class="w">        </span><span class="cm">/*output_operand_aliasing=*/</span><span class="p">{},</span><span class="w"> </span><span class="cm">/*literal=*/</span><span class="k">nullptr</span><span class="p">,</span>
+<span class="w">        </span><span class="cm">/*schedule=*/</span><span class="n">CustomCallSchedule</span><span class="o">::</span><span class="n">SCHEDULE_NONE</span><span class="p">,</span>
+<span class="w">        </span><span class="cm">/*api_version=*/</span><span class="n">CustomCallApiVersion</span><span class="o">::</span><span class="n">API_VERSION_TYPED_FFI</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="c1">// Constrain custom call arguments to 1-dimensional buffers of F32 data type.</span>
+<span class="k">using</span><span class="w"> </span><span class="n">BufferF32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xla</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">BufferR1</span><span class="o">&lt;</span><span class="n">xla</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">DataType</span><span class="o">::</span><span class="n">F32</span><span class="o">&gt;</span><span class="p">;</span>
+
+<span class="c1">// Implement a custom call as a C++ function. Note that we can use `Buffer` type</span>
+<span class="c1">// defined by XLA FFI that gives us access to buffer data type and shape.</span>
+<span class="n">xla</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">Error</span><span class="w"> </span><span class="nf">do_custom_call</span><span class="p">(</span><span class="n">BufferF32</span><span class="w"> </span><span class="n">in0</span><span class="p">,</span><span class="w"> </span><span class="n">BufferF32</span><span class="w"> </span><span class="n">in1</span><span class="p">,</span>
+<span class="w">                               </span><span class="n">xla</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">Result</span><span class="o">&lt;</span><span class="n">BufferF32</span><span class="o">&gt;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">d0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in0</span><span class="p">.</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in1</span><span class="p">.</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+<span class="w">  </span><span class="c1">// Check that dimensions are compatible.</span>
+<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">out</span><span class="o">-&gt;</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;unexpected dimensions&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">size_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">d1</span><span class="p">;</span><span class="w"> </span><span class="o">++</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">out</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in0</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="n">d0</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">in1</span><span class="p">.</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// Explicitly define an XLA FFI handler signature and bind it to the</span>
+<span class="c1">// `do_custom_call` implementation. XLA FFI handler can automatically infer</span>
+<span class="c1">// type signature from the custom call function, but it relies on magical</span>
+<span class="c1">// template metaprogramming an explicit binding provides and extra level of</span>
+<span class="c1">// type checking and clearly states custom call author intentions.</span>
+<span class="n">XLA_FFI_DEFINE_HANDLER</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span><span class="w"> </span><span class="n">do_custom_call</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">ffi</span><span class="o">::</span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">()</span>
+<span class="w">                           </span><span class="p">.</span><span class="n">Arg</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">                           </span><span class="p">.</span><span class="n">Arg</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">                           </span><span class="p">.</span><span class="n">Ret</span><span class="o">&lt;</span><span class="n">Buffer</span><span class="o">&gt;</span><span class="p">());</span>
+
+<span class="c1">// Registers `handler` with and XLA FFI on a &quot;Host&quot; platform.</span>
+<span class="n">XLA_FFI_REGISTER_HANDLER</span><span class="p">(</span><span class="n">xla</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">GetXlaFfiApi</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;do_custom_call&quot;</span><span class="p">,</span>
+<span class="w">                         </span><span class="s">&quot;Host&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">handler</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="create-a-custom-call-on-gpu">
+<h2>Create a custom call on GPU<a class="headerlink" href="#create-a-custom-call-on-gpu" title="Link to this heading">#</a></h2>
+<p>The GPU custom call registration with XLA FFI is almost identical, the only
+difference is that for GPU you need to ask for an underlying platform stream
+(CUDA or ROCM stream) to be able to launch kernel on device. Here is a CUDA
+example that does the same computation (<code class="docutils literal notranslate"><span class="pre">A[i]</span> <span class="pre">=</span> <span class="pre">B[i</span> <span class="pre">%</span> <span class="pre">128]</span> <span class="pre">+</span> <span class="pre">C[i]</span></code>) as the CPU
+code above.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="kt">void</span><span class="w"> </span><span class="nf">do_it</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* same implementation as above */</span><span class="w"> </span><span class="p">}</span>
+
+<span class="n">__global__</span><span class="w"> </span><span class="nf">custom_call_kernel</span><span class="p">(</span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">in0</span><span class="p">,</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">in1</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">idx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">blockIdx</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">blockDim</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">threadIdx</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+<span class="w">  </span><span class="n">out</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in0</span><span class="p">[</span><span class="n">idx</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">128</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">in1</span><span class="p">[</span><span class="n">idx</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="kt">void</span><span class="w"> </span><span class="nf">do_custom_call</span><span class="p">(</span><span class="n">CUstream</span><span class="w"> </span><span class="n">stream</span><span class="p">,</span><span class="w"> </span><span class="n">BufferF32</span><span class="w"> </span><span class="n">in0</span><span class="p">,</span><span class="w"> </span><span class="n">BufferF32</span><span class="w"> </span><span class="n">in1</span><span class="p">,</span>
+<span class="w">                    </span><span class="n">xla</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">Result</span><span class="o">&lt;</span><span class="n">BufferF32</span><span class="o">&gt;</span><span class="w"> </span><span class="n">out</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">d0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in0</span><span class="p">.</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">in1</span><span class="p">.</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="w">  </span><span class="kt">size_t</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">out</span><span class="o">-&gt;</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+
+<span class="w">  </span><span class="n">assert</span><span class="p">(</span><span class="n">d0</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">128</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">d1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2048</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">d2</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2048</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="s">&quot;unexpected dimensions&quot;</span><span class="p">);</span>
+
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">block_dim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">64</span><span class="p">;</span>
+<span class="w">  </span><span class="k">const</span><span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">grid_dim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2048</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">block_dim</span><span class="p">;</span>
+<span class="w">  </span><span class="n">custom_call_kernel</span><span class="o">&lt;&lt;&lt;</span><span class="n">grid_dim</span><span class="p">,</span><span class="w"> </span><span class="n">block_dim</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">stream</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span>
+<span class="w">    </span><span class="n">in0</span><span class="p">.</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">in1</span><span class="p">.</span><span class="n">data</span><span class="p">,</span><span class="w"> </span><span class="n">out</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="n">XLA_FFI_DEFINE_HANDLER</span><span class="p">(</span><span class="n">handler</span><span class="p">,</span><span class="w"> </span><span class="n">do_custom_call</span><span class="p">,</span>
+<span class="w">                       </span><span class="n">ffi</span><span class="o">::</span><span class="n">Ffi</span><span class="o">::</span><span class="n">Bind</span><span class="p">()</span>
+<span class="w">                           </span><span class="p">.</span><span class="n">Ctx</span><span class="o">&lt;</span><span class="n">xla</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">PlatformStream</span><span class="o">&lt;</span><span class="n">CUstream</span><span class="o">&gt;&gt;</span><span class="p">()</span>
+<span class="w">                           </span><span class="p">.</span><span class="n">Arg</span><span class="o">&lt;</span><span class="n">BufferF32</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">                           </span><span class="p">.</span><span class="n">Arg</span><span class="o">&lt;</span><span class="n">BufferF32</span><span class="o">&gt;</span><span class="p">()</span>
+<span class="w">                           </span><span class="p">.</span><span class="n">Ret</span><span class="o">&lt;</span><span class="n">BufferF32</span><span class="o">&gt;</span><span class="p">());</span>
+
+<span class="n">XLA_FFI_REGISTER_HANDLER</span><span class="p">(</span><span class="n">xla</span><span class="o">::</span><span class="n">ffi</span><span class="o">::</span><span class="n">GetXlaFfiApi</span><span class="p">(),</span><span class="w"> </span><span class="s">&quot;do_custom_call&quot;</span><span class="p">,</span>
+<span class="w">                         </span><span class="s">&quot;CUDA&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">handler</span><span class="p">);</span>
+</pre></div>
+</div>
+<p>Notice first that the GPU custom call function <em>is still a function executed on
+the CPU</em>. The <code class="docutils literal notranslate"><span class="pre">do_custom_call</span></code> CPU function is responsible for enqueueing work
+on the GPU. Here it launches a CUDA kernel, but it could also do something else,
+like call cuBLAS.</p>
+<p>Arguments and results also live on the host, and data member contains a pointer
+to device (i.e. GPU) memory. Buffers passed to custom call handler have the
+shape of the underlying device buffers, so the custom call can compute kernel
+launch parameters from them.</p>
+</section>
+<section id="passing-tuples-to-custom-calls">
+<h2>Passing tuples to custom calls<a class="headerlink" href="#passing-tuples-to-custom-calls" title="Link to this heading">#</a></h2>
+<p>Consider the following custom call.</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">xla</span><span class="o">::</span><span class="n">ShapeUtil</span><span class="p">;</span>
+<span class="k">using</span><span class="w"> </span><span class="n">xla</span><span class="o">::</span><span class="n">F32</span><span class="p">;</span>
+<span class="n">Shape</span><span class="w"> </span><span class="n">p0_shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeTuple</span><span class="p">({</span>
+<span class="w">    </span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeShape</span><span class="p">(</span><span class="n">F32</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">32</span><span class="p">}),</span>
+<span class="w">    </span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeTuple</span><span class="p">({</span>
+<span class="w">        </span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeShape</span><span class="p">(</span><span class="n">F32</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">64</span><span class="p">}),</span>
+<span class="w">        </span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeShape</span><span class="p">(</span><span class="n">F32</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">128</span><span class="p">}),</span>
+<span class="w">    </span><span class="p">}),</span>
+<span class="w">    </span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeShape</span><span class="p">(</span><span class="n">F32</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">256</span><span class="p">}),</span>
+<span class="p">});</span>
+<span class="n">xla</span><span class="o">::</span><span class="n">XlaOp</span><span class="w"> </span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">xla</span><span class="o">::</span><span class="n">Parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">p0_shape</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;p0&quot;</span><span class="p">);</span>
+
+<span class="n">Shape</span><span class="w"> </span><span class="n">out_shape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeTuple</span><span class="p">({</span>
+<span class="w">  </span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeShape</span><span class="p">(</span><span class="n">F32</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">512</span><span class="p">}),</span>
+<span class="w">  </span><span class="n">ShapeUtil</span><span class="o">::</span><span class="n">MakeShape</span><span class="p">(</span><span class="n">F32</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="mi">1024</span><span class="p">}),</span>
+<span class="p">});</span>
+<span class="n">xla</span><span class="o">::</span><span class="n">CustomCall</span><span class="p">(</span><span class="o">&amp;</span><span class="n">b</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;do_custom_call&quot;</span><span class="p">,</span><span class="w"> </span><span class="cm">/*operands=*/</span><span class="p">{</span><span class="n">p0</span><span class="p">},</span><span class="w"> </span><span class="n">out_shape</span><span class="p">,</span><span class="w"> </span><span class="p">...);</span>
+</pre></div>
+</div>
+<p>On both CPU and GPU, a tuple is represented in memory as an array of pointers.
+When XLA calls custom calls with tuple arguments or results it flattens them and
+passes as regular buffer arguments or results.</p>
+<section id="tuple-outputs-as-temp-buffers">
+<h3>Tuple outputs as temp buffers<a class="headerlink" href="#tuple-outputs-as-temp-buffers" title="Link to this heading">#</a></h3>
+<p>Tuple inputs to custom calls are a convenience, but they aren’t strictly
+necessary. If we didn’t support tuple inputs to custom calls, you could always
+unpack the tuples using get-tuple-element before passing them to the custom
+call.</p>
+<p>On the other hand, tuple <em>outputs</em> do let you do things you couldn’t otherwise.</p>
+<p>The obvious reason to have tuple outputs is that tuple outputs are how a custom
+call (or any other XLA op) returns multiple independent arrays.</p>
+<p>But less obviously, a tuple output is also a way to give your custom call temp
+memory. Yes, an <em>output</em> can represent a temp buffer. Consider, an output buffer
+has the property that the op can write to it, and it can read from it after it’s
+been written to. That’s exactly what you want from a temp buffer.</p>
+<p>In the example above, suppose we wanted to use the <code class="docutils literal notranslate"><span class="pre">F32[1024]</span></code> as a temp buffer.
+Then we’d write the HLO just as above, and we’d simply never read tuple index 1
+of the custom call’s output.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="async_ops.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Async HLO Instructions</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="sparsecore.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">A deep dive into SparseCore for Large Embedding Models (LEM)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#jax-xla-custom-calls">JAX + XLA Custom Calls</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xla-ffi-binding">XLA FFI Binding</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#returning-errors-from-custom-calls">Returning Errors From Custom Calls</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-arguments-and-results">Buffer Arguments And Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constrained-buffer-arguments-and-results">Constrained Buffer Arguments And Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variadic-arguments-and-results">Variadic Arguments And Results</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#attributes">Attributes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user-defined-enum-attributes">User-Defined Enum Attributes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#binding-all-custom-call-attributes">Binding All Custom Call Attributes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#user-defined-struct-attributes">User-defined Struct Attributes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-custom-call-on-cpu">Create a custom call on CPU</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-custom-call-on-gpu">Create a custom call on GPU</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#passing-tuples-to-custom-calls">Passing tuples to custom calls</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tuple-outputs-as-temp-buffers">Tuple outputs as temp buffers</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

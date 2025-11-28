@@ -1,0 +1,1519 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Indexing Analysis &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'indexing';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tiled layout" href="tiled_layout.html" />
+    <link rel="prev" title="Broadcasting" href="broadcasting.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="shapes.html">Data representation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="error_codes.html">Error Codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/indexing.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Indexing Analysis</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">Motivation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coalescing">Coalescing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operand-utilization">Operand Utilization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tiling">Tiling</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-map">Indexing map</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-maps-for-unfused-ops">Indexing Maps for Unfused Ops</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elementwise">Elementwise</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#broadcast">Broadcast</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iota">Iota</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamicslice">DynamicSlice</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamicupdateslice">DynamicUpdateSlice</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gather">Gather</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transpose">Transpose</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reverse">Reverse</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variadic-reduce">(Variadic)Reduce</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#slice">Slice</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reshape">Reshape</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#collapse-shape">Collapse shape</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expand-shape">Expand shape</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#generic-reshape">Generic reshape</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-linearization-delinearization">Example 1: Linearization-delinearization.</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-expanded-and-collapsed-subshapes">Example 2: Expanded and collapsed subshapes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bitcast">Bitcast</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#concatenate">Concatenate</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dot">Dot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pad">Pad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reducewindow">ReduceWindow</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-maps-for-fusion">Indexing Maps for Fusion</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-input-several-indexing-maps">One input, several indexing maps</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-input-deduplicated-indexing-map">One input, deduplicated indexing map</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#softmax">Softmax</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-map-simplifier">Indexing Map Simplifier</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="indexing-analysis">
+<h1>Indexing Analysis<a class="headerlink" href="#indexing-analysis" title="Link to this heading">#</a></h1>
+<p>HLO indexing analysis is a <a class="reference external" href="https://en.wikipedia.org/wiki/Data-flow_analysis">dataflow analysis</a>
+that describes how elements of one tensor relate to another via “indexing
+maps”. For example, how indices of an HLO instruction output map to indices of
+HLO instruction operands.</p>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
+<p>For a broadcast from <code class="docutils literal notranslate"><span class="pre">tensor&lt;20xf32&gt;</span></code> to <code class="docutils literal notranslate"><span class="pre">tensor&lt;10x20x30xf32&gt;</span></code></p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">bc0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">]</span><span class="w"> </span><span class="n">broadcast</span><span class="p">(</span><span class="n">p0</span><span class="p">),</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>the indexing map from the output to input is <code class="docutils literal notranslate"><span class="pre">(i,</span> <span class="pre">j,</span> <span class="pre">k)</span> <span class="pre">-&gt;</span> <span class="pre">(j)</span></code> for <code class="docutils literal notranslate"><span class="pre">i</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">10]</span></code>, <code class="docutils literal notranslate"><span class="pre">j</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">20]</span></code> and <code class="docutils literal notranslate"><span class="pre">k</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">30]</span></code>.</p>
+</section>
+<section id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">#</a></h2>
+<p>XLA uses several bespoke solutions to reason about coalescing, operand
+utilization, and tiling schemes (more details below). The goal of indexing
+analysis is providing a reusable component for such use cases. Indexing analysis
+is built on MLIR’s Affine Map infrastructure and adds HLO semantics.</p>
+<section id="coalescing">
+<h3>Coalescing<a class="headerlink" href="#coalescing" title="Link to this heading">#</a></h3>
+<p>Reasoning about memory coalescing becomes feasible for non-trivial cases, when
+we know what elements/slices of the inputs are read to compute an element of the
+output.</p>
+</section>
+<section id="operand-utilization">
+<h3>Operand Utilization<a class="headerlink" href="#operand-utilization" title="Link to this heading">#</a></h3>
+<p>Operand utilization in XLA indicates how much each input of the instruction is
+used assuming its output is fully used. Currently, utilization is also not
+computed for a generic case. Indexing analysis allows us to compute utilization
+precisely.</p>
+</section>
+<section id="tiling">
+<h3>Tiling<a class="headerlink" href="#tiling" title="Link to this heading">#</a></h3>
+<p>A tile/slice is hyper-rectangular subset of a tensor parameterized by offsets,
+sizes and strides. Tile propagation is a way to compute tile parameters of the
+producer/consumer of the op using the tiling parameters of the op itself. There
+is already a
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/service/gpu/triton_tiling_propagation.h">library</a>
+that does it for softmax and dot. Tile propagation can be made more generic and
+robust if it is expressed via indexing maps.</p>
+</section>
+</section>
+<section id="indexing-map">
+<h2>Indexing map<a class="headerlink" href="#indexing-map" title="Link to this heading">#</a></h2>
+<p>An <em>indexing map</em> is a combination of</p>
+<ul class="simple">
+<li><p>a symbolically expressed function that maps every element of one tensor <code class="docutils literal notranslate"><span class="pre">A</span></code> to
+ranges of elements in tensor <code class="docutils literal notranslate"><span class="pre">B</span></code>;</p></li>
+<li><p>constraints on valid function arguments, including function’s domain.</p></li>
+</ul>
+<p>Function arguments are split into 3 categories to better communicate their
+nature:</p>
+<ul class="simple">
+<li><p><em>dimension</em> variables of the tensor <code class="docutils literal notranslate"><span class="pre">A</span></code> or a GPU grid we are mapping from;
+values are known statically. Index elements are also called <em>dimension
+variables</em>.</p></li>
+<li><p><em>range</em> variables. They define a one-to-many mapping and specify a set of
+elements in <code class="docutils literal notranslate"><span class="pre">B</span></code> used to compute a single value of <code class="docutils literal notranslate"><span class="pre">A</span></code>; values are known
+statically. The contracting dimension of a matrix multiplication is an example
+of a range variable.</p></li>
+<li><p><em>runtime variables</em> that are only known at during execution. For example,
+indices argument of <a class="reference external" href="https://openxla.org/xla/operation_semantics#gather">gather</a>
+operation.</p></li>
+</ul>
+<p>Result of the function is an index of the target <code class="docutils literal notranslate"><span class="pre">B</span></code> tensor.</p>
+<p>In short, an indexing function from tensor <code class="docutils literal notranslate"><span class="pre">A</span></code> to tensor <code class="docutils literal notranslate"><span class="pre">B</span></code> for operation <code class="docutils literal notranslate"><span class="pre">x</span></code>
+is</p>
+<p><code class="docutils literal notranslate"><span class="pre">map_ab(index</span> <span class="pre">in</span> <span class="pre">A,</span> <span class="pre">range</span> <span class="pre">variables,</span> <span class="pre">runtime</span> <span class="pre">variables)</span> <span class="pre">-&gt;</span> <span class="pre">index</span> <span class="pre">in</span> <span class="pre">B</span></code>.</p>
+<p>To better separate the types of mapping arguments we write them as:</p>
+<p><code class="docutils literal notranslate"><span class="pre">map_ab(index</span> <span class="pre">in</span> <span class="pre">A)[range</span> <span class="pre">variables]{runtime</span> <span class="pre">variables}</span> <span class="pre">-&gt;</span> <span class="pre">(index</span> <span class="pre">in</span> <span class="pre">B)</span></code></p>
+<p>For example, let’s look at the indexing maps for the reduce operation
+<code class="docutils literal notranslate"><span class="pre">f32[4,</span> <span class="pre">8]</span> <span class="pre">out</span> <span class="pre">=</span> <span class="pre">reduce(f32[2,</span> <span class="pre">4,</span> <span class="pre">8,</span> <span class="pre">16]</span> <span class="pre">in,</span> <span class="pre">0),</span> <span class="pre">dimensions={0,3}</span></code>:</p>
+<ul class="simple">
+<li><p>to map elements of <code class="docutils literal notranslate"><span class="pre">in</span></code> to <code class="docutils literal notranslate"><span class="pre">out</span></code> our function can be expressed as
+<code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">d2,</span> <span class="pre">d3)</span> <span class="pre">-&gt;</span> <span class="pre">(d1,</span> <span class="pre">d2)</span></code>. The constraints of the variables
+<code class="docutils literal notranslate"><span class="pre">d0</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">1],</span> <span class="pre">d1</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">3],</span> <span class="pre">d2</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">7],</span> <span class="pre">d3</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">15]</span></code> are defined by the
+shape of <code class="docutils literal notranslate"><span class="pre">in</span></code>.</p></li>
+<li><p>To map elements of <code class="docutils literal notranslate"><span class="pre">out</span></code> to <code class="docutils literal notranslate"><span class="pre">in</span></code>: <code class="docutils literal notranslate"><span class="pre">out</span></code> has only two dimensions, and reduction
+introduces two range variables that cover reducing dimensions. Thus the
+mapping function is <code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1)[s0,</span> <span class="pre">s1]</span> <span class="pre">-&gt;</span> <span class="pre">(s0,</span> <span class="pre">d0,</span> <span class="pre">d1,</span> <span class="pre">s1)</span></code>, where <code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1)</span></code>
+is index of <code class="docutils literal notranslate"><span class="pre">out</span></code>. <code class="docutils literal notranslate"><span class="pre">s0</span></code>, <code class="docutils literal notranslate"><span class="pre">s1</span></code> are ranges defined by operation’s semantics and
+span dimension 0 and 3 of the <code class="docutils literal notranslate"><span class="pre">in</span></code> tensor. The constraints are
+<code class="docutils literal notranslate"><span class="pre">d0</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">3],</span> <span class="pre">d1</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">7],</span> <span class="pre">s0</span> <span class="pre">in</span> <span class="pre">[0,1],</span> <span class="pre">s1</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">15]</span></code>.</p></li>
+</ul>
+<p>It’s important to note that in most scenarios we are interested in mapping from
+the elements of the <em>output</em>. For computation</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">C</span> <span class="o">=</span> <span class="n">op1</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">B</span><span class="p">)</span>
+<span class="n">E</span> <span class="o">=</span> <span class="n">op2</span><span class="p">(</span><span class="n">C</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>we can talk about “indexing of B” meaning “mapping of elements of <code class="docutils literal notranslate"><span class="pre">E</span></code> into
+the elements of <code class="docutils literal notranslate"><span class="pre">B</span></code>”. This might be counter-intuitive compared to other types of
+data-flow analysis that work from input toward outputs.</p>
+<p><em>Constraints</em> on variables enable optimization opportunities and help with
+code generation. In the documentation and implementation constraints are also
+referred to as <em>domain</em> as they define all valid combinations or argument values
+of the mapping function. For many operation, constraints simply describe the
+dimensions of tensors but for some operations they might be more complicated;
+see examples below.</p>
+<p>By having functions and argument constraints expressed symbolically and being
+able to combine functions and constraints we can compute a compact indexing
+mapping for an arbitrary large computation (fusion).</p>
+<p>Expressiveness of symbolic function and constraints is a balance between
+implementation complexity and optimization gains we get from having a more
+precise representation. For some HLO operations we capture access patterns only
+approximately.</p>
+</section>
+<section id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Link to this heading">#</a></h2>
+<p>Since we want to minimize recomputation, we need a library for symbolic
+computations. XLA already depends on MLIR, so we use
+<a class="reference external" href="https://github.com/llvm/llvm-project/blob/main/mlir/include/mlir/IR/AffineMap.h">mlir::AffineMap</a>
+instead of writing a yet-another symbolic arithmetic library.</p>
+<p>A typical <code class="docutils literal notranslate"><span class="pre">AffineMap</span></code> looks like</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">)[</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">s0</span> <span class="o">+</span> <span class="mi">5</span><span class="p">,</span> <span class="n">d0</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">s1</span> <span class="o">*</span> <span class="mi">3</span> <span class="o">+</span> <span class="mi">50</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">AffineMap</span></code> has two types of parameters: <em>dimensions</em> and <em>symbols</em>.
+<em>Dimensions</em> correspond to the dimension variables <em>d</em>; <em>symbols</em> correspond to
+the range variables <em>r</em> and runtime variables <em>rt</em>. <code class="docutils literal notranslate"><span class="pre">AffineMap</span></code> does not contain
+any metadata about constraints of the parameters, so we have to provide them
+separately.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="k">struct</span><span class="w"> </span><span class="nc">Interval</span><span class="w"> </span><span class="p">{</span>
+<span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">lower</span><span class="p">;</span>
+<span class="w"> </span><span class="kt">int64_t</span><span class="w"> </span><span class="n">upper</span><span class="p">;</span>
+<span class="p">};</span>
+
+<span class="n">class</span><span class="w"> </span><span class="n">IndexingMap</span><span class="w"> </span><span class="p">{</span>
+<span class="w">   </span><span class="c1">// Variable represents dimension, range or runtime variable.</span>
+<span class="w">  </span><span class="k">struct</span><span class="w"> </span><span class="nc">Variable</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Interval</span><span class="w"> </span><span class="n">bounds</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Name of the variable is used for nicer printing.</span>
+<span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="p">};</span>
+
+<span class="w">  </span><span class="n">mlir</span><span class="o">::</span><span class="n">AffineMap</span><span class="w"> </span><span class="n">affine_map_</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// DimVars represent dimensions of a tensor or of a GPU grid.</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Variable</span><span class="o">&gt;</span><span class="w"> </span><span class="n">dim_vars_</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// RangeVars represent ranges of values, e.g. to compute a single element of</span>
+<span class="w">  </span><span class="c1">// the reduction&#39;s result we need a range of values from the input tensor.</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Variable</span><span class="o">&gt;</span><span class="w"> </span><span class="n">range_vars_</span><span class="p">;</span>
+
+<span class="w">  </span><span class="c1">// RTVars represent runtime values, e.g. a dynamic offset in</span>
+<span class="w">  </span><span class="c1">// HLO dynamic-update-slice op.</span>
+<span class="w">  </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">Variable</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rt_vars_</span><span class="p">;</span>
+<span class="w">  </span><span class="n">llvm</span><span class="o">::</span><span class="n">DenseMap</span><span class="o">&lt;</span><span class="n">mlir</span><span class="o">::</span><span class="n">AffineExpr</span><span class="p">,</span><span class="w"> </span><span class="n">Interval</span><span class="o">&gt;</span><span class="w"> </span><span class="n">constraints_</span><span class="p">;</span>
+<span class="p">};</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">dim_vars_</span></code> encode the <strong>inclusive</strong> box constraints for the dimension
+variables <strong>d</strong> of the indexing map, which usually coincide with the
+shape of the output tensor for ops like transpose, reduce, elementwise, dot, but
+there are some exceptions like
+<a class="reference external" href="https://github.com/openxla/stablehlo/blob/main/docs/spec.md#concatenate">HloConcatenateInstruction</a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">range_vars_</span></code> all values that range variables <strong>s</strong> take. The range variables
+are needed when multiple values are necessary to compute a single element of the
+tensor we are mapping from, e.g. for output-&gt;input indexing map of reductions or
+input-&gt;output map for broadcasts.</p>
+<p><code class="docutils literal notranslate"><span class="pre">rt_vars_</span></code> encode the feasible values in runtime. For example, the offset is
+dynamic for a 1D <code class="docutils literal notranslate"><span class="pre">HloDynamicSliceInstruction</span></code>. The corresponding <code class="docutils literal notranslate"><span class="pre">RTVar</span></code> will
+have feasible values between <code class="docutils literal notranslate"><span class="pre">0</span></code> and <code class="docutils literal notranslate"><span class="pre">tensor_size</span> <span class="pre">-</span> <span class="pre">slice_size</span> <span class="pre">-</span> <span class="pre">1</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">constraints_</span></code> capture relations between values in form
+<code class="docutils literal notranslate"><span class="pre">&lt;expression&gt;</span> <span class="pre">in</span> <span class="pre">&lt;range&gt;</span></code>, e.g. <code class="docutils literal notranslate"><span class="pre">d0</span> <span class="pre">+</span> <span class="pre">s0</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">20]</span></code>. Together with
+<code class="docutils literal notranslate"><span class="pre">Variable.bounds</span></code> they define the “domain” of indexing function.</p>
+<p>Let’s study-by-example to understand what’s all of the above actually means.</p>
+</section>
+<section id="indexing-maps-for-unfused-ops">
+<h2>Indexing Maps for Unfused Ops<a class="headerlink" href="#indexing-maps-for-unfused-ops" title="Link to this heading">#</a></h2>
+<section id="elementwise">
+<h3>Elementwise<a class="headerlink" href="#elementwise" title="Link to this heading">#</a></h3>
+<p>For elementwise ops the indexing map is an identity.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">  </span><span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="w">  </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span><span class="w"> </span><span class="n">p1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output to input map <code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">-&gt;</span> <span class="pre">p0</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The input to output map <code class="docutils literal notranslate"><span class="pre">p0</span> <span class="pre">-&gt;</span> <span class="pre">output</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="broadcast">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#broadcastindim">Broadcast</a><a class="headerlink" href="#broadcast" title="Link to this heading">#</a></h3>
+<p>Broadcasting means that some of the dimensions will be removed when we map
+output to input and added when we map input to output.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">bc0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">]</span><span class="w"> </span><span class="n">broadcast</span><span class="p">(</span><span class="n">p0</span><span class="p">),</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The output to input map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d1</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">29</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The input to output map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">)[</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">s0</span><span class="p">,</span> <span class="n">d0</span><span class="p">,</span> <span class="n">s1</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">],</span>
+<span class="n">s0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="n">s1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">29</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that now we have range variables <strong>s</strong> on the right side for the
+input-to-output mapping. Those are the symbols that represent ranges of values.
+For example, in this particular case every element of input with index <code class="docutils literal notranslate"><span class="pre">d0</span></code> is
+mapped to a 10x1x30 slice of the output.</p>
+</section>
+<section id="iota">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#iota">Iota</a><a class="headerlink" href="#iota" title="Link to this heading">#</a></h3>
+<p>Iota has no input tensor operand, so there is no input index arguments.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">iota</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="n">iota</span><span class="p">(),</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>Output to input map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">()</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Input to output map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">()[</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">)</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">s0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">s1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="dynamicslice">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#dynamicslice">DynamicSlice</a><a class="headerlink" href="#dynamicslice" title="Link to this heading">#</a></h3>
+<p>DynamicSlice has offsets known only at runtime.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">src</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">258</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">of1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">of2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">of3</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">ds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">]</span><span class="w"> </span><span class="n">dynamic</span><span class="o">-</span><span class="n">slice</span><span class="p">(</span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="n">of1</span><span class="p">,</span><span class="w"> </span><span class="n">of2</span><span class="p">,</span><span class="w"> </span><span class="n">of3</span><span class="p">),</span><span class="w"> </span><span class="n">dynamic_slice_sizes</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The output to input map from <code class="docutils literal notranslate"><span class="pre">ds</span></code> to <code class="docutils literal notranslate"><span class="pre">src</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">){</span><span class="n">rt0</span><span class="p">,</span> <span class="n">rt1</span><span class="p">,</span> <span class="n">rt2</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="o">+</span> <span class="n">rt0</span><span class="p">,</span> <span class="n">d1</span> <span class="o">+</span> <span class="n">rt1</span><span class="p">,</span> <span class="n">d2</span> <span class="o">+</span> <span class="n">rt2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">31</span><span class="p">],</span>
+<span class="n">rt0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">rt1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="n">rt2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">226</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that now we have <strong>rt</strong> on the right side for the input-to-output mapping.
+Those are the symbols that represent runtime values. For example, in this
+particular case for every element of the output with indices <code class="docutils literal notranslate"><span class="pre">d0,</span> <span class="pre">d1,</span> <span class="pre">d2</span></code> we
+access slice offsets <code class="docutils literal notranslate"><span class="pre">of1</span></code>, <code class="docutils literal notranslate"><span class="pre">of2</span></code> and <code class="docutils literal notranslate"><span class="pre">of3</span></code> to compute the index of the input.
+The intervals for the runtime variables are derived by assuming that the entire
+slice stays in bounds.</p>
+<p>The output to input map for <code class="docutils literal notranslate"><span class="pre">of1</span></code>, <code class="docutils literal notranslate"><span class="pre">of2</span></code> and <code class="docutils literal notranslate"><span class="pre">of3</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">31</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="dynamicupdateslice">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#dynamicupdateslice">DynamicUpdateSlice</a><a class="headerlink" href="#dynamicupdateslice" title="Link to this heading">#</a></h3>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">src</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">upd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">of1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">of2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+<span class="n">dus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">]</span><span class="w"> </span><span class="n">dynamic</span><span class="o">-</span><span class="n">update</span><span class="o">-</span><span class="n">slice</span><span class="p">(</span>
+<span class="w">    </span><span class="n">s32</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">]</span><span class="w"> </span><span class="n">src</span><span class="p">,</span><span class="w"> </span><span class="n">s32</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span><span class="w"> </span><span class="n">upd</span><span class="p">,</span><span class="w"> </span><span class="n">s32</span><span class="p">[]</span><span class="w"> </span><span class="n">of1</span><span class="p">,</span><span class="w"> </span><span class="n">s32</span><span class="p">[]</span><span class="w"> </span><span class="n">of2</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output to input map for <code class="docutils literal notranslate"><span class="pre">src</span></code> is trivial. It can be made more precise by
+restricting the domain to the not-updated indices, but right now indexing maps
+do not support inequality constraints.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">29</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The output to input map for <code class="docutils literal notranslate"><span class="pre">upd</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">){</span><span class="n">rt0</span><span class="p">,</span> <span class="n">rt1</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="o">-</span> <span class="n">rt0</span><span class="p">,</span> <span class="n">d1</span> <span class="o">-</span> <span class="n">rt1</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">29</span><span class="p">],</span>
+<span class="n">rt0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
+<span class="n">rt1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that now we have <code class="docutils literal notranslate"><span class="pre">rt0</span></code> and <code class="docutils literal notranslate"><span class="pre">rt1</span></code> that represent runtime values. In
+this particular case for every element of the output with indices <code class="docutils literal notranslate"><span class="pre">d0,</span> <span class="pre">d1</span></code> we
+access slice offsets <code class="docutils literal notranslate"><span class="pre">of1</span></code> and <code class="docutils literal notranslate"><span class="pre">of2</span></code> to compute the index of the input. The
+intervals for the runtime variables are derived by assuming that the entire
+slice stays in bounds.</p>
+<p>The output to input map for <code class="docutils literal notranslate"><span class="pre">of1</span></code> and <code class="docutils literal notranslate"><span class="pre">of2</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">29</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="gather">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#gather">Gather</a><a class="headerlink" href="#gather" title="Link to this heading">#</a></h3>
+<p>Only the simplified gather is supported. See <a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/simplifiers/gather_simplifier.h">gather_simplifier.h</a>.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">operand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">33</span><span class="p">,</span><span class="mi">76</span><span class="p">,</span><span class="mi">70</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">indices</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[</span><span class="mi">1806</span><span class="p">,</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">gather</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">1806</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="n">gather</span><span class="p">(</span><span class="n">operand</span><span class="p">,</span><span class="w"> </span><span class="n">indices</span><span class="p">),</span>
+<span class="w">  </span><span class="n">offset_dims</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">},</span>
+<span class="w">  </span><span class="n">collapsed_slice_dims</span><span class="o">=</span><span class="p">{},</span>
+<span class="w">  </span><span class="n">start_index_map</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">},</span>
+<span class="w">  </span><span class="n">index_vector_dim</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="n">slice_sizes</span><span class="o">=</span><span class="p">{</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">4</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The output to input map for <code class="docutils literal notranslate"><span class="pre">operand</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">){</span><span class="n">rt0</span><span class="p">,</span> <span class="n">rt1</span><span class="p">}</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d1</span> <span class="o">+</span> <span class="n">rt0</span><span class="p">,</span> <span class="n">d2</span> <span class="o">+</span> <span class="n">rt1</span><span class="p">,</span> <span class="n">d3</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1805</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="n">d3</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="n">rt0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">26</span><span class="p">],</span>
+<span class="n">rt1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">68</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Note that now we have <strong>rt</strong> symbols that represent runtime values.</p>
+<p>The output to input map for <code class="docutils literal notranslate"><span class="pre">indices</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">)[</span><span class="n">s0</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">s0</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1805</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="n">d3</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="n">s0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The range variable <code class="docutils literal notranslate"><span class="pre">s0</span></code> shows that we need the entire row (d0, *) of the
+<code class="docutils literal notranslate"><span class="pre">indices</span></code> tensor to compute an element of the output.</p>
+</section>
+<section id="transpose">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#transpose">Transpose</a><a class="headerlink" href="#transpose" title="Link to this heading">#</a></h3>
+<p>Indexing map for transpose is a permutation of input/output dimensions.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">12288</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">transpose</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">12288</span><span class="p">]</span><span class="w"> </span><span class="n">transpose</span><span class="p">(</span><span class="n">p0</span><span class="p">),</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The output to input map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d3</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">127</span><span class="p">],</span>
+<span class="n">d3</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12287</span><span class="p">],</span>
+</pre></div>
+</div>
+<p>The input to output map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">,</span> <span class="n">d1</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">12287</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">],</span>
+<span class="n">d3</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">127</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="reverse">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#rev_reverse">Reverse</a><a class="headerlink" href="#reverse" title="Link to this heading">#</a></h3>
+<p>Indexing map for reverse changes the reverted dimensions to <code class="docutils literal notranslate"><span class="pre">upper_bound(d_i)</span> <span class="pre">-</span> <span class="pre">d_i</span></code>:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">reverse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">,</span><span class="w"> </span><span class="mi">9</span><span class="p">]</span><span class="w"> </span><span class="n">reverse</span><span class="p">(</span><span class="n">p0</span><span class="p">),</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The output to input map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="o">-</span><span class="n">d1</span> <span class="o">+</span> <span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="n">d2</span> <span class="o">+</span> <span class="mi">8</span><span class="p">,</span> <span class="n">d3</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="n">d3</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The input to output map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">,</span> <span class="n">d3</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="o">-</span><span class="n">d1</span> <span class="o">+</span> <span class="mi">16</span><span class="p">,</span> <span class="o">-</span><span class="n">d2</span> <span class="o">+</span> <span class="mi">8</span><span class="p">,</span> <span class="n">d3</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">],</span>
+<span class="n">d3</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="variadic-reduce">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#reduce">(Variadic)Reduce</a><a class="headerlink" href="#variadic-reduce" title="Link to this heading">#</a></h3>
+<p>Variadic reduction have several inputs and several initial values, the map from
+output to input adds the reduced dimensions.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">256</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">p0_init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[]</span><span class="w"> </span><span class="n">constant</span><span class="p">(</span><span class="o">-</span><span class="n">inf</span><span class="p">)</span>
+<span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[</span><span class="mi">256</span><span class="p">,</span><span class="mi">10</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">p1_init</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s32</span><span class="p">[]</span><span class="w"> </span><span class="n">constant</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span><span class="w"> </span><span class="n">s32</span><span class="p">[</span><span class="mi">10</span><span class="p">])</span><span class="w"> </span><span class="n">reduce</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span><span class="w"> </span><span class="n">p1</span><span class="p">,</span><span class="w"> </span><span class="n">p0_init</span><span class="p">,</span><span class="w"> </span><span class="n">p1_init</span><span class="p">),</span>
+<span class="w">  </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="n">to_apply</span><span class="o">=</span><span class="n">max</span>
+</pre></div>
+</div>
+<p>The output to input maps:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">out[0]</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">p0</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">)[</span><span class="n">s0</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">s0</span><span class="p">,</span> <span class="n">d0</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="n">s0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">out[0]</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">p0_init</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The input to output maps:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">p0</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">out[0]</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d1</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">p0_init</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">out[0]</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">()[</span><span class="n">s0</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">s0</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">s0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="slice">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#slice">Slice</a><a class="headerlink" href="#slice" title="Link to this heading">#</a></h3>
+<p>Indexing from output to input for slice results in a strided indexing map which
+is valid for every element of the output. Mapping from the input to output is
+restricted to a strided range of the elements in the input.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">slice</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">25</span><span class="p">]</span><span class="w"> </span><span class="n">slice</span><span class="p">(</span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">]</span><span class="w"> </span><span class="n">p0</span><span class="p">),</span>
+<span class="w">  </span><span class="n">slice</span><span class="o">=</span><span class="p">{[</span><span class="mi">5</span><span class="o">:</span><span class="mi">10</span><span class="o">:</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="o">:</span><span class="mi">20</span><span class="o">:</span><span class="mi">7</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="o">:</span><span class="mi">50</span><span class="o">:</span><span class="mi">2</span><span class="p">]}</span>
+</pre></div>
+</div>
+<p>The output to input map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="o">+</span> <span class="mi">5</span><span class="p">,</span> <span class="n">d1</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">d2</span> <span class="o">*</span> <span class="mi">2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">24</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The input to output map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="p">(</span><span class="n">d1</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="n">floordiv</span> <span class="mi">7</span><span class="p">,</span> <span class="n">d2</span> <span class="n">floordiv</span> <span class="mi">2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">17</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">48</span><span class="p">],</span>
+<span class="p">(</span><span class="n">d1</span> <span class="o">-</span> <span class="mi">3</span><span class="p">)</span> <span class="n">mod</span> <span class="mi">7</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+<span class="n">d2</span> <span class="n">mod</span> <span class="mi">2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="reshape">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#reshape">Reshape</a><a class="headerlink" href="#reshape" title="Link to this heading">#</a></h3>
+<p>Reshapes come in different flavors.</p>
+<section id="collapse-shape">
+<h4>Collapse shape<a class="headerlink" href="#collapse-shape" title="Link to this heading">#</a></h4>
+<p>This is a “linearizing” reshape from N-D to 1D.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">reshape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">p0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output to input map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="n">floordiv</span> <span class="mi">8</span><span class="p">,</span> <span class="n">d0</span> <span class="n">mod</span> <span class="mi">8</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">31</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The input to output map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">d1</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="expand-shape">
+<h4>Expand shape<a class="headerlink" href="#expand-shape" title="Link to this heading">#</a></h4>
+<p>This is an inverse “collapse shape” op, it reshapes a 1D input into N-D output.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">reshape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">]</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">p0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output to input map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">d1</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The input to output map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="n">floordiv</span> <span class="mi">8</span><span class="p">,</span> <span class="n">d0</span> <span class="n">mod</span> <span class="mi">8</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">31</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="generic-reshape">
+<h4>Generic reshape<a class="headerlink" href="#generic-reshape" title="Link to this heading">#</a></h4>
+<p>These are the reshape ops that cannot be represented as a single expand or
+collapse shape. They can be only represented as a composition of 2 or more
+expand or collapse shapes.</p>
+<section id="example-1-linearization-delinearization">
+<h5>Example 1: Linearization-delinearization.<a class="headerlink" href="#example-1-linearization-delinearization" title="Link to this heading">#</a></h5>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">reshape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">p0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This reshape can be represented as a composition of collapse shape of
+<code class="docutils literal notranslate"><span class="pre">tensor&lt;4x8xf32&gt;</span></code> to <code class="docutils literal notranslate"><span class="pre">tensor&lt;32xf32&gt;</span></code> and then a shape expansion to
+<code class="docutils literal notranslate"><span class="pre">tensor&lt;2x4x4xf32&gt;</span></code>.</p>
+<p>The output to input map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">d1</span> <span class="n">floordiv</span> <span class="mi">2</span><span class="p">,</span> <span class="n">d2</span> <span class="o">+</span> <span class="p">(</span><span class="n">d1</span> <span class="n">mod</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">4</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The input to output map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="n">floordiv</span> <span class="mi">2</span><span class="p">,</span> <span class="n">d1</span> <span class="n">floordiv</span> <span class="mi">4</span> <span class="o">+</span> <span class="p">(</span><span class="n">d0</span> <span class="n">mod</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">d1</span> <span class="n">mod</span> <span class="mi">4</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="example-2-expanded-and-collapsed-subshapes">
+<h5>Example 2: Expanded and collapsed subshapes<a class="headerlink" href="#example-2-expanded-and-collapsed-subshapes" title="Link to this heading">#</a></h5>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">12</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">reshape</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">p0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This reshape can be represented as a composition of two reshapes. The first one
+collapses the outermost dimensions <code class="docutils literal notranslate"><span class="pre">tensor&lt;4x8x12xf32&gt;</span></code> to <code class="docutils literal notranslate"><span class="pre">tensor&lt;32x12xf32&gt;</span></code>
+and the second one expand the innermost dimension <code class="docutils literal notranslate"><span class="pre">tensor&lt;32x12xf32&gt;</span></code> into
+<code class="docutils literal notranslate"><span class="pre">tensor&lt;32x3x4xf32&gt;</span></code>.</p>
+<p>The output to input map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="n">floordiv</span> <span class="mi">8</span><span class="p">,</span> <span class="n">d0</span> <span class="n">mod</span> <span class="mi">8</span><span class="p">,</span> <span class="n">d1</span> <span class="o">*</span> <span class="mi">4</span> <span class="o">+</span> <span class="n">d2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">31</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The input to output map:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span> <span class="n">floordiv</span> <span class="mi">4</span><span class="p">,</span> <span class="n">d2</span> <span class="n">mod</span> <span class="mi">4</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">11</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="bitcast">
+<h3>Bitcast<a class="headerlink" href="#bitcast" title="Link to this heading">#</a></h3>
+<p>A bitcast op can be represented as a
+<a class="reference external" href="https://github.com/openxla/xla/blob/578b6df240be94c3c84129fd83f34487efc623a5/xla/shape_util.h#L813">sequence of transpose-reshape-transpose</a>.
+Therefore, its indexing maps are just a composition of indexing maps for this
+sequence.</p>
+</section>
+<section id="concatenate">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#concatenate">Concatenate</a><a class="headerlink" href="#concatenate" title="Link to this heading">#</a></h3>
+<p>Output-to-input mapping for concat is defined for all inputs, but with
+non-overlapping domains, i.e. only one of the inputs will be used at a time.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">p2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ROOT</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">33</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">]</span><span class="w"> </span><span class="n">concatenate</span><span class="p">(</span><span class="n">f32</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">]</span><span class="w"> </span><span class="n">p0</span><span class="p">,</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">11</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">]</span><span class="w"> </span><span class="n">p1</span><span class="p">,</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">17</span><span class="p">,</span><span class="w"> </span><span class="mi">7</span><span class="p">]</span><span class="w"> </span><span class="n">p2</span><span class="p">),</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The output to inputs maps:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">output</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">p0</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">output</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">p1</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="n">d2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">15</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">output</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">p2</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span> <span class="o">-</span> <span class="mi">16</span><span class="p">,</span> <span class="n">d2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The inputs to output maps:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">p0</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">output</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">p1</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">output</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span> <span class="o">+</span> <span class="mi">5</span><span class="p">,</span> <span class="n">d2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">p2</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">output</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span> <span class="o">+</span> <span class="mi">16</span><span class="p">,</span> <span class="n">d2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">16</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="dot">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#dot">Dot</a><a class="headerlink" href="#dot" title="Link to this heading">#</a></h3>
+<p>Indexing maps for dot are very similar to the ones of reduce.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">256</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">256</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">128</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="p">]</span><span class="w"> </span><span class="n">dot</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span><span class="w"> </span><span class="n">p1</span><span class="p">),</span>
+<span class="w">  </span><span class="n">lhs_batch_dims</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">},</span><span class="w"> </span><span class="n">rhs_batch_dims</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">},</span>
+<span class="w">  </span><span class="n">lhs_contracting_dims</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">},</span><span class="w"> </span><span class="n">rhs_contracting_dims</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The output to inputs maps:</p>
+<ul class="simple">
+<li><p>output -&gt; p0:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)[</span><span class="n">s0</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">s0</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">127</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">63</span><span class="p">],</span>
+<span class="n">s0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>output -&gt; p1:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)[</span><span class="n">s0</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">s0</span><span class="p">,</span> <span class="n">d2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">127</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">63</span><span class="p">],</span>
+<span class="n">s0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>The inputs to output maps:</p>
+<ul class="simple">
+<li><p>p0 -&gt; output:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)[</span><span class="n">s0</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">s0</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">127</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span>
+<span class="n">s0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">63</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>p1 -&gt; output:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)[</span><span class="n">s0</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">s0</span><span class="p">,</span> <span class="n">d1</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">63</span><span class="p">],</span>
+<span class="n">s0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">127</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="pad">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#pad">Pad</a><a class="headerlink" href="#pad" title="Link to this heading">#</a></h3>
+<p>Indexing of PadOp is the inverse of SliceOp indexing.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">p1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">pad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">12</span><span class="p">,</span><span class="w"> </span><span class="mi">16</span><span class="p">]</span><span class="w"> </span><span class="n">pad</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span><span class="w"> </span><span class="n">p1</span><span class="p">),</span><span class="w"> </span><span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="n">_4_1x4_8_0</span>
+</pre></div>
+</div>
+<p>The padding config <code class="docutils literal notranslate"><span class="pre">1_4_1x4_8_0</span></code> denotes <code class="docutils literal notranslate"><span class="pre">lowPad_highPad_interiorPad_dim_0</span> <span class="pre">x</span> <span class="pre">lowPad_highPad_interiorPad_dim_1</span></code>.</p>
+<p>The output to input maps:</p>
+<ul class="simple">
+<li><p>output -&gt; p0:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">((</span><span class="n">d0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="n">floordiv</span> <span class="mi">2</span><span class="p">,</span> <span class="n">d1</span> <span class="o">-</span> <span class="mi">4</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">7</span><span class="p">],</span>
+<span class="p">(</span><span class="n">d0</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="n">mod</span> <span class="mi">2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>output -&gt; p1:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">11</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">15</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="reducewindow">
+<h3><a class="reference external" href="https://openxla.org/xla/operation_semantics#reducewindow">ReduceWindow</a><a class="headerlink" href="#reducewindow" title="Link to this heading">#</a></h3>
+<p>ReduceWindow in XLA also performs padding. Therefore, the indexing maps can be
+computed as a composition of ReduceWindow indexing that does not do any padding
+and PadOp’s indexing.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">c_inf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[]</span><span class="w"> </span><span class="n">constant</span><span class="p">(</span><span class="o">-</span><span class="n">inf</span><span class="p">)</span>
+<span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">1024</span><span class="p">,</span><span class="w"> </span><span class="mi">514</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">outpu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">1024</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="n">reduce</span><span class="o">-</span><span class="n">window</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span><span class="w"> </span><span class="n">c_inf</span><span class="p">),</span>
+<span class="w">  </span><span class="n">window</span><span class="o">=</span><span class="p">{</span><span class="n">size</span><span class="o">=</span><span class="mi">1</span><span class="n">x512</span><span class="w"> </span><span class="n">pad</span><span class="o">=</span><span class="mi">0</span><span class="n">_0x0_0</span><span class="p">},</span><span class="w"> </span><span class="n">to_apply</span><span class="o">=</span><span class="n">max</span>
+</pre></div>
+</div>
+<p>The output to input maps:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">-&gt;</span> <span class="pre">p0</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)[</span><span class="n">s0</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span> <span class="o">+</span> <span class="n">s0</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1023</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+<span class="n">s0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">511</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">output</span> <span class="pre">-&gt;</span> <span class="pre">c_inf</span></code>:</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1023</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="indexing-maps-for-fusion">
+<h2>Indexing Maps for Fusion<a class="headerlink" href="#indexing-maps-for-fusion" title="Link to this heading">#</a></h2>
+<p>Indexing map for fusion op is a composition of indexing maps for every op in the
+cluster. It can happen that some inputs are read several times with different
+access patterns.</p>
+<section id="one-input-several-indexing-maps">
+<h3>One input, several indexing maps<a class="headerlink" href="#one-input-several-indexing-maps" title="Link to this heading">#</a></h3>
+<p>Here is an example for <code class="docutils literal notranslate"><span class="pre">p0</span> <span class="pre">+</span> <span class="pre">transpose(p0)</span></code>.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">  </span><span class="n">transpose_p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">]{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span><span class="w"> </span><span class="n">transpose</span><span class="p">(</span><span class="n">p0</span><span class="p">),</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">}</span>
+<span class="w">  </span><span class="n">ROOT</span><span class="w"> </span><span class="n">a0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">1000</span><span class="p">,</span><span class="w"> </span><span class="mi">1000</span><span class="p">]</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">p0</span><span class="p">,</span><span class="w"> </span><span class="n">transpose_p0</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The output-to-input indexing maps for <code class="docutils literal notranslate"><span class="pre">p0</span></code> will be <code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1)</span> <span class="pre">-&gt;</span> <span class="pre">(d0,</span> <span class="pre">d1)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1)</span> <span class="pre">-&gt;</span> <span class="pre">(d1,</span> <span class="pre">d0)</span></code>. It means that to compute one element
+of the output we might need to read the input parameter twice.</p>
+</section>
+<section id="one-input-deduplicated-indexing-map">
+<h3>One input, deduplicated indexing map<a class="headerlink" href="#one-input-deduplicated-indexing-map" title="Link to this heading">#</a></h3>
+<p><img alt="img" src="_images/indexing_analysis_transposes.svg" /></p>
+<p>There are cases when the indexing maps are actually the same, even though it is
+not immediately obvious.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="w">  </span><span class="n">lhs_transpose_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">]</span><span class="w"> </span><span class="n">transpose</span><span class="p">(</span><span class="n">p0</span><span class="p">),</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">}</span>
+<span class="w">  </span><span class="n">lhs_e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">]</span><span class="w"> </span><span class="n">exponential</span><span class="p">(</span><span class="n">lhs_transpose_1</span><span class="p">)</span>
+<span class="w">  </span><span class="n">lhs_transpose_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="n">transpose</span><span class="p">(</span><span class="n">lhs_e</span><span class="p">),</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">}</span>
+<span class="w">  </span><span class="n">rhs_transpose_1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="n">transpose</span><span class="p">(</span><span class="n">p0</span><span class="p">),</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">}</span>
+<span class="w">  </span><span class="n">rhs_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="n">exponential</span><span class="p">(</span><span class="n">rhs_transpose_1</span><span class="p">)</span>
+<span class="w">  </span><span class="n">rhs_transpose_2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="n">transpose</span><span class="p">(</span><span class="n">rhs_log</span><span class="p">),</span><span class="w"> </span><span class="n">dimensions</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">}</span>
+<span class="w">  </span><span class="n">ROOT</span><span class="w"> </span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="n">add</span><span class="p">(</span><span class="n">lhs_transpose_2</span><span class="p">,</span><span class="w"> </span><span class="n">rhs_transpose_2</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The output-to-input indexing map for <code class="docutils literal notranslate"><span class="pre">p0</span></code> in this case is just
+<code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">d2)</span> <span class="pre">-&gt;</span> <span class="pre">(d2,</span> <span class="pre">d0,</span> <span class="pre">d1)</span></code>.</p>
+</section>
+<section id="softmax">
+<h3>Softmax<a class="headerlink" href="#softmax" title="Link to this heading">#</a></h3>
+<p><img alt="img" src="_images/indexing_analysis_softmax.png" /></p>
+<p>The output-to-input indexing maps for <code class="docutils literal notranslate"><span class="pre">parameter</span> <span class="pre">0</span></code> for softmax:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)[</span><span class="n">s0</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">s0</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">64</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">124</span><span class="p">],</span>
+<span class="n">s0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">124</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>and</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="n">d2</span><span class="p">),</span>
+<span class="n">domain</span><span class="p">:</span>
+<span class="n">d0</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+<span class="n">d1</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">64</span><span class="p">],</span>
+<span class="n">d2</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">124</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">s0</span></code> refers to the innermost dimension of the input.</p>
+<p>For more examples see <a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/analysis/indexing_analysis_test.cc">indexing_analysis_test.cc</a>.</p>
+</section>
+</section>
+<section id="indexing-map-simplifier">
+<h2>Indexing Map Simplifier<a class="headerlink" href="#indexing-map-simplifier" title="Link to this heading">#</a></h2>
+<p>The default simplifier for <code class="docutils literal notranslate"><span class="pre">mlir::AffineMap</span></code> upstream cannot make any
+assumptions about the ranges of dimensions/symbols. Therefore, it cannot
+simplify expressions with <code class="docutils literal notranslate"><span class="pre">mod</span></code> and <code class="docutils literal notranslate"><span class="pre">div</span></code>efficiently.</p>
+<p>We can leverage the knowledge about lower and upper bounds of the
+sub-expressions in the affine maps to simplify them even more.</p>
+<p>The simplifier can rewrite the following expressions.</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1)</span> <span class="pre">-&gt;</span> <span class="pre">(d0</span> <span class="pre">+</span> <span class="pre">d1</span> <span class="pre">floordiv</span> <span class="pre">16,</span> <span class="pre">d1</span> <span class="pre">mod</span> <span class="pre">16)</span></code> for <strong>d</strong> in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">6]</span> <span class="pre">x</span> <span class="pre">[0,</span> <span class="pre">14]</span></code> becomes <code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1)</span> <span class="pre">-&gt;</span> <span class="pre">(d0,</span> <span class="pre">d1)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">d2)</span> <span class="pre">-&gt;</span> <span class="pre">((100d0</span> <span class="pre">+</span> <span class="pre">10d1</span> <span class="pre">+</span> <span class="pre">d2)</span> <span class="pre">floorDiv</span> <span class="pre">100,</span> <span class="pre">((100d0</span> <span class="pre">+</span> <span class="pre">10d1</span> <span class="pre">+</span> <span class="pre">d2)</span> <span class="pre">mod</span> <span class="pre">100)</span> <span class="pre">floordiv</span> <span class="pre">10,</span> <span class="pre">d2</span> <span class="pre">mod</span> <span class="pre">10)</span></code> for <code class="docutils literal notranslate"><span class="pre">di</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">9]</span></code> becomes <code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">d2)</span> <span class="pre">-&gt;</span> <span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">d2)</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">d2)</span> <span class="pre">-&gt;</span> <span class="pre">((16d0</span> <span class="pre">+</span> <span class="pre">4d1</span> <span class="pre">+</span> <span class="pre">d2)</span> <span class="pre">floordiv</span> <span class="pre">8,</span> <span class="pre">(16d0</span> <span class="pre">+</span> <span class="pre">4d1</span> <span class="pre">+</span> <span class="pre">d2)</span> <span class="pre">mod</span> <span class="pre">8)</span></code> for <code class="docutils literal notranslate"><span class="pre">d_i</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">9]</span></code> becomes <code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">d2)</span> <span class="pre">-&gt;</span> <span class="pre">(2d0</span> <span class="pre">+</span> <span class="pre">(4d1</span> <span class="pre">+</span> <span class="pre">d2)</span> <span class="pre">floordiv</span> <span class="pre">8,(4d1</span> <span class="pre">+</span> <span class="pre">d2)</span> <span class="pre">mod</span> <span class="pre">8)</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1)</span> <span class="pre">-&gt;</span> <span class="pre">(-(-11d0</span> <span class="pre">-</span> <span class="pre">d1</span> <span class="pre">+</span> <span class="pre">109)</span> <span class="pre">floordiv</span> <span class="pre">11</span> <span class="pre">+</span> <span class="pre">9)</span></code> for <strong>d</strong>
+in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">9]</span> <span class="pre">x</span> <span class="pre">[0,</span> <span class="pre">10]</span></code> becomes <code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1)</span> <span class="pre">-&gt;</span> <span class="pre">(d0)</span></code>.</p></li>
+</ol>
+<p>Indexing map simplifier allows us to understand that some of the chained
+reshapes in HLO cancel each other.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">]</span><span class="w"> </span><span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">reshape1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">50</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">]</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">p0</span><span class="p">)</span>
+<span class="n">reshape2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">10</span><span class="p">]</span><span class="w"> </span><span class="n">reshape</span><span class="p">(</span><span class="n">reshape1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>After the composition of indexing maps and their simplification we will get</p>
+<p><code class="docutils literal notranslate"><span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">d2)</span> <span class="pre">-&gt;</span> <span class="pre">(d0,</span> <span class="pre">d1,</span> <span class="pre">d2)</span></code>.</p>
+<p>Indexing map simplification also simplifies the constraints.</p>
+<ol class="arabic simple">
+<li><p>Constraints of type
+<code class="docutils literal notranslate"><span class="pre">lower_bound</span> <span class="pre">&lt;=</span> <span class="pre">affine_expr</span> <span class="pre">(floordiv,</span> <span class="pre">+,</span> <span class="pre">-,</span> <span class="pre">*)</span> <span class="pre">constant</span> <span class="pre">&lt;=</span> <span class="pre">upper_bound</span></code> are
+rewritten as <code class="docutils literal notranslate"><span class="pre">updated_lower_bound</span> <span class="pre">&lt;=</span> <span class="pre">affine_expr</span> <span class="pre">&lt;=</span> <span class="pre">updated_upped_bound</span></code>.</p></li>
+<li><p>Constraints that are always satisfied, e.g. <code class="docutils literal notranslate"><span class="pre">d0</span> <span class="pre">+</span> <span class="pre">s0</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">20]</span></code>
+for <code class="docutils literal notranslate"><span class="pre">d0</span> <span class="pre">in</span> <span class="pre">[0,</span> <span class="pre">5]</span></code> and <code class="docutils literal notranslate"><span class="pre">s0</span> <span class="pre">in</span> <span class="pre">[1,</span> <span class="pre">3]</span></code> are eliminated.</p></li>
+<li><p>Affine expressions in the constraints are optimized as the indexing affine
+map above.</p></li>
+</ol>
+<p>For more examples see <a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/analysis/indexing_map_test.cc">indexing_map_test.cc</a>.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="broadcasting.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Broadcasting</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tiled_layout.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Tiled layout</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">Motivation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#coalescing">Coalescing</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operand-utilization">Operand Utilization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tiling">Tiling</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-map">Indexing map</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#implementation">Implementation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-maps-for-unfused-ops">Indexing Maps for Unfused Ops</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#elementwise">Elementwise</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#broadcast">Broadcast</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#iota">Iota</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamicslice">DynamicSlice</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamicupdateslice">DynamicUpdateSlice</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gather">Gather</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transpose">Transpose</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reverse">Reverse</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#variadic-reduce">(Variadic)Reduce</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#slice">Slice</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reshape">Reshape</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#collapse-shape">Collapse shape</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#expand-shape">Expand shape</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#generic-reshape">Generic reshape</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-1-linearization-delinearization">Example 1: Linearization-delinearization.</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#example-2-expanded-and-collapsed-subshapes">Example 2: Expanded and collapsed subshapes</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bitcast">Bitcast</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#concatenate">Concatenate</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dot">Dot</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pad">Pad</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reducewindow">ReduceWindow</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-maps-for-fusion">Indexing Maps for Fusion</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-input-several-indexing-maps">One input, several indexing maps</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-input-deduplicated-indexing-map">One input, deduplicated indexing map</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#softmax">Softmax</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-map-simplifier">Indexing Map Simplifier</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

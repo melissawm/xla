@@ -1,0 +1,875 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>XLA Flags Guidance &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'flags_guidance';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HLO Passes" href="hlo_passes.html" />
+    <link rel="prev" title="Error code: 0102" href="errors/error_0102.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="error_codes.html">Error Codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/flags_guidance.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>XLA Flags Guidance</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#correctness-flags">Correctness Flags</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-flags">Performance Flags</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-flags">Memory Flags</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#other-commonly-used-flags">Other commonly used flags</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tpu-xla-flags">TPU XLA flags</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu-xla-flags">GPU XLA flags</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="xla-flags-guidance">
+<h1>XLA Flags Guidance<a class="headerlink" href="#xla-flags-guidance" title="Link to this heading">#</a></h1>
+<p>This guide offers a curated selection of key XLA flags to assist users
+in effectively navigating and utilizing XLA’s capabilities. The following
+sections detail flags that can significantly impact runtime performance and
+memory utilization. Should any issues, such as crashes, arise after enabling a
+flag, it is recommended to revert to the default setting and create a
+GitHub issue.</p>
+<section id="correctness-flags">
+<h2>Correctness Flags<a class="headerlink" href="#correctness-flags" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Flag</p></th>
+<th class="head text-left"><p>Description</p></th>
+<th class="head text-left"><p>Default Values</p></th>
+<th class="head text-left"><p>Suggested Values</p></th>
+<th class="head text-left"><p>Candidate Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_mosaic_on_device_checks</span></code></p></td>
+<td class="text-left"><p>This flag enables on-device checks for Mosaic codegen. Currently, the supported checks are on bounds, i.e., if an out-of-bounds memory is touched, the compilation/execution would catch it.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_mosaic_on_device_checks=bounds</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_mosaic_on_device_checks=bounds</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_mosaic_on_device_checks=bounds</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="performance-flags">
+<h2>Performance Flags<a class="headerlink" href="#performance-flags" title="Link to this heading">#</a></h2>
+<p>The following flags are instrumental in enhancing runtime performance.
+Experimenting with these settings may lead to considerable performance gains.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Flag</p></th>
+<th class="head text-left"><p>Description</p></th>
+<th class="head text-left"><p>Default Values</p></th>
+<th class="head text-left"><p>Suggested Values</p></th>
+<th class="head text-left"><p>Candidate Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>Pipelining</strong> <br> 1. <code class="docutils literal notranslate"><span class="pre">xla_should_allow_loop_variant_parameter_in_chain</span></code> <br> 2. <code class="docutils literal notranslate"><span class="pre">xla_should_add_loop_invariant_op_in_chain</span></code> <br> 3. <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_ici_ag_pipelining</span></code></p></td>
+<td class="text-left"><p>These 3 flags should be used in conjunction to enable collective pipelining of ICI(Interchip-Interconnect) all-gather operations, which creates more opportunities for overlapping execution.</p></td>
+<td class="text-left"><p>1. <code class="docutils literal notranslate"><span class="pre">xla_should_allow_loop_variant_parameter_in_chain=kDisabled</span></code> <br> 2. <code class="docutils literal notranslate"><span class="pre">xla_should_add_loop_invariant_op_in_chain=kDisabled</span></code> <br> 3. <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_ici_ag_pipelining=false</span></code></p></td>
+<td class="text-left"><p>1. <code class="docutils literal notranslate"><span class="pre">xla_should_allow_loop_variant_parameter_in_chain=kEnabled</span></code> <br> 2. <code class="docutils literal notranslate"><span class="pre">xla_should_add_loop_invariant_op_in_chain=kEnabled</span></code> <br> 3. <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_ici_ag_pipelining=true</span></code></p></td>
+<td class="text-left"><p>1. <code class="docutils literal notranslate"><span class="pre">xla_should_allow_loop_variant_parameter_in_chain=kDisabled/kEnabled/kAuto</span></code> <br> 2. <code class="docutils literal notranslate"><span class="pre">xla_should_add_loop_invariant_op_in_chain=kDisabled/kEnabled/kAuto</span></code> <br> 3. <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_ici_ag_pipelining=true/false</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>v5e/Async</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_enable_async_all_gather</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion_fuse_all_gather</span></code></p></td>
+<td class="text-left"><p>These 3 flags should be used in conjunction to activate asynchronous all-gather operations on v5e.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_enable_async_all_gather=kAuto</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion=true</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion_fuse_all_gather=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_enable_async_all_gather=kAuto</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion=true</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion_fuse_all_gather=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_enable_async_all_gather=kDisabled/kEnabled/kAuto</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion=true/false</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion_fuse_all_gather=true/false</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>v5e/Async</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion_fuse_all_reduce</span></code></p></td>
+<td class="text-left"><p>These 2 flags should be used in conjunction to activate asynchronous all-reduce operations on v5e.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion=true</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion_fuse_all_reduce=false</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion=true</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion_fuse_all_reduce=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion=true/false</span></code> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_collective_fusion_fuse_all_reduce=true/false</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Async</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_all_to_all</span></code></p></td>
+<td class="text-left"><p>This flag enables asynchronous all-to-all communication.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_all_to_all=false</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_all_to_all=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_async_all_to_all=true/false</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Latency-bound</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_all_gather_latency_bound_threshold_in_bytes</span></code></p></td>
+<td class="text-left"><p>This flag is intended for latency-bound (i.e., small-sized) all-gather operations. Enabling this triggers specific optimizations that can reduce execution time for latency-bound all-gathers. Typically it’s used in inference workloads.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_all_gather_latency_bound_threshold_in_bytes=-1</span></code> <br> (which is not enabled)</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">4~16Mb(i.e.</span> <span class="pre">4~16</span> <span class="pre">*</span> <span class="pre">1024</span> <span class="pre">*</span> <span class="pre">1024)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">9223372036854775807]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Latency-bound</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_all_reduce_latency_bound_threshold_in_bytes</span></code></p></td>
+<td class="text-left"><p>This flag is intended for latency-bound (i.e., small-sized) all-gather operations. Enabling this triggers specific optimizations that can reduce execution time for latency-bound all-reduces. Typically it’s used in inference workloads.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_all_reduce_latency_bound_threshold_in_bytes=-1</span></code> <br> (which is not enabled)</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">4~16Mb(i.e.</span> <span class="pre">4~16</span> <span class="pre">*</span> <span class="pre">1024</span> <span class="pre">*</span> <span class="pre">1024)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">9223372036854775807]</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Latency-bound</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_collective_permute_latency_bound_threshold_in_bytes</span></code></p></td>
+<td class="text-left"><p>This flag is intended for latency-bound (i.e., small-sized) all-gather operations. Enabling this triggers specific optimizations that can reduce execution time for latency-bound collective-permutes. Typically it’s used in inference workloads.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_collective_permute_latency_bound_threshold_in_bytes=-1</span></code> <br> (which is not enabled)</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">4~16Mb(i.e.</span> <span class="pre">4~16</span> <span class="pre">*</span> <span class="pre">1024</span> <span class="pre">*</span> <span class="pre">1024)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">9223372036854775807]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Latency-bound</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_all_to_all_latency_bound_threshold_in_bytes</span></code></p></td>
+<td class="text-left"><p>This flag is intended for latency-bound (i.e., small-sized) all-gather operations. Enabling this triggers specific optimizations that can reduce execution time for latency-bound all-to-all. Typically it’s used in inference workloads.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_all_to_all_latency_bound_threshold_in_bytes=-1</span></code> <br> (which is not enabled)</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">4~16Mb(i.e.</span> <span class="pre">4~16</span> <span class="pre">*</span> <span class="pre">1024</span> <span class="pre">*</span> <span class="pre">1024)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">9223372036854775807]</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_enable_async_collective_permute</span></code></p></td>
+<td class="text-left"><p>Rewrites all collective-permute operations to their asynchronous variants. When set to <code class="docutils literal notranslate"><span class="pre">auto</span></code>, XLA can turn on async collective based on other configurations or conditions automatically.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_enable_async_collective_permute=kAuto</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_enable_async_collective_permute=kAuto</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_enable_async_collective_permute=kAuto/kEnabled/kDisabled</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Compute centric</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_dot_strength_reduction</span></code></p></td>
+<td class="text-left"><p>This flag rewrites non-compute intensive dots as multiply + reduce operations.</p></td>
+<td class="text-left"><p><strong>Compute centric</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_dot_strength_reduction=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_dot_strength_reduction=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_dot_strength_reduction=true/false</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Compute centric</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_dot_dot_fusion</span></code></p></td>
+<td class="text-left"><p>This flag enables dot-dot fusion, which fuses a producer-dot operation with a consumer-dot operation. On doing so, the producer-dot’s output is not manifested in slow/main memory driving down memory footprint.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_dot_dot_fusion=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_dot_dot_fusion=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_dot_dot_fusion=true/false</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Compute centric</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_jf_enable_multi_output_fusion</span></code></p></td>
+<td class="text-left"><p>This flag enables fusions that fuse multiple consumers (i.e. the resultant fusion will have multiple outputs)</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_jf_enable_multi_output_fusion=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_jf_enable_multi_output_fusion=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_jf_enable_multi_output_fusion=true/false</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Compute centric</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_scoped_vmem_limit_kib</span></code></p></td>
+<td class="text-left"><p>This flag sets the amount of scratchpad VMEM available to per op for local usage in KiloBytes. Rest of the VMEM is used as buffer space.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_scoped_vmem_limit_kib=16384</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_scoped_vmem_limit_kib=16384</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_scoped_vmem_limit_kib=[4096,</span> <span class="pre">VMEM</span> <span class="pre">size</span> <span class="pre">of</span> <span class="pre">the</span> <span class="pre">architecture</span> <span class="pre">-</span> <span class="pre">1024]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Compute centric</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_async_copy_bandwidth_scaling_factor</span></code></p></td>
+<td class="text-left"><p>Scales effective bandwidth for async copies. This is used when making prefetch decisions and deciding which tensors should live in VMEM.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_async_copy_bandwidth_scaling_factor=1</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_async_copy_bandwidth_scaling_factor=1</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_async_copy_bandwidth_scaling_factor=(0,</span> <span class="pre">1]</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Compute centric</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_msa_enable_cross_program_prefetch_freeing</span></code></p></td>
+<td class="text-left"><p>Enables freeing optimization for cross-program-prefetched buffers.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_msa_enable_cross_program_prefetch_freeing=enabled</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_msa_enable_cross_program_prefetch_freeing=enabled</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_msa_enable_cross_program_prefetch_freeing=enabled/disabled</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Compute centric</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_msa_inefficient_use_to_copy_ratio</span></code></p></td>
+<td class="text-left"><p>The ratio of use bytes to copy bytes for a given allocation site below which we consider the site to be inefficient. This is used while making VMEM placement decisions. A value of 0 would treat all sites as efficient and a value of 1 would require the amount of bytes used at the site to be at least as much as the async copy bytes.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_msa_inefficient_use_to_copy_ratio=0.5</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_msa_inefficient_use_to_copy_ratio=0.5</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_msa_inefficient_use_to_copy_ratio=[0,</span> <span class="pre">1]</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="memory-flags">
+<h2>Memory Flags<a class="headerlink" href="#memory-flags" title="Link to this heading">#</a></h2>
+<p>The flags listed below are provided to address HBM-related issues. These
+should only be adjusted if you encounter HBM “out of memory” errors during model
+compilation. In all other scenarios, the default values are recommended, as
+altering them could adversely affect performance.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Flag</p></th>
+<th class="head text-left"><p>Description</p></th>
+<th class="head text-left"><p>Default Values</p></th>
+<th class="head text-left"><p>Suggested Values</p></th>
+<th class="head text-left"><p>Candidate Values</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><strong>Scheduler</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_latency_hiding_scheduler_rerun</span></code></p></td>
+<td class="text-left"><p>This setting adjusts the behavior of the latency-hiding scheduler. It works by incrementally reducing the memory limit allocated for scheduling with each “rerun” of the process.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_latency_hiding_scheduler_rerun=1</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_latency_hiding_scheduler_rerun=5</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">0~10(it</span> <span class="pre">doesn’t</span> <span class="pre">make</span> <span class="pre">much</span> <span class="pre">sense</span> <span class="pre">beyond</span> <span class="pre">10</span> <span class="pre">reruns)</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Fusion</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_rwb_fusion</span></code></p></td>
+<td class="text-left"><p>This flag enables reduce+broadcast type of fusions, and may decrease memory usage.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_rwb_fusion=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_rwb_fusion=false</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_rwb_fusion=true/false</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>Scheduler</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_memory_scheduler</span></code></p></td>
+<td class="text-left"><p>This flag specifies the algorithm the memory scheduler will use to minimize memory consumption. Using a more advanced algorithm might get a less memory-consuming schedule, at the cost of longer compilation time.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_memory_scheduler=kDefault</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_memory_scheduler=kBrkga</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_memory_scheduler=kDefault/kList/kDfs/kPostOrder/kBrkga</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Scheduler</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_latency_hiding_scheduler</span></code></p></td>
+<td class="text-left"><p>This flag enables the latency-hiding scheduler, which allows us to perform asynchronous collective instead of synchronous ones. Disabling it reduces memory usage at the cost of losing the performance gains from these asynchronous operations.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_latency_hiding_scheduler=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_latency_hiding_scheduler=false</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_latency_hiding_scheduler=true/false</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><strong>SPMD</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_jf_spmd_threshold_for_windowed_einsum_mib</span></code></p></td>
+<td class="text-left"><p>This flag sets the lower threshold of the minimum size of the dot to trigger collective matmul. Setting it to a higher value would save memory at the cost of losing opportunities to perform collective matmul.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_jf_spmd_threshold_for_windowed_einsum_mib=-1</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">10Mb~1Gb</span> <span class="pre">(i.e.</span> <span class="pre">10*1024*1024</span> <span class="pre">~</span> <span class="pre">1024*1024*1024)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">9223372036854775807]</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><strong>Scheduler</strong> <br> <code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_analytical_sol_latency_estimator</span></code></p></td>
+<td class="text-left"><p>This flag enables the analytical estimator which maximizes compute-communication overlap on GPUs.</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_analytical_sol_latency_estimator=true</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_analytical_sol_latency_estimator=false</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">true/false</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="other-commonly-used-flags">
+<h2>Other commonly used flags<a class="headerlink" href="#other-commonly-used-flags" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Flag</p></th>
+<th class="head text-left"><p>Type</p></th>
+<th class="head text-left"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_dump_to</span></code></p></td>
+<td class="text-left"><p>String (filepath)</p></td>
+<td class="text-left"><p>The folder where pre-optimization HLO files and other artifacts will be placed (see <a class="reference external" href="https://openxla.org/xla/tools">XLA Tools</a>).</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<section id="tpu-xla-flags">
+<h3>TPU XLA flags<a class="headerlink" href="#tpu-xla-flags" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Flag</p></th>
+<th class="head text-left"><p>Type</p></th>
+<th class="head text-left"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_data_parallel_all_reduce_opt</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Optimization to increase overlap opportunities for DCN (data center networking) all-reduces used for data parallel sharding.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_data_parallel_opt_different_sized_ops</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Enables pipelining of data parallel ops across multiple iterations even if their output sizes don’t match what can be saved in place in the stacked variables. Can increase memory pressure.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_spmd_rng_bit_generator_unsafe</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Whether to run RngBitGenerator HLO in a partitioned way, which is unsafe if deterministic results are expected with different shardings on different parts of the computation.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_megacore_fusion_allow_ags</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Allows fusing all-gathers with convolutions/all-reduces.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_tpu_enable_ag_backward_pipelining</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Pipelines all-gathers (currently megascale all-gathers) backwards through scan loops.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="gpu-xla-flags">
+<h3>GPU XLA flags<a class="headerlink" href="#gpu-xla-flags" title="Link to this heading">#</a></h3>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head text-left"><p>Flag</p></th>
+<th class="head text-left"><p>Type</p></th>
+<th class="head text-left"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_latency_hiding_scheduler</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>This flag enables latency hiding schedulers to overlap asynchronous communication with computation efficiently. The default value is False.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_analytical_sol_latency_estimator</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Enables platform specific scheduling decisions, which in turn improve compute-communication overlap. The default value is true.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_analytical_latency_estimator_options</span></code></p></td>
+<td class="text-left"><p>Structured string</p></td>
+<td class="text-left"><p>Configures parameters for the <code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_analytical_sol_latency_estimator</span></code>. Adjust by setting <code class="docutils literal notranslate"><span class="pre">nic_speed_gbps=$NIC_SPEED,nccl_op_launch_us=$LAUNCH_OVERHEAD,chunk_prep_us=$CHUNK_PREP,rtt_us=$RTT,chunk_size_bytes=$CHUNK_SIZE,gpus_per_node=$GPUS_PER_NODE</span></code>. The default value depends on a detected platform.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_triton_gemm</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Use Triton-based matrix multiplication.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_command_buffer</span></code></p></td>
+<td class="text-left"><p>List of CommandBufferCmdType</p></td>
+<td class="text-left"><p>Which kind of commands should be captured in command buffers.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_all_reduce_combine_threshold_bytes</span></code></p></td>
+<td class="text-left"><p>Integer (bytes)</p></td>
+<td class="text-left"><p>These flags tune when to combine multiple small AllGather / ReduceScatter / AllReduce into one big AllGather / ReduceScatter / AllReduce to reduce time spent on cross-device communication. For example, for the AllGather / ReduceScatter thresholds on a Transformer-based workload, consider tuning them high enough so as to combine at least a Transformer Layer’s weight AllGather / ReduceScatter. By default, the combine_threshold_bytes is set to 256.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_all_gather_combine_threshold_bytes</span></code></p></td>
+<td class="text-left"><p>Integer (bytes)</p></td>
+<td class="text-left"><p>See xla_gpu_all_reduce_combine_threshold_bytes above.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_reduce_scatter_combine_threshold_bytes</span></code></p></td>
+<td class="text-left"><p>Integer (bytes)</p></td>
+<td class="text-left"><p>See xla_gpu_all_reduce_combine_threshold_bytes above.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_pipelined_all_gather</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Enable pipelinling of all-gather instructions.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_pipelined_reduce_scatter</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Enable pipelinling of reduce-scatter instructions.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_pipelined_all_reduce</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Enable pipelinling of all-reduce instructions.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_while_loop_double_buffering</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Enable double-buffering for while loop.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_all_gather_combine_by_dim</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Combine all-gather ops with the same gather dimension or irrespective of their dimension.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">xla_gpu_enable_reduce_scatter_combine_by_dim</span></code></p></td>
+<td class="text-left"><p>Boolean (true/false)</p></td>
+<td class="text-left"><p>Combine reduce-scatter ops with the same dimension or irrespective of their dimension.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="errors/error_0102.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Error code: 0102</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="hlo_passes.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">HLO Passes</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#correctness-flags">Correctness Flags</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-flags">Performance Flags</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-flags">Memory Flags</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#other-commonly-used-flags">Other commonly used flags</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tpu-xla-flags">TPU XLA flags</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu-xla-flags">GPU XLA flags</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

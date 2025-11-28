@@ -1,0 +1,847 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tooling &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tools';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="From HLO to Thunks" href="hlo_to_thunks.html" />
+    <link rel="prev" title="Terminology" href="terminology.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">Terminology</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="error_codes.html">Error Codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/tools.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Tooling</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-hlo-module-run-hlo-modules">[<code class="docutils literal notranslate"><span class="pre">run_hlo_module</span></code>] Run HLO Modules</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-multiple-hlo-modules">Run Multiple HLO Modules</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multihost-hlo-runner-run-hlo-modules-with-spmd-support">[<code class="docutils literal notranslate"><span class="pre">multihost_hlo_runner</span></code>] Run HLO Modules With SPMD Support</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-multiple-hlo-modules-with-spmd-support">Run Multiple HLO Modules With SPMD Support</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hlo-opt-compile-hlo-module">[<code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code>] Compile HLO Module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deviceless-compilation-for-gpu">Deviceless Compilation for GPU</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#autotuning">Autotuning</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hlo-opt-hlo-pass-development-and-debugging">[<code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code>] HLO Pass Development And Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#assist-new-hlo-pass-development">Assist New HLO Pass Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pass-runtime-measurement">Pass Runtime Measurement</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hlo-opt-convert-hlo-module-formats">[<code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code>] Convert HLO Module Formats</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-hlo-text-hlo-proto">Convert <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Text</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-hlo-proto-or-hlo-proto-binary-hlo-text">Convert <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span></code> or <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span> <span class="pre">Binary</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Text</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="tooling">
+<h1>Tooling<a class="headerlink" href="#tooling" title="Link to this heading">#</a></h1>
+<p>The XLA development workflow is usually centered around
+<a class="reference internal" href="operation_semantics.html"><span class="doc std std-doc">HLO</span></a> IR, which represents isolated functional
+computation given to the compiler. XLA comes with multiple command line tools
+(described below) which consume HLO and either run it, or provide an
+intermediate compilation stage. Using such tools is invaluable for a fast
+<code class="docutils literal notranslate"><span class="pre">compile-&gt;modify-&gt;run</span></code> iteration cycle, as HLO is both visualizable and
+hackable, and iteratively changing and running it is often the fastest way to
+understand and to fix an XLA performance or behavior.</p>
+<p>The easiest way to obtain the HLO for a program being compiled with XLA is
+usually to use the <code class="docutils literal notranslate"><span class="pre">XLA_FLAGS</span></code> environment variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ XLA_FLAGS=--xla_dump_to=/tmp/myfolder ./myprogram-entry-point
+</pre></div>
+</div>
+<p>which stores all before-optimization HLO files in the folder specified, along
+with many other useful artifacts.</p>
+<section id="run-hlo-module-run-hlo-modules">
+<h2>[<code class="docutils literal notranslate"><span class="pre">run_hlo_module</span></code>] Run HLO Modules<a class="headerlink" href="#run-hlo-module-run-hlo-modules" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bazel</span> <span class="n">run</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">tools</span><span class="p">:</span><span class="n">run_hlo_module</span> <span class="o">--</span> <span class="p">[</span><span class="n">flags</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The tool <code class="docutils literal notranslate"><span class="pre">run_hlo_module</span></code> operates on pre-optimization HLO, and by default
+bundles compilation, running and comparison with the reference interpreter
+implementation. For example, the usual invocation to run an input file
+<code class="docutils literal notranslate"><span class="pre">computation.hlo</span></code> on an NVIDIA GPU and to check it for correctness is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run_hlo_module</span> <span class="o">--</span><span class="n">platform</span><span class="o">=</span><span class="n">CUDA</span> <span class="o">--</span><span class="n">reference_platform</span><span class="o">=</span><span class="n">Interpreter</span> <span class="n">computation</span><span class="o">.</span><span class="n">hlo</span>
+</pre></div>
+</div>
+<section id="run-multiple-hlo-modules">
+<h3>Run Multiple HLO Modules<a class="headerlink" href="#run-multiple-hlo-modules" title="Link to this heading">#</a></h3>
+<p>Invocation with multiple HLO modules is supported for <code class="docutils literal notranslate"><span class="pre">run_hlo_module</span></code>. To run
+all hlo modules from a directory:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bazel</span> <span class="n">run</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">tools</span><span class="p">:</span><span class="n">run_hlo_module</span> <span class="o">--</span> <span class="p">[</span><span class="n">flags</span><span class="p">]</span> <span class="o">/</span><span class="n">dump</span><span class="o">/*</span><span class="n">before_optimizations</span><span class="o">*</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="multihost-hlo-runner-run-hlo-modules-with-spmd-support">
+<h2>[<code class="docutils literal notranslate"><span class="pre">multihost_hlo_runner</span></code>] Run HLO Modules With SPMD Support<a class="headerlink" href="#multihost-hlo-runner-run-hlo-modules-with-spmd-support" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: Binary name is `hlo_runner_main`.</span>
+<span class="n">bazel</span> <span class="n">run</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">multihost_hlo_runner</span><span class="p">:</span><span class="n">hlo_runner_main</span> <span class="o">--</span> <span class="p">[</span><span class="n">flags</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Multihost HLO runner is a very similar tool, with the caveat that it supports
+SPMD, including cross host communication. See
+<a class="reference internal" href="tools_multihost_hlo_runner.html"><span class="doc std std-doc">Multi-Host HLO Runner</span></a> for details.</p>
+<section id="run-multiple-hlo-modules-with-spmd-support">
+<h3>Run Multiple HLO Modules With SPMD Support<a class="headerlink" href="#run-multiple-hlo-modules-with-spmd-support" title="Link to this heading">#</a></h3>
+<p>Similar to <code class="docutils literal notranslate"><span class="pre">run_hlo_module</span></code>, <code class="docutils literal notranslate"><span class="pre">multihost_hlo_runner</span></code> also supports invocation
+with multiple modules.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bazel</span> <span class="n">run</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">multihost_hlo_runner</span><span class="p">:</span><span class="n">hlo_runner_main</span> <span class="o">--</span> <span class="p">[</span><span class="n">flags</span><span class="p">]</span> <span class="o">/</span><span class="n">dump</span><span class="o">/*</span><span class="n">before_optimizations</span><span class="o">*</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="hlo-opt-compile-hlo-module">
+<h2>[<code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code>] Compile HLO Module<a class="headerlink" href="#hlo-opt-compile-hlo-module" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bazel</span> <span class="n">run</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">tools</span><span class="p">:</span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span> <span class="o">--</span><span class="n">platform</span><span class="o">=</span><span class="p">[</span><span class="n">gpu</span><span class="o">|</span><span class="n">cpu</span><span class="o">|...</span><span class="p">]</span> <span class="p">[</span><span class="n">more</span> <span class="n">flags</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>When debugging or understanding the workings of the compiler, it is often useful
+to get the expansion for a particular hardware at a particular point in the
+pipeline (be it HLO, optimized HLO, TritonIR or LLVM), for a given HLO or
+StableHLO input.</p>
+<p><code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code> supports multiple output stages: be it PTX, HLO after optimizations,
+LLVM IR before optimizations, or TritonIR. The exact set of stages supported
+depends on the platform (as e.g. PTX is NVIDIA-specific), and can be seen using
+the –list-stages command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span><span class="n">platform</span><span class="o">=</span><span class="n">CUDA</span> <span class="o">--</span><span class="nb">list</span><span class="o">-</span><span class="n">stages</span>
+<span class="n">buffer</span><span class="o">-</span><span class="n">assignment</span>
+<span class="n">hlo</span>
+<span class="n">hlo</span><span class="o">-</span><span class="n">backend</span>
+<span class="n">html</span>
+<span class="n">llvm</span>
+<span class="n">llvm</span><span class="o">-</span><span class="n">after</span><span class="o">-</span><span class="n">optimizations</span>
+<span class="n">llvm</span><span class="o">-</span><span class="n">before</span><span class="o">-</span><span class="n">optimizations</span>
+<span class="n">ptx</span>
+</pre></div>
+</div>
+<p>After selecting a stage, the user can write the result of the conversion for a
+given platform to a given stream:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span><span class="n">platform</span><span class="o">=</span><span class="n">cpu</span> <span class="o">--</span><span class="n">stage</span><span class="o">=</span><span class="n">hlo</span> <span class="nb">input</span><span class="o">.</span><span class="n">hlo</span>
+</pre></div>
+</div>
+<p>which would print the dump to stdout (or to a given file if <code class="docutils literal notranslate"><span class="pre">-o</span></code> was specified).</p>
+<section id="deviceless-compilation-for-gpu">
+<h3>Deviceless Compilation for GPU<a class="headerlink" href="#deviceless-compilation-for-gpu" title="Link to this heading">#</a></h3>
+<p>Deviceless compilation do not need access to a GPU. The Deviceless Compilation
+provides a way to specify GPU spec on the command line
+(<code class="docutils literal notranslate"><span class="pre">--xla_gpu_target_config_filename</span></code>) for stages where access to GPU is required,
+eliminating a need for GPU device.</p>
+<p>Example: PTX output without access to a gpu device:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span>  <span class="o">--</span><span class="n">platform</span><span class="o">=</span><span class="n">CUDA</span> <span class="o">--</span><span class="n">stage</span><span class="o">=</span><span class="n">llvm</span>  <span class="o">--</span><span class="n">xla_gpu_target_config_filename</span><span class="o">=/</span><span class="n">xla</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">hlo_opt</span><span class="o">/</span><span class="n">gpu_specs</span><span class="o">/</span><span class="n">a100_pcie_80</span><span class="o">.</span><span class="n">txtpb</span> <span class="nb">input</span><span class="o">.</span><span class="n">hlo</span>
+</pre></div>
+</div>
+<p>Specs for popular GPUs are shipped with the compiler, and the provided file is
+string serialization of <code class="docutils literal notranslate"><span class="pre">device_description.proto</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gpu_device_info</span> <span class="p">{</span>
+  <span class="n">cuda_compute_capability</span> <span class="p">{</span>
+    <span class="n">major</span><span class="p">:</span> <span class="mi">8</span>
+    <span class="n">minor</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="p">}</span>
+  <span class="n">threads_per_block_limit</span><span class="p">:</span> <span class="mi">1024</span>
+  <span class="n">threads_per_warp</span><span class="p">:</span> <span class="mi">32</span>
+  <span class="n">shared_memory_per_block</span><span class="p">:</span> <span class="mi">127152</span>
+  <span class="n">shared_memory_per_core</span><span class="p">:</span> <span class="mi">65536</span>
+  <span class="n">threads_per_core_limit</span><span class="p">:</span> <span class="mi">2048</span>
+  <span class="n">core_count</span><span class="p">:</span> <span class="mi">6192</span>
+  <span class="n">fpus_per_core</span><span class="p">:</span> <span class="mi">64</span>
+  <span class="n">block_dim_limit_x</span><span class="p">:</span> <span class="mi">2147483647</span>
+  <span class="n">block_dim_limit_y</span><span class="p">:</span> <span class="mi">65535</span>
+  <span class="n">block_dim_limit_z</span><span class="p">:</span> <span class="mi">65535</span>
+  <span class="n">memory_bandwidth</span><span class="p">:</span> <span class="mi">2039000000000</span>
+  <span class="n">l2_cache_size</span><span class="p">:</span> <span class="mi">4194304</span>
+  <span class="n">clock_rate_ghz</span><span class="p">:</span> <span class="mf">1.1105</span>
+  <span class="n">device_memory_size</span><span class="p">:</span> <span class="mi">79050250240</span>
+<span class="p">}</span>
+<span class="n">platform_name</span><span class="p">:</span> <span class="s2">&quot;CUDA&quot;</span>
+</pre></div>
+</div>
+<p>More GPU specs are located at <code class="docutils literal notranslate"><span class="pre">/xla/tools/hlo_opt/gpu_specs</span></code></p>
+<section id="autotuning">
+<h4>Autotuning<a class="headerlink" href="#autotuning" title="Link to this heading">#</a></h4>
+<p>Sometimes compilation may involve autotuning based on a compilation <code class="docutils literal notranslate"><span class="pre">--stage</span></code>.
+For the deviceless compilation to work, the user either need to <br />
+<strong>disable</strong> autotuning with <code class="docutils literal notranslate"><span class="pre">--xla_gpu_autotune_level=0</span></code><br />
+or<br />
+<strong>load a pre-existing autotuning results</strong> with
+<code class="docutils literal notranslate"><span class="pre">--xla_gpu_load_autotune_results_from=&lt;filename&gt;</span></code> (obtained with
+<code class="docutils literal notranslate"><span class="pre">--xla_gpu_dump_autotune_results_to=&lt;filename&gt;</span></code>).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span>  <span class="o">--</span><span class="n">platform</span><span class="o">=</span><span class="n">CUDA</span> <span class="o">--</span><span class="n">stage</span><span class="o">=</span><span class="n">llvm</span>  <span class="o">--</span><span class="n">xla_gpu_target_config_filename</span><span class="o">=</span><span class="n">gpu_specs</span><span class="o">/</span><span class="n">a100_pcie_80</span><span class="o">.</span><span class="n">txtpb</span> <span class="o">--</span><span class="n">xla_gpu_load_autotune_results_from</span><span class="o">=</span><span class="n">results</span><span class="o">.</span><span class="n">textpb</span> <span class="nb">input</span><span class="o">.</span><span class="n">hlo</span>
+</pre></div>
+</div>
+<p>The autotune file is text serialization of <code class="docutils literal notranslate"><span class="pre">autotune_results.proto</span></code>, with
+example looking like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">version</span><span class="p">:</span> <span class="mi">3</span>
+<span class="n">results</span> <span class="p">{</span>
+  <span class="n">device</span><span class="p">:</span> <span class="s2">&quot;CUDA: 8.0, Cores: 108, GPU clock: 1.41 GHz, Memory bandwidth: 1555 GB/s, L2 cache: 40 MB&quot;</span>
+  <span class="n">hlo</span><span class="p">:</span> <span class="s2">&quot;{</span><span class="se">\n</span><span class="s2">  tmp_0 = f16[1,16,17,3]{3,2,1,0} parameter(0)</span><span class="se">\n</span><span class="s2">  tmp_1 = f16[16,51]{1,0} bitcast(f16[1,16,17,3]{3,2,1,0} tmp_0)</span><span class="se">\n</span><span class="s2">  tmp_2 = s8[16,17,3]{2,1,0} parameter(1)</span><span class="se">\n</span><span class="s2">  tmp_3 = s8[51,16]{0,1} bitcast(s8[16,17,3]{2,1,0} tmp_2)</span><span class="se">\n</span><span class="s2">  tmp_4 = f16[51,16]{0,1} convert(s8[51,16]{0,1} tmp_3)</span><span class="se">\n</span><span class="s2">  tmp_5 = f16[16,16]{1,0} dot(f16[16,51]{1,0} tmp_1, f16[51,16]{0,1} tmp_4), lhs_contracting_dims=</span><span class="si">{1}</span><span class="s2">, rhs_contracting_dims=</span><span class="si">{0}</span><span class="se">\n</span><span class="s2">  ROOT tmp_6 = f16[1,16,16]{2,1,0} bitcast(f16[16,16]{1,0} tmp_5)</span><span class="se">\n</span><span class="s2">}&quot;</span>
+  <span class="n">result</span> <span class="p">{</span>
+    <span class="n">run_time</span> <span class="p">{</span>
+      <span class="n">nanos</span><span class="p">:</span> <span class="mi">31744</span>
+    <span class="p">}</span>
+    <span class="n">triton</span> <span class="p">{</span>
+      <span class="n">block_m</span><span class="p">:</span> <span class="mi">32</span>
+      <span class="n">block_n</span><span class="p">:</span> <span class="mi">32</span>
+      <span class="n">block_k</span><span class="p">:</span> <span class="mi">32</span>
+      <span class="n">split_k</span><span class="p">:</span> <span class="mi">1</span>
+      <span class="n">num_stages</span><span class="p">:</span> <span class="mi">1</span>
+      <span class="n">num_warps</span><span class="p">:</span> <span class="mi">4</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The autotuning database can be serialized using
+<code class="docutils literal notranslate"><span class="pre">XLA_FLAGS=--xla_gpu_dump_autotune_results_to=&lt;myfile.pbtxt&gt;</span></code></p>
+</section>
+</section>
+</section>
+<section id="hlo-opt-hlo-pass-development-and-debugging">
+<h2>[<code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code>] HLO Pass Development And Debugging<a class="headerlink" href="#hlo-opt-hlo-pass-development-and-debugging" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># If you are working with hardware independent passes from the</span>
+<span class="c1"># `xla/hlo/transforms/` directory, prefer light-weight version</span>
+<span class="c1"># of the `hlo-opt` tool with fewer dependencies:</span>
+
+<span class="n">bazel</span> <span class="n">run</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">hlo</span><span class="o">/</span><span class="n">tools</span><span class="p">:</span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span> <span class="p">[</span><span class="n">flags</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
+
+<span class="c1"># Otherwise, for hardware independent and CPU, GPU passes use</span>
+<span class="c1"># the same binary from &quot;Compile HLO Modules&quot; section above:</span>
+
+<span class="n">bazel</span> <span class="n">run</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">tools</span><span class="p">:</span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span> <span class="p">[</span><span class="n">flags</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code> tool allows execution of an individual passes
+independent of the given platform compilation stages. This isolation helps to
+quickly run passes on input hlo module and pinpoint the root cause of failures.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span><span class="n">passes</span><span class="o">=</span><span class="n">schedule</span><span class="o">-</span><span class="n">aware</span><span class="o">-</span><span class="n">collective</span><span class="o">-</span><span class="n">cse</span> <span class="nb">input</span><span class="o">.</span><span class="n">hlo</span>
+</pre></div>
+</div>
+<p>Note: <code class="docutils literal notranslate"><span class="pre">--platform</span></code> option is not required.</p>
+<p><code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code> tool also supports <a class="reference external" href="https://github.com/openxla/xla/blob/5bf1e6420d250dce5eb840889096bdf8aad6f432/xla/xla.proto#L40-L1197"><code class="docutils literal notranslate"><span class="pre">DebugOptions</span> <span class="pre">XLA_FLAGS</span></code></a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span><span class="n">passes</span><span class="o">=</span><span class="n">schedule</span><span class="o">-</span><span class="n">aware</span><span class="o">-</span><span class="n">collective</span><span class="o">-</span><span class="n">cse</span>
+<span class="o">--</span><span class="n">xla_gpu_experimental_collective_cse_distance_threshold</span><span class="o">=</span><span class="mi">20</span> <span class="nb">input</span><span class="o">.</span><span class="n">hlo</span>
+</pre></div>
+</div>
+<p>Use<code class="docutils literal notranslate"><span class="pre">--list-passes</span></code> option to get the pass name string.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span><span class="nb">list</span><span class="o">-</span><span class="n">passes</span>
+</pre></div>
+</div>
+<p>Users can create their own custom pipeline by specifying more than one passes
+to <code class="docutils literal notranslate"><span class="pre">--passes</span></code> option.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span><span class="n">passes</span><span class="o">=</span><span class="n">pass1</span><span class="p">,</span><span class="n">pass2</span><span class="p">,</span><span class="n">pass3</span> <span class="nb">input</span><span class="o">.</span><span class="n">hlo</span>
+</pre></div>
+</div>
+<section id="assist-new-hlo-pass-development">
+<h3>Assist New HLO Pass Development<a class="headerlink" href="#assist-new-hlo-pass-development" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>First, write your pass.</p></li>
+<li><p>Register the new pass to the <code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code> tool pass registry.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RegisterPass</span><span class="o">&lt;</span><span class="n">FooPass</span><span class="o">&gt;</span><span class="p">(</span><span class="n">FooPassInputOptions</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Based on the pass type, choose one of the following locations for
+registration:<br />
+<a class="reference external" href="https://github.com/openxla/xla/blob/5d015a2ddfcf4f40934a33891dc63471704f221d/xla/hlo/tools/hlo_opt/opt_lib.cc"><code class="docutils literal notranslate"><span class="pre">opt_lib.cc</span></code></a>
+Hardware-independent passes.<br />
+<a class="reference external" href="https://github.com/openxla/xla/blob/5d015a2ddfcf4f40934a33891dc63471704f221d/xla/tools/hlo_opt/cpu_opt.cc"><code class="docutils literal notranslate"><span class="pre">cpu_opt.cc</span></code></a>
+CPU specific passes.<br />
+<a class="reference external" href="https://github.com/openxla/xla/blob/5d015a2ddfcf4f40934a33891dc63471704f221d/xla/tools/hlo_opt/gpu_opt.cc"><code class="docutils literal notranslate"><span class="pre">gpu_opt.cc</span></code></a>
+GPU specific passes.<br />
+<a class="reference external" href="https://github.com/openxla/xla/blob/5d015a2ddfcf4f40934a33891dc63471704f221d/xla/tools/hlo_opt/compiled_opt_lib.cc"><code class="docutils literal notranslate"><span class="pre">compiled_opt.cc</span></code></a>
+Passes common to CPU, GPU, XPU.<br />
+Don’t forget to add build dependency.</p>
+<p>Include pass registration as part of your PR(<a class="reference external" href="https://github.com/openxla/xla/pull/22968/files#diff-e37a0ea999dfc5764d624240cd2edebb8b7ee4e6d91686be89c632dd7203b823">example</a>) so that the pass will be
+available to use for all <code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code> users.</p>
+</li>
+<li><p>Rebuild the <code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code> tool, validate successful pass registration using
+<code class="docutils literal notranslate"><span class="pre">--list-passes</span></code> option and then use <code class="docutils literal notranslate"><span class="pre">--passes</span></code> option to run the pass.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ hlo-opt --passes=foo-pass input.hlo
+</pre></div>
+</div>
+</li>
+<li><p>Writing unit tests for the pass? refer <a class="reference external" href="https://openxla.org/xla/test_hlo_passes">https://openxla.org/xla/test_hlo_passes</a> for more details.</p></li>
+</ol>
+</section>
+<section id="pass-runtime-measurement">
+<h3>Pass Runtime Measurement<a class="headerlink" href="#pass-runtime-measurement" title="Link to this heading">#</a></h3>
+<p>For large models, full compilation runs can take upto few minutes, making it
+challenging to detect subtle performance regressions. In contrast, individual
+pass runs using <code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code> allow for precise
+performance measurement and the easy detection of even small increases in
+execution time caused by new code changes.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">time</span> <span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span><span class="n">passes</span><span class="o">=</span><span class="n">reduce</span><span class="o">-</span><span class="n">window</span><span class="o">-</span><span class="n">rewriter</span><span class="p">,</span><span class="n">scatter_simplifier</span>
+<span class="o">--</span><span class="n">xla_reduce_window_rewrite_base_length</span><span class="o">=</span><span class="mi">128</span> <span class="nb">input</span><span class="o">.</span><span class="n">hlo</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="hlo-opt-convert-hlo-module-formats">
+<h2>[<code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code>] Convert HLO Module Formats<a class="headerlink" href="#hlo-opt-convert-hlo-module-formats" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use the light weight version of the `hlo-opt` tool.</span>
+
+<span class="n">bazel</span> <span class="n">run</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">hlo</span><span class="o">/</span><span class="n">tools</span><span class="p">:</span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span> <span class="p">[</span><span class="n">flags</span><span class="p">]</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<section id="convert-hlo-text-hlo-proto">
+<h3>Convert <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Text</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span></code><a class="headerlink" href="#convert-hlo-text-hlo-proto" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span><span class="n">emit</span><span class="o">-</span><span class="n">proto</span> <span class="nb">input</span><span class="o">.</span><span class="n">hlo</span>
+</pre></div>
+</div>
+</section>
+<section id="convert-hlo-proto-or-hlo-proto-binary-hlo-text">
+<h3>Convert <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span></code> or <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span> <span class="pre">Binary</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Text</span></code><a class="headerlink" href="#convert-hlo-proto-or-hlo-proto-binary-hlo-text" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">hlo</span><span class="o">-</span><span class="n">opt</span> <span class="nb">input</span><span class="o">.</span><span class="n">pbtxt</span> <span class="ow">or</span> <span class="nb">input</span><span class="o">.</span><span class="n">pb</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="terminology.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Terminology</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="hlo_to_thunks.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">From HLO to Thunks</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-hlo-module-run-hlo-modules">[<code class="docutils literal notranslate"><span class="pre">run_hlo_module</span></code>] Run HLO Modules</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-multiple-hlo-modules">Run Multiple HLO Modules</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multihost-hlo-runner-run-hlo-modules-with-spmd-support">[<code class="docutils literal notranslate"><span class="pre">multihost_hlo_runner</span></code>] Run HLO Modules With SPMD Support</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#run-multiple-hlo-modules-with-spmd-support">Run Multiple HLO Modules With SPMD Support</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hlo-opt-compile-hlo-module">[<code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code>] Compile HLO Module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deviceless-compilation-for-gpu">Deviceless Compilation for GPU</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#autotuning">Autotuning</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hlo-opt-hlo-pass-development-and-debugging">[<code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code>] HLO Pass Development And Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#assist-new-hlo-pass-development">Assist New HLO Pass Development</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pass-runtime-measurement">Pass Runtime Measurement</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hlo-opt-convert-hlo-module-formats">[<code class="docutils literal notranslate"><span class="pre">hlo-opt</span></code>] Convert HLO Module Formats</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-hlo-text-hlo-proto">Convert <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Text</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-hlo-proto-or-hlo-proto-binary-hlo-text">Convert <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span></code> or <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span> <span class="pre">Binary</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Text</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,1082 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>XLA:GPU Emitters &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'emitters';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Persisted autotuning (GPU only)" href="persisted_autotuning.html" />
+    <link rel="prev" title="XLA:GPU Architecture Overview" href="gpu_architecture.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="xla_gpu.html">XLA:GPU</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="error_codes.html">Error Codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/emitters.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>XLA:GPU Emitters</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hero-based-codegen">Hero-based codegen</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#high-level-overview">High-level overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#partitioning">Partitioning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elemental-emission">Elemental emission</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-transformations">Indexing transformations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tuples">Tuples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gather">Gather</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subgraph-functions">Subgraph functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entry-function">Entry function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compilation-pipeline">Compilation pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loop-emitter">Loop emitter</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mlir-conversion">MLIR Conversion</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inliner">Inliner</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#xla-gpu-to-scf-conversion"><code class="docutils literal notranslate"><span class="pre">xla_gpu</span></code> to <code class="docutils literal notranslate"><span class="pre">scf</span></code> conversion</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#flatten-tensors">Flatten tensors</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vectorization">Vectorization</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#loop-unrolling">Loop unrolling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conversion-to-llvm">Conversion to LLVM</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transpose-emitter">Transpose emitter</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducer">Reproducer</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#links-to-code">Links to code</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="xla-gpu-emitters">
+<h1>XLA:GPU Emitters<a class="headerlink" href="#xla-gpu-emitters" title="Link to this heading">#</a></h1>
+<p>There are three ways how to generate code for HLO in XLA:GPU.</p>
+<p><img alt="img" src="_images/emitters-codegen-types.jpg" /></p>
+<ol class="arabic simple">
+<li><p>Replacing HLO with custom calls to external libraries, e.g. <a class="reference external" href="https://developer.nvidia.com/cublas">NVidia cuBLAS</a>, <a class="reference external" href="https://developer.nvidia.com/cudnn">cuDNN</a>.</p></li>
+<li><p>Tiling HLO to block-level and then using <a class="reference external" href="https://openai.com/index/triton/">OpenAI Triton</a>.</p></li>
+<li><p>Using XLA Emitters to progressively lower HLO to LLVM IR.</p></li>
+</ol>
+<p>This document is focused on XLA:GPU Emitters.</p>
+<section id="hero-based-codegen">
+<h2>Hero-based codegen<a class="headerlink" href="#hero-based-codegen" title="Link to this heading">#</a></h2>
+<p>There are 7 emitter types in XLA:GPU. Each emitter type corresponds to a “hero”
+of the fusion, i.e. the most important op in the fused computation that shapes
+the code generation for the whole fusion.</p>
+<p><img alt="img" src="_images/emitters-hero-types.jpg" /></p>
+<p>For example, the tranpose emitter will be selected if there is a
+<code class="docutils literal notranslate"><span class="pre">HloTransposeInstruction</span></code> within the fusion that requires using shared memory to
+improve the memory reading and writing patterns. The reduction emitter generates
+reductions using shuffles and shared memory. The loop emitter is the default
+emitter. If a fusion does not have a hero for which we have a special emitter,
+then the loop emitter will be used.</p>
+</section>
+<section id="high-level-overview">
+<h2>High-level overview<a class="headerlink" href="#high-level-overview" title="Link to this heading">#</a></h2>
+<p>The code consists of the following big building blocks:</p>
+<ul class="simple">
+<li><p>Computation partitioner - splitting an HLO fusion computation into functions</p></li>
+<li><p>Emitters - converting partitioned HLO fusion to MLIR (<code class="docutils literal notranslate"><span class="pre">xla_gpu</span></code>, <code class="docutils literal notranslate"><span class="pre">tensor</span></code>, <code class="docutils literal notranslate"><span class="pre">arith</span></code>, <code class="docutils literal notranslate"><span class="pre">math</span></code>, <code class="docutils literal notranslate"><span class="pre">scf</span></code> dialects)</p></li>
+<li><p>Compilation pipeline - optimizes and lowers IR to LLVM</p></li>
+</ul>
+<p><img alt="img" src="_images/emitters-pipeline-overview.jpg" /></p>
+</section>
+<section id="partitioning">
+<h2>Partitioning<a class="headerlink" href="#partitioning" title="Link to this heading">#</a></h2>
+<p>See <a class="reference external" href="https://github.com/openxla/xla/blob/ca62f3e1bc9ea1d808c3a4de0a78bae7453389eb/xla/codegen/emitters/computation_partitioner.h">computation_partitioner.h</a>.</p>
+<p>Non-elementwise HLO instructions cannot always be emitted together. Consider the
+following HLO graph:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>     <span class="n">param</span>
+       <span class="o">|</span>
+      <span class="n">log</span>
+      <span class="o">|</span>  \
+      <span class="o">|</span>  <span class="n">transpose</span>
+      <span class="o">|</span>  <span class="o">/</span>
+      <span class="n">add</span>
+</pre></div>
+</div>
+<p>If we emit this in a single function, the <code class="docutils literal notranslate"><span class="pre">log</span></code> will be accessed at two
+different indices for each element of the <code class="docutils literal notranslate"><span class="pre">add</span></code>. The old emitters solve this
+problem by generating the <code class="docutils literal notranslate"><span class="pre">log</span></code> twice. For this particular graph, this is not
+a problem, but when there are multiple splits, the code size grows
+exponentially.</p>
+<p>Here, we solve this problem by partitioning the graph into pieces that can be
+safely emitted as one function. The criteria are:</p>
+<ul class="simple">
+<li><p>Instructions that have only one user are safe to emit together with their
+user.</p></li>
+<li><p>Instructions that have multiple users are safe to emit together with their
+users if they are accessed through the same indices by all users.</p></li>
+</ul>
+<p>In the example above, the <code class="docutils literal notranslate"><span class="pre">add</span></code> and <code class="docutils literal notranslate"><span class="pre">tranpose</span></code> access different indices of the
+<code class="docutils literal notranslate"><span class="pre">log</span></code>, so it is not safe to emit it together with them.</p>
+<p>The graph is therefore partitioned into three functions (each containing just
+one instruction).</p>
+<p>The same is applicable to the following example with <code class="docutils literal notranslate"><span class="pre">slice</span></code> and <code class="docutils literal notranslate"><span class="pre">pad</span></code> of <code class="docutils literal notranslate"><span class="pre">add</span></code>.</p>
+<p><img alt="img" src="_images/emitters-partitioning.jpg" /></p>
+</section>
+<section id="elemental-emission">
+<h2>Elemental emission<a class="headerlink" href="#elemental-emission" title="Link to this heading">#</a></h2>
+<p>See <a class="reference external" href="https://github.com/openxla/xla/blob/ca62f3e1bc9ea1d808c3a4de0a78bae7453389eb/xla/codegen/emitters/elemental_hlo_to_mlir.h">elemental_hlo_to_mlir.h</a>.</p>
+<p>Elemental emission creates loops and math/arith ops for <code class="docutils literal notranslate"><span class="pre">HloInstructions</span></code>. For
+the most part, this is straightforward, but there are some interesting things
+going on here.</p>
+<section id="indexing-transformations">
+<h3>Indexing transformations<a class="headerlink" href="#indexing-transformations" title="Link to this heading">#</a></h3>
+<p>Some instructions (<code class="docutils literal notranslate"><span class="pre">transpose</span></code>, <code class="docutils literal notranslate"><span class="pre">broadcast</span></code>, <code class="docutils literal notranslate"><span class="pre">reshape</span></code>, <code class="docutils literal notranslate"><span class="pre">slice</span></code>, <code class="docutils literal notranslate"><span class="pre">reverse</span></code> and
+a few more) are purely transformations on indices: to produce an element of the
+result, we need to produce some other element of the input. For this, we can
+reuse XLA’s <a class="reference external" href="https://openxla.org/xla/indexing">indexing_analysis</a>, which has
+functions to produce the output to input mapping for an instruction.</p>
+<p>For example, for a <code class="docutils literal notranslate"><span class="pre">transpose</span></code> from <code class="docutils literal notranslate"><span class="pre">[20,40]</span></code> to <code class="docutils literal notranslate"><span class="pre">[40,20]</span></code>, it will produce the
+following indexing map (one affine expression per input dimension; d0 and d1 are
+the output dimensions):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">d1</span>
+  <span class="p">(</span><span class="n">d0</span><span class="p">,</span> <span class="n">d1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">d0</span>
+</pre></div>
+</div>
+<p>So for these pure index transformation instructions, we can simply get the map,
+apply it to the output indices, and produce the input at the resulting index.</p>
+<p>Similarly, the <code class="docutils literal notranslate"><span class="pre">pad</span></code> op uses indexing maps and constraints for most of the
+implementation. <code class="docutils literal notranslate"><span class="pre">pad</span></code> is also an indexing transformation with some added checks
+to see if we return an element of the input or the padding value.</p>
+</section>
+<section id="tuples">
+<h3>Tuples<a class="headerlink" href="#tuples" title="Link to this heading">#</a></h3>
+<p>We do not support internal <code class="docutils literal notranslate"><span class="pre">tuple</span></code>s. We also do not support nested tuple
+outputs. All XLA graphs that use these features can be converted to graphs that
+do not.</p>
+</section>
+<section id="gather">
+<h3>Gather<a class="headerlink" href="#gather" title="Link to this heading">#</a></h3>
+<p>We only support canonical gathers as produced by <a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/simplifiers/gather_simplifier.h"><code class="docutils literal notranslate"><span class="pre">gather_simplifier</span></code></a>.</p>
+</section>
+</section>
+<section id="subgraph-functions">
+<h2>Subgraph functions<a class="headerlink" href="#subgraph-functions" title="Link to this heading">#</a></h2>
+<p>For a subgraph of a computation with parameters <code class="docutils literal notranslate"><span class="pre">%p0</span></code> to <code class="docutils literal notranslate"><span class="pre">%p_n</span></code>, and subgraph
+roots with <code class="docutils literal notranslate"><span class="pre">r</span></code> dimensions and element types (<code class="docutils literal notranslate"><span class="pre">e0</span></code> to <code class="docutils literal notranslate"><span class="pre">e_m</span></code>), we use the
+following MLIR function signature:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">%</span><span class="n">p0</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;...&gt;</span><span class="p">,</span> <span class="o">%</span><span class="n">p1</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;...&gt;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">%</span><span class="n">pn</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;...&gt;</span><span class="p">,</span>
+ <span class="o">%</span><span class="n">i0</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span> <span class="o">%</span><span class="n">i1</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">%</span><span class="n">i_r</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="n">index</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">e0</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">e_m</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>That is, we have one tensor input per computation parameter, one index input per
+dimension of the output, and one result per output.</p>
+<p>To emit a function, we simply use the elemental emitter above, and recursively
+emit its operands until we reach the edge of the subgraph. Then, we:emit a
+<code class="docutils literal notranslate"><span class="pre">tensor.extract</span></code> for parameters or emit a <code class="docutils literal notranslate"><span class="pre">func.call</span></code> for other subgraphs</p>
+</section>
+<section id="entry-function">
+<h2>Entry function<a class="headerlink" href="#entry-function" title="Link to this heading">#</a></h2>
+<p>Each emitter type differs in how it generates the entry function, i.e. the
+function for the hero. The entry function is different from the functions above,
+since it has no indices as inputs (just the thread and block IDs) and actually
+needs to write the output somewhere. For the loop emitter, this is fairly
+straightforward, but the transpose and reduction emitters have non-trivial write
+logic.</p>
+<p>The signature of the entry computation is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="o">%</span><span class="n">p0</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;...&gt;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">%</span><span class="n">pn</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;...&gt;</span><span class="p">,</span>
+ <span class="o">%</span><span class="n">r0</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;...&gt;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">%</span><span class="n">rn</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;...&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">tensor</span><span class="o">&lt;...&gt;</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="n">tensor</span><span class="o">&lt;...&gt;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Where like before, the <code class="docutils literal notranslate"><span class="pre">%pn</span></code>s are the parameters of the computation, and the
+<code class="docutils literal notranslate"><span class="pre">%rn</span></code>s are the results of the computation. The entry computation takes the
+results as tensors, <code class="docutils literal notranslate"><span class="pre">tensor.insert</span></code>s updates into them, and then returns them.
+No other uses of the output tensors are allowed.</p>
+</section>
+<section id="compilation-pipeline">
+<h2>Compilation pipeline<a class="headerlink" href="#compilation-pipeline" title="Link to this heading">#</a></h2>
+<section id="loop-emitter">
+<h3>Loop emitter<a class="headerlink" href="#loop-emitter" title="Link to this heading">#</a></h3>
+<p>See <a class="reference external" href="https://github.com/openxla/xla/blob/cfd16b7f21feff17635c782f4489c0f478178eb9/xla/backends/gpu/codegen/emitters/loop.h#L4">loop.h</a>.</p>
+<p>Let’s study the most important passes of the MLIR compilation pipeline using the
+HLO for the GELU function.</p>
+<p><img alt="img" src="_images/emitters-gelu.png" /></p>
+<p>This HLO computation only has elementwise ops, constants and broadcasts. It will
+be emitted using the loop emitter.</p>
+<section id="mlir-conversion">
+<h4>MLIR Conversion<a class="headerlink" href="#mlir-conversion" title="Link to this heading">#</a></h4>
+<p>After conversion to MLIR we get an <code class="docutils literal notranslate"><span class="pre">xla_gpu.loop</span></code> that depends on
+<code class="docutils literal notranslate"><span class="pre">%thread_id_x</span></code> and <code class="docutils literal notranslate"><span class="pre">%block_id_x</span></code> and defines the loop that traverses all
+elements of the output linearly to guarantee coalesced writes.</p>
+<p>On every iteration of this loop we call</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>   <span class="o">%</span><span class="n">pure_call</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">pure_call</span> <span class="nd">@gelu</span><span class="p">(</span><span class="o">%</span><span class="nb">input</span><span class="p">,</span> <span class="o">%</span><span class="n">dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">dim2</span><span class="p">)</span>
+      <span class="p">:</span> <span class="p">(</span><span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bf16</span>
+</pre></div>
+</div>
+<p>to compute elements of the root operation. Note, that we have only one outlined
+function for <code class="docutils literal notranslate"><span class="pre">&#64;gelu</span></code>, because the partitioner did not detect a tensor that has 2
+or more various access patterns.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#map = #xla_gpu.indexing_map&lt;&quot;(th_x, bl_x)[vector_index] -&gt; (&quot;</span>
+ <span class="s2">&quot;bl_x floordiv 4096, (bl_x floordiv 8) mod 512, (bl_x mod 8) * 512 + th_x * 4 + vector_index),&quot;</span>
+ <span class="s2">&quot;domain: th_x in [0, 127], bl_x in [0, 24575], vector_index in [0, 3]&quot;</span><span class="o">&gt;</span>
+
+<span class="n">func</span><span class="o">.</span><span class="n">func</span> <span class="nd">@main</span><span class="p">(</span><span class="o">%</span><span class="nb">input</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span> <span class="p">,</span> <span class="o">%</span><span class="n">output</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span><span class="p">)</span>
+   <span class="o">-&gt;</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span> <span class="p">{</span>
+ <span class="o">%</span><span class="n">thread_id_x</span> <span class="o">=</span> <span class="n">gpu</span><span class="o">.</span><span class="n">thread_id</span>  <span class="n">x</span> <span class="p">{</span><span class="n">xla</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">index</span><span class="p">,</span> <span class="mi">127</span> <span class="p">:</span> <span class="n">index</span><span class="p">]}</span>
+ <span class="o">%</span><span class="n">block_id_x</span> <span class="o">=</span> <span class="n">gpu</span><span class="o">.</span><span class="n">block_id</span>  <span class="n">x</span> <span class="p">{</span><span class="n">xla</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">index</span><span class="p">,</span> <span class="mi">24575</span> <span class="p">:</span> <span class="n">index</span><span class="p">]}</span>
+
+ <span class="o">%</span><span class="n">xla_loop</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">loop</span> <span class="p">(</span><span class="o">%</span><span class="n">thread_id_x</span><span class="p">,</span> <span class="o">%</span><span class="n">block_id_x</span><span class="p">)[</span><span class="o">%</span><span class="n">vector_index</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="o">%</span><span class="n">dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">dim2</span><span class="p">)</span>
+     <span class="ow">in</span> <span class="c1">#map iter_args(%iter = %output) -&gt; (tensor&lt;6x512x4096xbf16&gt;) {</span>
+   <span class="o">%</span><span class="n">pure_call</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">pure_call</span> <span class="nd">@gelu</span><span class="p">(</span><span class="o">%</span><span class="nb">input</span><span class="p">,</span> <span class="o">%</span><span class="n">dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">dim2</span><span class="p">)</span>
+      <span class="p">:</span> <span class="p">(</span><span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="n">inserted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">insert</span> <span class="o">%</span><span class="n">pure_call</span> <span class="n">into</span> <span class="o">%</span><span class="nb">iter</span><span class="p">[</span><span class="o">%</span><span class="n">dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">dim2</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+   <span class="n">xla_gpu</span><span class="o">.</span><span class="k">yield</span> <span class="o">%</span><span class="n">inserted</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+ <span class="p">}</span>
+ <span class="k">return</span> <span class="o">%</span><span class="n">xla_loop</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="n">func</span><span class="o">.</span><span class="n">func</span> <span class="n">private</span> <span class="nd">@gelu</span><span class="p">(</span><span class="o">%</span><span class="n">arg0</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">%</span><span class="n">i</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span> <span class="o">%</span><span class="n">j</span><span class="p">:</span> <span class="n">index</span><span class="p">,</span> <span class="o">%</span><span class="n">k</span><span class="p">:</span> <span class="n">index</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bf16</span> <span class="p">{</span>
+  <span class="o">%</span><span class="n">cst</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">constant</span> <span class="mf">5.000000e-01</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="n">cst_0</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">constant</span> <span class="mf">1.000000e+00</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="n">cst_1</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">constant</span> <span class="mf">7.968750e-01</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="n">cst_2</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">constant</span> <span class="mf">4.467770e-02</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="n">extracted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">extract</span> <span class="o">%</span><span class="n">arg0</span><span class="p">[</span><span class="o">%</span><span class="n">i</span><span class="p">,</span> <span class="o">%</span><span class="n">j</span><span class="p">,</span> <span class="o">%</span><span class="n">k</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+  <span class="o">%</span><span class="mi">0</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="n">extracted</span><span class="p">,</span> <span class="o">%</span><span class="n">extracted</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="mi">1</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">0</span><span class="p">,</span> <span class="o">%</span><span class="n">extracted</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="mi">2</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">1</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_2</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="mi">3</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">addf</span> <span class="o">%</span><span class="n">extracted</span><span class="p">,</span> <span class="o">%</span><span class="mi">2</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="mi">4</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">3</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_1</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="mi">5</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">tanh</span> <span class="o">%</span><span class="mi">4</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="mi">6</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">addf</span> <span class="o">%</span><span class="mi">5</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_0</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="mi">7</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">6</span><span class="p">,</span> <span class="o">%</span><span class="n">cst</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="o">%</span><span class="mi">8</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="n">extracted</span><span class="p">,</span> <span class="o">%</span><span class="mi">7</span> <span class="p">:</span> <span class="n">bf16</span>
+  <span class="k">return</span> <span class="o">%</span><span class="mi">8</span> <span class="p">:</span> <span class="n">bf16</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="inliner">
+<h4>Inliner<a class="headerlink" href="#inliner" title="Link to this heading">#</a></h4>
+<p>After <code class="docutils literal notranslate"><span class="pre">&#64;gelu</span></code> is inlined, we get a single <code class="docutils literal notranslate"><span class="pre">&#64;main</span></code> function. It can happen that
+the same function is called twice or more. In this case we don’t inline. More
+details on the inlining rules can be found in
+<a class="reference external" href="https://github.com/openxla/xla/blob/39fc9c0c3e06b29e27f2aebdb21fca15754de928/xla/backends/gpu/codegen/emitters/ir/xla_gpu_dialect.cc">xla_gpu_dialect.cc</a>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">func</span><span class="o">.</span><span class="n">func</span> <span class="nd">@main</span><span class="p">(</span><span class="o">%</span><span class="n">arg0</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">%</span><span class="n">arg1</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span> <span class="p">{</span>
+ <span class="o">...</span>
+  <span class="o">%</span><span class="n">thread_id_x</span> <span class="o">=</span> <span class="n">gpu</span><span class="o">.</span><span class="n">thread_id</span>  <span class="n">x</span> <span class="p">{</span><span class="n">xla</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">index</span><span class="p">,</span> <span class="mi">127</span> <span class="p">:</span> <span class="n">index</span><span class="p">]}</span>
+  <span class="o">%</span><span class="n">block_id_x</span> <span class="o">=</span> <span class="n">gpu</span><span class="o">.</span><span class="n">block_id</span>  <span class="n">x</span> <span class="p">{</span><span class="n">xla</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">index</span><span class="p">,</span> <span class="mi">24575</span> <span class="p">:</span> <span class="n">index</span><span class="p">]}</span>
+
+  <span class="o">%</span><span class="n">xla_loop</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">loop</span> <span class="p">(</span><span class="o">%</span><span class="n">thread_id_x</span><span class="p">,</span> <span class="o">%</span><span class="n">block_id_x</span><span class="p">)[</span><span class="o">%</span><span class="n">vector_index</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="o">%</span><span class="n">dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">dim2</span><span class="p">)</span>
+      <span class="ow">in</span> <span class="c1">#map iter_args(%iter = %output) -&gt; (tensor&lt;6x512x4096xbf16&gt;) {</span>
+    <span class="o">%</span><span class="n">extracted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">extract</span> <span class="o">%</span><span class="nb">input</span><span class="p">[</span><span class="o">%</span><span class="n">dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">dim2</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+    <span class="o">%</span><span class="mi">0</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="n">extracted</span><span class="p">,</span> <span class="o">%</span><span class="n">extracted</span> <span class="p">:</span> <span class="n">bf16</span>
+    <span class="o">%</span><span class="mi">1</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">0</span><span class="p">,</span> <span class="o">%</span><span class="n">extracted</span> <span class="p">:</span> <span class="n">bf16</span>
+    <span class="o">%</span><span class="mi">2</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">1</span><span class="p">,</span> <span class="o">%</span><span class="n">cst</span> <span class="p">:</span> <span class="n">bf16</span>
+    <span class="o">%</span><span class="mi">3</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">addf</span> <span class="o">%</span><span class="n">extracted</span><span class="p">,</span> <span class="o">%</span><span class="mi">2</span> <span class="p">:</span> <span class="n">bf16</span>
+    <span class="o">%</span><span class="mi">4</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">3</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_0</span> <span class="p">:</span> <span class="n">bf16</span>
+    <span class="o">%</span><span class="mi">5</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">tanh</span> <span class="o">%</span><span class="mi">4</span> <span class="p">:</span> <span class="n">bf16</span>
+    <span class="o">%</span><span class="mi">6</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">addf</span> <span class="o">%</span><span class="mi">5</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_1</span> <span class="p">:</span> <span class="n">bf16</span>
+    <span class="o">%</span><span class="mi">7</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">6</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_2</span> <span class="p">:</span> <span class="n">bf16</span>
+    <span class="o">%</span><span class="mi">8</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="n">extracted</span><span class="p">,</span> <span class="o">%</span><span class="mi">7</span> <span class="p">:</span> <span class="n">bf16</span>
+    <span class="o">%</span><span class="n">inserted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">insert</span> <span class="o">%</span><span class="mi">8</span> <span class="n">into</span> <span class="o">%</span><span class="nb">iter</span><span class="p">[</span><span class="o">%</span><span class="n">dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">dim2</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+    <span class="n">xla_gpu</span><span class="o">.</span><span class="k">yield</span> <span class="o">%</span><span class="n">inserted</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="o">%</span><span class="n">xla_loop</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="xla-gpu-to-scf-conversion">
+<h4><code class="docutils literal notranslate"><span class="pre">xla_gpu</span></code> to <code class="docutils literal notranslate"><span class="pre">scf</span></code> conversion<a class="headerlink" href="#xla-gpu-to-scf-conversion" title="Link to this heading">#</a></h4>
+<p>See <a class="reference external" href="https://github.com/openxla/xla/blob/39fc9c0c3e06b29e27f2aebdb21fca15754de928/xla/backends/gpu/codegen/emitters/transforms/lower_xla_gpu_to_scf.cc">lower_xla_gpu_to_scf.cc</a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">xla_gpu.loop</span></code> represents a loop nest with a boundary check inside. If the loop
+inductions variables are out of bounds of the indexing map domain, then this
+iteration is skipped. It means, that the loop is converted to 1 or more nested
+<code class="docutils literal notranslate"><span class="pre">scf.for</span></code> ops with an <code class="docutils literal notranslate"><span class="pre">scf.if</span></code> inside.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">xla_loop</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="k">for</span> <span class="o">%</span><span class="n">vector_index</span> <span class="o">=</span> <span class="o">%</span><span class="n">c0</span> <span class="n">to</span> <span class="o">%</span><span class="n">c4</span> <span class="n">step</span> <span class="o">%</span><span class="n">c1</span> <span class="n">iter_args</span><span class="p">(</span><span class="o">%</span><span class="nb">iter</span> <span class="o">=</span> <span class="o">%</span><span class="n">output</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+   <span class="o">%</span><span class="mi">2</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">cmpi</span> <span class="n">sge</span><span class="p">,</span> <span class="o">%</span><span class="n">thread_id_x</span><span class="p">,</span> <span class="o">%</span><span class="n">c0</span> <span class="p">:</span> <span class="n">index</span>
+   <span class="o">%</span><span class="mi">3</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">cmpi</span> <span class="n">sle</span><span class="p">,</span> <span class="o">%</span><span class="n">thread_id_x</span><span class="p">,</span> <span class="o">%</span><span class="n">c127</span> <span class="p">:</span> <span class="n">index</span>
+   <span class="o">%</span><span class="mi">4</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">andi</span> <span class="o">%</span><span class="mi">2</span><span class="p">,</span> <span class="o">%</span><span class="mi">3</span> <span class="p">:</span> <span class="n">i1</span>
+   <span class="o">%</span><span class="mi">5</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">cmpi</span> <span class="n">sge</span><span class="p">,</span> <span class="o">%</span><span class="n">block_id_x</span><span class="p">,</span> <span class="o">%</span><span class="n">c0</span> <span class="p">:</span> <span class="n">index</span>
+   <span class="o">%</span><span class="mi">6</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">cmpi</span> <span class="n">sle</span><span class="p">,</span> <span class="o">%</span><span class="n">block_id_x</span><span class="p">,</span> <span class="o">%</span><span class="n">c24575</span> <span class="p">:</span> <span class="n">index</span>
+   <span class="o">%</span><span class="mi">7</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">andi</span> <span class="o">%</span><span class="mi">5</span><span class="p">,</span> <span class="o">%</span><span class="mi">6</span> <span class="p">:</span> <span class="n">i1</span>
+   <span class="o">%</span><span class="n">inbounds</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">andi</span> <span class="o">%</span><span class="mi">4</span><span class="p">,</span> <span class="o">%</span><span class="mi">7</span> <span class="p">:</span> <span class="n">i1</span>
+   <span class="o">%</span><span class="mi">9</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="k">if</span> <span class="o">%</span><span class="n">inbounds</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+     <span class="o">%</span><span class="n">dim0</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">apply_indexing</span> <span class="c1">#map(%thread_id_x,  %block_id_x)[%vector_index]</span>
+     <span class="o">%</span><span class="n">dim1</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">apply_indexing</span> <span class="c1">#map1(%thread_id_x, %block_id_x)[%vector_index]</span>
+     <span class="o">%</span><span class="n">dim2</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">apply_indexing</span> <span class="c1">#map2(%thread_id_x, %block_id_x)[%vector_index]</span>
+     <span class="o">%</span><span class="n">extracted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">extract</span> <span class="o">%</span><span class="nb">input</span><span class="p">[</span><span class="o">%</span><span class="n">dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">dim2</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+     <span class="o">//</span> <span class="o">...</span> <span class="n">more</span> <span class="n">arithmetic</span> <span class="n">operations</span>
+     <span class="o">%</span><span class="mi">29</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="n">extracted</span><span class="p">,</span> <span class="o">%</span><span class="mi">28</span> <span class="p">:</span> <span class="n">bf16</span>
+     <span class="o">%</span><span class="n">inserted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">insert</span> <span class="o">%</span><span class="mi">29</span> <span class="n">into</span> <span class="o">%</span><span class="nb">iter</span><span class="p">[</span><span class="o">%</span><span class="n">dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">dim2</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+     <span class="n">scf</span><span class="o">.</span><span class="k">yield</span> <span class="o">%</span><span class="n">inserted</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+     <span class="n">scf</span><span class="o">.</span><span class="k">yield</span> <span class="o">%</span><span class="nb">iter</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+   <span class="p">}</span>
+   <span class="n">scf</span><span class="o">.</span><span class="k">yield</span> <span class="o">%</span><span class="mi">9</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">6</span><span class="n">x512x4096xbf16</span><span class="o">&gt;</span>
+ <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="flatten-tensors">
+<h4>Flatten tensors<a class="headerlink" href="#flatten-tensors" title="Link to this heading">#</a></h4>
+<p>See <a class="reference external" href="https://github.com/openxla/xla/blob/39fc9c0c3e06b29e27f2aebdb21fca15754de928/xla/backends/gpu/codegen/emitters/transforms/flatten_tensors.cc">flatten_tensors.cc</a>.</p>
+<p>The N-d tensors are projected onto 1D. This will simplify the vectorization and
+the lowering to LLVM because every tensor access now corresponds to how the data
+is aligned in memory.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#map = #xla_gpu.indexing_map&lt;&quot;(th_x, bl_x, vector_index) -&gt; (th_x * 4 + bl_x * 512 + vector_index),&quot;</span>
+ <span class="s2">&quot;domain: th_x in [0, 127], bl_x in [0, 24575], vector_index in [0, 3]&quot;</span><span class="o">&gt;</span>
+
+<span class="n">func</span><span class="o">.</span><span class="n">func</span> <span class="nd">@main</span><span class="p">(</span><span class="o">%</span><span class="nb">input</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">%</span><span class="n">output</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span> <span class="p">{</span>
+ <span class="o">%</span><span class="n">xla_loop</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="k">for</span> <span class="o">%</span><span class="n">vector_index</span> <span class="o">=</span> <span class="o">%</span><span class="n">c0</span> <span class="n">to</span> <span class="o">%</span><span class="n">c4</span> <span class="n">step</span> <span class="o">%</span><span class="n">c1</span> <span class="n">iter_args</span><span class="p">(</span><span class="o">%</span><span class="nb">iter</span> <span class="o">=</span> <span class="o">%</span><span class="n">output</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+   <span class="o">%</span><span class="n">dim</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">apply_indexing</span> <span class="c1">#map(%thread_id_x, %block_id_x, %vector_index)</span>
+   <span class="o">%</span><span class="n">extracted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">extract</span> <span class="o">%</span><span class="nb">input</span><span class="p">[</span><span class="o">%</span><span class="n">dim</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span>
+   <span class="o">%</span><span class="mi">2</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="n">extracted</span><span class="p">,</span> <span class="o">%</span><span class="n">extracted</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">3</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">2</span><span class="p">,</span> <span class="o">%</span><span class="n">extracted</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">4</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">3</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_2</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">5</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">addf</span> <span class="o">%</span><span class="n">extracted</span><span class="p">,</span> <span class="o">%</span><span class="mi">4</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">6</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">5</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_1</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">7</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">tanh</span> <span class="o">%</span><span class="mi">6</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">8</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">addf</span> <span class="o">%</span><span class="mi">7</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_0</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">9</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">8</span><span class="p">,</span> <span class="o">%</span><span class="n">cst</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">10</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="n">extracted</span><span class="p">,</span> <span class="o">%</span><span class="mi">9</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="n">inserted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">insert</span> <span class="o">%</span><span class="mi">10</span> <span class="n">into</span> <span class="o">%</span><span class="nb">iter</span><span class="p">[</span><span class="o">%</span><span class="n">dim</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span>
+   <span class="n">scf</span><span class="o">.</span><span class="k">yield</span> <span class="o">%</span><span class="n">inserted</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span>
+ <span class="p">}</span>
+ <span class="k">return</span> <span class="o">%</span><span class="n">xla_loop</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="vectorization">
+<h4>Vectorization<a class="headerlink" href="#vectorization" title="Link to this heading">#</a></h4>
+<p>See <a class="reference external" href="https://github.com/openxla/xla/blob/39fc9c0c3e06b29e27f2aebdb21fca15754de928/xla/backends/gpu/codegen/emitters/transforms/vectorize_loads_stores.cc">vectorize_loads_stores.cc</a>.</p>
+<p>The pass analyses the indices in the <code class="docutils literal notranslate"><span class="pre">tensor.extract</span></code> and <code class="docutils literal notranslate"><span class="pre">tensor.insert</span></code> ops
+and if they are produced by <code class="docutils literal notranslate"><span class="pre">xla_gpu.apply_indexing</span></code> that accesses the elements
+contiguously w.r.t. to the <code class="docutils literal notranslate"><span class="pre">%vector_index</span></code> and the access is aligned, then
+<code class="docutils literal notranslate"><span class="pre">tensor.extract</span></code> is converted to <code class="docutils literal notranslate"><span class="pre">vector.transfer_read</span></code> and hoisted out of the
+loop.</p>
+<p>In this particular case, there is an indexing map
+<code class="docutils literal notranslate"><span class="pre">(th_x,</span> <span class="pre">bl_x,</span> <span class="pre">vector_index)</span> <span class="pre">-&gt;</span> <span class="pre">(th_x</span> <span class="pre">*</span> <span class="pre">4</span> <span class="pre">+</span> <span class="pre">bl_x</span> <span class="pre">*</span> <span class="pre">512</span> <span class="pre">+</span> <span class="pre">vector_index)</span></code> used to
+compute elements to extract and insert in a <code class="docutils literal notranslate"><span class="pre">scf.for</span></code> loop from 0 to 4.
+Therefore, both <code class="docutils literal notranslate"><span class="pre">tensor.extract</span></code> and <code class="docutils literal notranslate"><span class="pre">tensor.insert</span></code> can be vectorized.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">func</span><span class="o">.</span><span class="n">func</span> <span class="nd">@main</span><span class="p">(</span><span class="o">%</span><span class="nb">input</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">%</span><span class="n">output</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span> <span class="p">{</span>
+ <span class="o">%</span><span class="n">vector_0</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">constant</span> <span class="n">dense</span><span class="o">&lt;</span><span class="mf">0.000000e+00</span><span class="o">&gt;</span> <span class="p">:</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+ <span class="o">%</span><span class="mi">0</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">apply_indexing</span> <span class="c1">#map(%thread_id_x, %block_id_x, %c0)</span>
+ <span class="o">%</span><span class="mi">2</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">transfer_read</span> <span class="o">%</span><span class="nb">input</span><span class="p">[</span><span class="o">%</span><span class="mi">0</span><span class="p">],</span> <span class="o">%</span><span class="n">cst</span> <span class="p">{</span><span class="n">in_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">true</span><span class="p">]}</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+ <span class="o">%</span><span class="n">xla_loop</span><span class="p">:</span><span class="mi">2</span> <span class="o">=</span> <span class="n">scf</span><span class="o">.</span><span class="k">for</span> <span class="o">%</span><span class="n">vector_index</span> <span class="o">=</span> <span class="o">%</span><span class="n">c0</span> <span class="n">to</span> <span class="o">%</span><span class="n">c4</span> <span class="n">step</span> <span class="o">%</span><span class="n">c1</span>
+     <span class="n">iter_args</span><span class="p">(</span><span class="o">%</span><span class="nb">iter</span> <span class="o">=</span> <span class="o">%</span><span class="n">output</span><span class="p">,</span> <span class="o">%</span><span class="n">iter_vector</span> <span class="o">=</span> <span class="o">%</span><span class="n">vector_0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+   <span class="o">%</span><span class="mi">5</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">extract</span> <span class="o">%</span><span class="mi">2</span><span class="p">[</span><span class="o">%</span><span class="n">vector_index</span><span class="p">]</span> <span class="p">:</span> <span class="n">bf16</span> <span class="kn">from</span><span class="w"> </span><span class="nn">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+   <span class="o">%</span><span class="mi">6</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">5</span><span class="p">,</span> <span class="o">%</span><span class="mi">5</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">7</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">6</span><span class="p">,</span> <span class="o">%</span><span class="mi">5</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">8</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">7</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_4</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">9</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">addf</span> <span class="o">%</span><span class="mi">5</span><span class="p">,</span> <span class="o">%</span><span class="mi">8</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">10</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">9</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_3</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">11</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">tanh</span> <span class="o">%</span><span class="mi">10</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">12</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">addf</span> <span class="o">%</span><span class="mi">11</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_2</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">13</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">12</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_1</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">14</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">mulf</span> <span class="o">%</span><span class="mi">5</span><span class="p">,</span> <span class="o">%</span><span class="mi">13</span> <span class="p">:</span> <span class="n">bf16</span>
+   <span class="o">%</span><span class="mi">15</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">insert</span> <span class="o">%</span><span class="mi">14</span><span class="p">,</span> <span class="o">%</span><span class="n">iter_vector</span> <span class="p">[</span><span class="o">%</span><span class="n">vector_index</span><span class="p">]</span> <span class="p">:</span> <span class="n">bf16</span> <span class="n">into</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+   <span class="n">scf</span><span class="o">.</span><span class="k">yield</span> <span class="o">%</span><span class="nb">iter</span><span class="p">,</span> <span class="o">%</span><span class="mi">15</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+ <span class="p">}</span>
+ <span class="o">%</span><span class="mi">4</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">transfer_write</span> <span class="o">%</span><span class="n">xla_loop</span><span class="c1">#1, %output[%0] {in_bounds = [true]}</span>
+     <span class="p">:</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span>
+ <span class="k">return</span> <span class="o">%</span><span class="mi">4</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="loop-unrolling">
+<h4>Loop unrolling<a class="headerlink" href="#loop-unrolling" title="Link to this heading">#</a></h4>
+<p>See <a class="reference external" href="https://github.com/openxla/xla/blob/39fc9c0c3e06b29e27f2aebdb21fca15754de928/xla/backends/gpu/codegen/emitters/transforms/optimize_loops.cc">optimize_loops.cc</a>.</p>
+<p>The loop unrolling finds <code class="docutils literal notranslate"><span class="pre">scf.for</span></code> loops that can be unrolled. In this case, the
+loop over the elements of the vector disappears.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">func</span><span class="o">.</span><span class="n">func</span> <span class="nd">@main</span><span class="p">(</span><span class="o">%</span><span class="nb">input</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">%</span><span class="n">arg1</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span> <span class="p">{</span>
+
+  <span class="o">%</span><span class="n">cst_0</span> <span class="o">=</span> <span class="n">arith</span><span class="o">.</span><span class="n">constant</span> <span class="n">dense</span><span class="o">&lt;</span><span class="mf">0.000000e+00</span><span class="o">&gt;</span> <span class="p">:</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+  <span class="o">%</span><span class="n">dim</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">apply_indexing</span> <span class="c1">#map(%thread_id_x, %block_id_x, %c0)</span>
+  <span class="o">%</span><span class="mi">2</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">transfer_read</span> <span class="o">%</span><span class="nb">input</span><span class="p">[</span><span class="o">%</span><span class="n">dim</span><span class="p">],</span> <span class="o">%</span><span class="n">cst</span> <span class="p">{</span><span class="n">in_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">true</span><span class="p">]}</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+  <span class="o">%</span><span class="mi">3</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">extract</span> <span class="o">%</span><span class="mi">2</span><span class="p">[</span><span class="o">%</span><span class="n">c0</span><span class="p">]</span> <span class="p">:</span> <span class="n">bf16</span> <span class="kn">from</span><span class="w"> </span><span class="nn">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+  <span class="o">...</span>
+  <span class="o">%</span><span class="mi">13</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">insert</span> <span class="o">%</span><span class="mi">12</span><span class="p">,</span> <span class="o">%</span><span class="n">cst_0</span> <span class="p">[</span><span class="o">%</span><span class="n">c0</span><span class="p">]</span> <span class="p">:</span> <span class="n">bf16</span> <span class="n">into</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+  <span class="o">%</span><span class="mi">14</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">extract</span> <span class="o">%</span><span class="mi">2</span><span class="p">[</span><span class="o">%</span><span class="n">c1</span><span class="p">]</span> <span class="p">:</span> <span class="n">bf16</span> <span class="kn">from</span><span class="w"> </span><span class="nn">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+  <span class="o">...</span>
+  <span class="o">%</span><span class="mi">24</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">insert</span> <span class="o">%</span><span class="mi">23</span><span class="p">,</span> <span class="o">%</span><span class="mi">13</span> <span class="p">[</span><span class="o">%</span><span class="n">c1</span><span class="p">]</span> <span class="p">:</span> <span class="n">bf16</span> <span class="n">into</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+  <span class="o">%</span><span class="mi">25</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">extract</span> <span class="o">%</span><span class="mi">2</span><span class="p">[</span><span class="o">%</span><span class="n">c2</span><span class="p">]</span> <span class="p">:</span> <span class="n">bf16</span> <span class="kn">from</span><span class="w"> </span><span class="nn">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+  <span class="o">...</span>
+  <span class="o">%</span><span class="mi">35</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">insert</span> <span class="o">%</span><span class="mi">34</span><span class="p">,</span> <span class="o">%</span><span class="mi">24</span> <span class="p">[</span><span class="o">%</span><span class="n">c2</span><span class="p">]</span> <span class="p">:</span> <span class="n">bf16</span> <span class="n">into</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+  <span class="o">%</span><span class="mi">36</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">extract</span> <span class="o">%</span><span class="mi">2</span><span class="p">[</span><span class="o">%</span><span class="n">c3</span><span class="p">]</span> <span class="p">:</span> <span class="n">bf16</span> <span class="kn">from</span><span class="w"> </span><span class="nn">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+  <span class="o">...</span>
+  <span class="o">%</span><span class="mi">46</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">insert</span> <span class="o">%</span><span class="mi">45</span><span class="p">,</span> <span class="o">%</span><span class="mi">35</span> <span class="p">[</span><span class="o">%</span><span class="n">c3</span><span class="p">]</span> <span class="p">:</span> <span class="n">bf16</span> <span class="n">into</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span>
+  <span class="o">%</span><span class="mi">47</span> <span class="o">=</span> <span class="n">vector</span><span class="o">.</span><span class="n">transfer_write</span> <span class="o">%</span><span class="mi">46</span><span class="p">,</span> <span class="o">%</span><span class="n">arg1</span><span class="p">[</span><span class="o">%</span><span class="n">dim</span><span class="p">]</span> <span class="p">{</span><span class="n">in_bounds</span> <span class="o">=</span> <span class="p">[</span><span class="n">true</span><span class="p">]}</span> <span class="p">:</span> <span class="n">vector</span><span class="o">&lt;</span><span class="mi">4</span><span class="n">xbf16</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span>
+  <span class="k">return</span> <span class="o">%</span><span class="mi">47</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">12582912</span><span class="n">xbf16</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="conversion-to-llvm">
+<h4>Conversion to LLVM<a class="headerlink" href="#conversion-to-llvm" title="Link to this heading">#</a></h4>
+<p>We mostly use the standard LLVM lowerings, but there are a few special passes.
+We cannot use the <code class="docutils literal notranslate"><span class="pre">memref</span></code> lowerings for tensors, since we don’t bufferize the
+IR and our ABI is not compatible with the <code class="docutils literal notranslate"><span class="pre">memref</span></code> ABI. Instead, we have a
+custom lowering directly from tensors to <code class="docutils literal notranslate"><span class="pre">LLVM</span></code>.</p>
+<ul class="simple">
+<li><p>The lowering of tensors is done in <a class="reference external" href="https://github.com/openxla/xla/blob/39fc9c0c3e06b29e27f2aebdb21fca15754de928/xla/backends/gpu/codegen/emitters/transforms/lower_tensors.cc">lower_tensors.cc</a>. <code class="docutils literal notranslate"><span class="pre">tensor.extract</span></code> is
+lowered to <code class="docutils literal notranslate"><span class="pre">llvm.load</span></code>, <code class="docutils literal notranslate"><span class="pre">tensor.insert</span></code> to <code class="docutils literal notranslate"><span class="pre">llvm.store</span></code>, in the obvious way.</p></li>
+<li><p><a class="reference external" href="https://github.com/openxla/xla/blob/39fc9c0c3e06b29e27f2aebdb21fca15754de928/xla/backends/gpu/codegen/emitters/transforms/propagate_slice_indices.cc">propagate_slice_indices</a> and <a class="reference external" href="https://github.com/openxla/xla/blob/39fc9c0c3e06b29e27f2aebdb21fca15754de928/xla/backends/gpu/codegen/emitters/transforms/merge_pointers_to_same_slice.cc">merge_pointers_to_same_slice</a> together
+implement a detail of buffer assignment and XLA’s ABI: if two tensors share
+the same buffer slice, they are only passed once. These passes deduplicate the
+function arguments.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>llvm.func @__nv_tanhf(f32) -&gt; f32
+llvm.func @main(%arg0: !llvm.ptr, %arg1: !llvm.ptr) {
+  %11 = nvvm.read.ptx.sreg.tid.x : i32
+  %12 = nvvm.read.ptx.sreg.ctaid.x : i32
+  %13 = llvm.mul %11, %1 : i32
+  %14 = llvm.mul %12, %0 : i32
+  %15 = llvm.add %13, %14 : i32
+  %16 = llvm.getelementptr inbounds %arg0[%15] : (!llvm.ptr, i32) -&gt; !llvm.ptr, bf16
+  %17 = llvm.load %16 invariant : !llvm.ptr -&gt; vector&lt;4xbf16&gt;
+  %18 = llvm.extractelement %17[%2 : i32] : vector&lt;4xbf16&gt;
+  %19 = llvm.fmul %18, %18  : bf16
+  %20 = llvm.fmul %19, %18  : bf16
+  %21 = llvm.fmul %20, %4  : bf16
+  %22 = llvm.fadd %18, %21  : bf16
+  %23 = llvm.fmul %22, %5  : bf16
+  %24 = llvm.fpext %23 : bf16 to f32
+  %25 = llvm.call @__nv_tanhf(%24) : (f32) -&gt; f32
+  %26 = llvm.fptrunc %25 : f32 to bf16
+  %27 = llvm.fadd %26, %6  : bf16
+  %28 = llvm.fmul %27, %7  : bf16
+  %29 = llvm.fmul %18, %28  : bf16
+  %30 = llvm.insertelement %29, %8[%2 : i32] : vector&lt;4xbf16&gt;
+  ...
+}
+</pre></div>
+</div>
+</section>
+</section>
+<section id="transpose-emitter">
+<h3>Transpose emitter<a class="headerlink" href="#transpose-emitter" title="Link to this heading">#</a></h3>
+<p>Let’s consider a slightly more involved example.</p>
+<p><img alt="img" src="_images/emitters-transpose.png" /></p>
+<p>The transpose emitter differs from the loop emitter only in how the entry
+function is generated.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">func</span><span class="o">.</span><span class="n">func</span> <span class="nd">@transpose</span><span class="p">(</span><span class="o">%</span><span class="n">arg0</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">20</span><span class="n">x160x170xf32</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">%</span><span class="n">arg1</span><span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">170</span><span class="n">x160x20xf32</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">170</span><span class="n">x160x20xf32</span><span class="o">&gt;</span> <span class="p">{</span>
+  <span class="o">%</span><span class="n">thread_id_x</span> <span class="o">=</span> <span class="n">gpu</span><span class="o">.</span><span class="n">thread_id</span>  <span class="n">x</span> <span class="p">{</span><span class="n">xla</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">index</span><span class="p">,</span> <span class="mi">127</span> <span class="p">:</span> <span class="n">index</span><span class="p">]}</span>
+  <span class="o">%</span><span class="n">block_id_x</span> <span class="o">=</span> <span class="n">gpu</span><span class="o">.</span><span class="n">block_id</span>  <span class="n">x</span> <span class="p">{</span><span class="n">xla</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span> <span class="p">:</span> <span class="n">index</span><span class="p">,</span> <span class="mi">959</span> <span class="p">:</span> <span class="n">index</span><span class="p">]}</span>
+
+  <span class="o">%</span><span class="n">shmem</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">allocate_shared</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">32</span><span class="n">x1x33xf32</span><span class="o">&gt;</span>
+  <span class="o">%</span><span class="n">xla_loop</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">loop</span> <span class="p">(</span><span class="o">%</span><span class="n">thread_id_x</span><span class="p">,</span> <span class="o">%</span><span class="n">block_id_x</span><span class="p">)[</span><span class="o">%</span><span class="n">i</span><span class="p">,</span> <span class="o">%</span><span class="n">j</span><span class="p">]</span>
+      <span class="o">-&gt;</span> <span class="p">(</span><span class="o">%</span><span class="n">input_dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">input_dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">input_dim2</span><span class="p">,</span> <span class="o">%</span><span class="n">shmem_dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">shmem_dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">shmem_dim2</span><span class="p">)</span>
+      <span class="ow">in</span> <span class="c1">#map iter_args(%iter = %shmem) -&gt; (tensor&lt;32x1x33xf32&gt;) {</span>
+    <span class="o">%</span><span class="n">extracted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">extract</span> <span class="o">%</span><span class="n">arg0</span><span class="p">[</span><span class="o">%</span><span class="n">input_dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">input_dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">input_dim2</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">20</span><span class="n">x160x170xf32</span><span class="o">&gt;</span>
+    <span class="o">%</span><span class="mi">0</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span> <span class="o">%</span><span class="n">extracted</span> <span class="p">:</span> <span class="n">f32</span>
+    <span class="o">%</span><span class="n">inserted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">insert</span> <span class="o">%</span><span class="mi">0</span> <span class="n">into</span> <span class="o">%</span><span class="nb">iter</span><span class="p">[</span><span class="o">%</span><span class="n">shmem_dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">shmem_dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">shmem_dim2</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">32</span><span class="n">x1x33xf32</span><span class="o">&gt;</span>
+    <span class="n">xla_gpu</span><span class="o">.</span><span class="k">yield</span> <span class="o">%</span><span class="n">inserted</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">32</span><span class="n">x1x33xf32</span><span class="o">&gt;</span>
+  <span class="p">}</span>
+
+  <span class="o">%</span><span class="n">synced_tensor</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">sync_threads</span> <span class="o">%</span><span class="n">xla_loop</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">32</span><span class="n">x1x33xf32</span><span class="o">&gt;</span>
+
+  <span class="o">%</span><span class="n">xla_loop_0</span> <span class="o">=</span> <span class="n">xla_gpu</span><span class="o">.</span><span class="n">loop</span> <span class="p">(</span><span class="o">%</span><span class="n">thread_id_x</span> <span class="o">%</span><span class="n">block_id_x</span><span class="p">)[</span><span class="o">%</span><span class="n">i</span><span class="p">,</span> <span class="o">%</span><span class="n">j</span><span class="p">]</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="o">%</span><span class="n">dim0</span><span class="p">,</span> <span class="o">%</span><span class="n">dim1</span><span class="p">,</span> <span class="o">%</span><span class="n">dim2</span><span class="p">)</span>
+      <span class="ow">in</span> <span class="c1">#map1 iter_args(%iter = %arg1) -&gt; (tensor&lt;170x160x20xf32&gt;) {</span>
+    <span class="o">//</span> <span class="n">indexing</span> <span class="n">computations</span>
+    <span class="o">%</span><span class="n">extracted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">extract</span> <span class="o">%</span><span class="n">synced_tensor</span><span class="p">[</span><span class="o">%</span><span class="mi">0</span><span class="p">,</span> <span class="o">%</span><span class="n">c0</span><span class="p">,</span> <span class="o">%</span><span class="mi">1</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">32</span><span class="n">x1x33xf32</span><span class="o">&gt;</span>
+    <span class="o">%</span><span class="mi">2</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">absf</span> <span class="o">%</span><span class="n">extracted</span> <span class="p">:</span> <span class="n">f32</span>
+    <span class="o">%</span><span class="n">inserted</span> <span class="o">=</span> <span class="n">tensor</span><span class="o">.</span><span class="n">insert</span> <span class="o">%</span><span class="mi">2</span> <span class="n">into</span> <span class="o">%</span><span class="nb">iter</span><span class="p">[</span><span class="o">%</span><span class="mi">3</span><span class="p">,</span> <span class="o">%</span><span class="mi">4</span><span class="p">,</span> <span class="o">%</span><span class="mi">1</span><span class="p">]</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">170</span><span class="n">x160x20xf32</span><span class="o">&gt;</span>
+    <span class="n">xla_gpu</span><span class="o">.</span><span class="k">yield</span> <span class="o">%</span><span class="n">inserted</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">170</span><span class="n">x160x20xf32</span><span class="o">&gt;</span>
+  <span class="p">}</span>
+  <span class="k">return</span> <span class="o">%</span><span class="n">xla_loop_0</span> <span class="p">:</span> <span class="n">tensor</span><span class="o">&lt;</span><span class="mi">170</span><span class="n">x160x20xf32</span><span class="o">&gt;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In this case, we generate two <code class="docutils literal notranslate"><span class="pre">xla_gpu.loop</span></code> ops. The first one performs
+coalesced reads from the input and writes the result to the shared memory.</p>
+<p>The shared memory tensor is created using <code class="docutils literal notranslate"><span class="pre">xla_gpu.allocate_shared</span></code> op.</p>
+<p>After the threads are synchronized using <code class="docutils literal notranslate"><span class="pre">xla_gpu.sync_threads</span></code>, the second
+<code class="docutils literal notranslate"><span class="pre">xla_gpu.loop</span></code> reads the elements from the shared memory tensor and performs
+coalesced writes to the output.</p>
+</section>
+<section id="reproducer">
+<h3>Reproducer<a class="headerlink" href="#reproducer" title="Link to this heading">#</a></h3>
+<p>In order to see the IR after every pass of the compilation pipeline, one can
+launch <code class="docutils literal notranslate"><span class="pre">run_hlo_module</span></code> with the <code class="docutils literal notranslate"><span class="pre">--xla_dump_hlo_pass_re=fusion-emitter</span></code> flag.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">run_hlo_module</span> <span class="o">--</span><span class="n">platform</span><span class="o">=</span><span class="n">CUDA</span> <span class="o">--</span><span class="n">xla_disable_all_hlo_passes</span> <span class="o">--</span><span class="n">reference_platform</span><span class="o">=</span><span class="s2">&quot;&quot;</span> <span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">gelu</span><span class="o">.</span><span class="n">hlo</span> <span class="o">--</span><span class="n">xla_dump_hlo_pass_re</span><span class="o">=</span><span class="n">fusion</span><span class="o">-</span><span class="n">emitter</span> <span class="o">--</span><span class="n">xla_dump_to</span><span class="o">=&lt;</span><span class="n">some_directory</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">/tmp/gelu.hlo</span></code> contains</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">HloModule</span> <span class="n">m</span><span class="p">:</span>
+
+<span class="n">gelu</span> <span class="p">{</span>
+  <span class="o">%</span><span class="n">param</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">constant_0</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[]</span> <span class="n">constant</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">bcast_0</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">broadcast</span><span class="p">(</span><span class="n">bf16</span><span class="p">[]</span> <span class="o">%</span><span class="n">constant_0</span><span class="p">),</span> <span class="n">dimensions</span><span class="o">=</span><span class="p">{}</span>
+  <span class="o">%</span><span class="n">constant_1</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[]</span> <span class="n">constant</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">bcast_1</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">broadcast</span><span class="p">(</span><span class="n">bf16</span><span class="p">[]</span> <span class="o">%</span><span class="n">constant_1</span><span class="p">),</span> <span class="n">dimensions</span><span class="o">=</span><span class="p">{}</span>
+  <span class="o">%</span><span class="n">constant_2</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[]</span> <span class="n">constant</span><span class="p">(</span><span class="mf">0.79785</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">bcast_2</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">broadcast</span><span class="p">(</span><span class="n">bf16</span><span class="p">[]</span> <span class="o">%</span><span class="n">constant_2</span><span class="p">),</span> <span class="n">dimensions</span><span class="o">=</span><span class="p">{}</span>
+  <span class="o">%</span><span class="n">constant_3</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[]</span> <span class="n">constant</span><span class="p">(</span><span class="mf">0.044708</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">bcast_3</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">broadcast</span><span class="p">(</span><span class="n">bf16</span><span class="p">[]</span> <span class="o">%</span><span class="n">constant_3</span><span class="p">),</span> <span class="n">dimensions</span><span class="o">=</span><span class="p">{}</span>
+  <span class="o">%</span><span class="n">square</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">multiply</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">param</span><span class="p">,</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">param</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">cube</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">multiply</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">square</span><span class="p">,</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">param</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">multiply_3</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">multiply</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">cube</span><span class="p">,</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">bcast_3</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">add_1</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">add</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">param</span><span class="p">,</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">multiply_3</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">multiply_2</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">multiply</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">add_1</span><span class="p">,</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">bcast_2</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">tanh_0</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">tanh</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">multiply_2</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">add_0</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">add</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">tanh_0</span><span class="p">,</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">bcast_1</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">multiply_1</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">multiply</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">add_0</span><span class="p">,</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">bcast_0</span><span class="p">)</span>
+  <span class="n">ROOT</span> <span class="o">%</span><span class="n">multiply_0</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">multiply</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">param</span><span class="p">,</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="o">%</span><span class="n">multiply_1</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">ENTRY</span> <span class="n">main</span> <span class="p">{</span>
+  <span class="o">%</span><span class="n">param</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+  <span class="n">ROOT</span> <span class="n">fusion</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">512</span><span class="p">,</span><span class="mi">4096</span><span class="p">]</span> <span class="n">fusion</span><span class="p">(</span><span class="o">%</span><span class="n">param</span><span class="p">),</span> <span class="n">kind</span><span class="o">=</span><span class="n">kLoop</span><span class="p">,</span> <span class="n">calls</span><span class="o">=</span><span class="n">gelu</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="links-to-code">
+<h2>Links to code<a class="headerlink" href="#links-to-code" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Compilation pipeline: <a class="reference external" href="https://github.com/openxla/xla/blob/cfd16b7f21feff17635c782f4489c0f478178eb9/xla/backends/gpu/codegen/emitters/emitter_base.h">emitter_base.h</a></p></li>
+<li><p>Optimization and conversion passes: <a class="reference external" href="https://github.com/openxla/xla/tree/39fc9c0c3e06b29e27f2aebdb21fca15754de928/xla/backends/gpu/codegen/emitters/transforms">backends/gpu/codegen/emitters/transforms</a></p></li>
+<li><p>Partition logic: <a class="reference external" href="https://github.com/openxla/xla/blob/ca62f3e1bc9ea1d808c3a4de0a78bae7453389eb/xla/codegen/emitters/computation_partitioner.h">computation_partitioner.h</a></p></li>
+<li><p>Hero-based emitters: <a class="reference external" href="https://github.com/openxla/xla/tree/cfd16b7f21feff17635c782f4489c0f478178eb9/xla/backends/gpu/codegen/emitters">backends/gpu/codegen/emitters</a></p></li>
+<li><p>XLA:GPU ops: <a class="reference external" href="https://github.com/openxla/xla/blob/39fc9c0c3e06b29e27f2aebdb21fca15754de928/xla/backends/gpu/codegen/emitters/ir/xla_gpu_types.td">xla_gpu_ops.td</a></p></li>
+<li><p>Correctness and lit tests: <a class="reference external" href="https://github.com/openxla/xla/tree/30229c9836cafa6b05c6d42f0d918e5f8dc0b2dd/xla/backends/gpu/codegen/emitters/tests">backends/gpu/codegen/emitters/tests</a></p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="gpu_architecture.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">XLA:GPU Architecture Overview</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="persisted_autotuning.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Persisted autotuning (GPU only)</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hero-based-codegen">Hero-based codegen</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#high-level-overview">High-level overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#partitioning">Partitioning</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#elemental-emission">Elemental emission</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-transformations">Indexing transformations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tuples">Tuples</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gather">Gather</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#subgraph-functions">Subgraph functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#entry-function">Entry function</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compilation-pipeline">Compilation pipeline</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#loop-emitter">Loop emitter</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mlir-conversion">MLIR Conversion</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#inliner">Inliner</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#xla-gpu-to-scf-conversion"><code class="docutils literal notranslate"><span class="pre">xla_gpu</span></code> to <code class="docutils literal notranslate"><span class="pre">scf</span></code> conversion</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#flatten-tensors">Flatten tensors</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#vectorization">Vectorization</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#loop-unrolling">Loop unrolling</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#conversion-to-llvm">Conversion to LLVM</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#transpose-emitter">Transpose emitter</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducer">Reproducer</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#links-to-code">Links to code</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,835 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>HLO Passes &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'hlo_passes';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Writing unit tests for HLO passes" href="test_hlo_passes.html" />
+    <link rel="prev" title="XLA Flags Guidance" href="flags_guidance.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="error_codes.html">Error Codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/hlo_passes.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>HLO Passes</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-details">Developer details</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tooling-and-testing">Tooling and Testing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hardware-independent-hlo-pass-examples">Hardware-independent HLO Pass Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rematerialization">Rematerialization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#algebraic-simplifier">Algebraic Simplifier</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constant-folding">Constant Folding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dead-code-elimination">Dead Code Elimination</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#call-graph-flattening">Call Graph Flattening</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reshape-mover">Reshape Mover</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-sized-hlo-elimination">Zero-sized HLO Elimination</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tpu-specific-hlo-pass-examples">TPU-specific HLO Pass Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-parallelism">Model parallelism</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-partitioning">Spatial partitioning</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-of-bfloat16">Handling of bfloat16</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#legalization-passes">Legalization passes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu-specific-hlo-pass-example">GPU-specific HLO Pass Example</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cudnn-rewriter">cuDNN Rewriter</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cpu-specific-hlo-pass-examples">CPU-specific HLO Pass Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convolution-canonicalization">Convolution Canonicalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operation-parallelization">Operation Parallelization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-passes">Analysis passes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-pass-examples">Analysis Pass Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dataflow-analysis">Dataflow Analysis</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#alias-analysis">Alias Analysis</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#computation-cost-analysis">Computation Cost Analysis</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hlo-verification">HLO Verification</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hlo-passes">
+<h1>HLO Passes<a class="headerlink" href="#hlo-passes" title="Link to this heading">#</a></h1>
+<p>This document outlines the <a class="reference external" href="https://openxla.org/xla/terminology">HLO</a>
+optimizations and transformations passes in the
+<a class="reference external" href="https://openxla.org/xla/architecture">XLA compiler</a>.</p>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>A single HLO Pass can be comprised of one or many compiler optimizations and
+transformations, and XLA provides several hundred such passes. HLO focuses only
+on the shape (e.g. a 3x4 matrix) and the
+<a class="reference external" href="https://openxla.org/xla/operation_semantics">operation semantics</a> of the arrays
+to make the optimization or transformation easier.</p>
+<p>For example:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/openxla/xla/blob/c37fc6a383b870f43cef82280418fcefcc90b0f8/xla/hlo/transforms/simplifiers/algebraic_simplifier.h#L417"><code class="docutils literal notranslate"><span class="pre">AlgebraicSimplifier</span></code>:</a>
+A pass that performs a number of mostly arithmetic simplifications and
+optimizations. Including:</p>
+<ul>
+<li><p>When dividing by a constant, an optimization is performed to transform
+the operation to multiplication by the inversion of the constant.</p></li>
+</ul>
+</li>
+<li><p><a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/hlo/transforms/simplifiers/hlo_rematerialization.h"><code class="docutils literal notranslate"><span class="pre">HloRematerialization</span></code>:</a>
+A pass that recomputes selected expressions in the computation to reduce
+memory pressure caused by long live ranges of array-shaped values.</p></li>
+</ul>
+</section>
+<section id="developer-details">
+<h2>Developer details<a class="headerlink" href="#developer-details" title="Link to this heading">#</a></h2>
+<p>The base class for HLO passes can be found in
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/pass/hlo_pass_interface.h"><code class="docutils literal notranslate"><span class="pre">xla/hlo/pass/hlo_pass_interface.h</span></code></a>.
+HLO pass should not extend this class directly but instead should extend
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/pass/hlo_pass_interface.h#L142"><code class="docutils literal notranslate"><span class="pre">HloModulePass</span></code></a>.</p>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/hlo/pass#readme">XLA HLO Pass Framework</a>.</p>
+<section id="tooling-and-testing">
+<h3>Tooling and Testing<a class="headerlink" href="#tooling-and-testing" title="Link to this heading">#</a></h3>
+<p>XLA comes with multiple command line tools, including the hlo-opt tool. This
+tool allows execution of an individual pass independent of the given platform
+compilation stages. For more information see
+<a class="reference external" href="https://openxla.org/xla/tools#hlo-opt_hlo_pass_development_and_debugging">Tooling</a>.</p>
+<p>For information on writing unit tests for HLO Passes see
+<a class="reference external" href="https://openxla.org/xla/test_hlo_passes">Testing HLO Passes</a>.</p>
+</section>
+</section>
+<section id="hardware-independent-hlo-pass-examples">
+<h2>Hardware-independent HLO Pass Examples<a class="headerlink" href="#hardware-independent-hlo-pass-examples" title="Link to this heading">#</a></h2>
+<p>This section describes a few examples of passes shared across XLA backends. Some
+passes may be specialized for specific backends, but the high-level
+functionality is similar.</p>
+<p>Shared passes or hardware-independent passes can be found in
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/hlo/transforms"><code class="docutils literal notranslate"><span class="pre">xla/hlo/transforms</span></code></a>.</p>
+<section id="rematerialization">
+<h3>Rematerialization<a class="headerlink" href="#rematerialization" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/simplifiers/hlo_rematerialization.h"><code class="docutils literal notranslate"><span class="pre">HloRematerialization</span></code></a>.</p>
+<p>Selectively recomputes expressions within the HLO graph to reduce memory usage.
+Trades off higher compute for lower memory usage. Can reduce memory usage by
+tens of percent and is required to run many large models.</p>
+</section>
+<section id="algebraic-simplifier">
+<h3>Algebraic Simplifier<a class="headerlink" href="#algebraic-simplifier" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/simplifiers/algebraic_simplifier.h"><code class="docutils literal notranslate"><span class="pre">AlgebraicSimplifier</span></code></a>.</p>
+<p>A grab bag of simplifications, optimizations, and canonicalizations. Analogous
+to
+<a class="reference external" href="https://llvm.org/docs/Passes.html#instcombine-combine-redundant-instructions">LLVM’s <code class="docutils literal notranslate"><span class="pre">instcombine</span></code> pass</a>.</p>
+</section>
+<section id="constant-folding">
+<h3>Constant Folding<a class="headerlink" href="#constant-folding" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/simplifiers/hlo_constant_folding.h"><code class="docutils literal notranslate"><span class="pre">HloConstantFolding</span></code></a>.</p>
+<p>Replaces expressions which can be evaluated at compile time with their constant
+equivalent.</p>
+</section>
+<section id="dead-code-elimination">
+<h3>Dead Code Elimination<a class="headerlink" href="#dead-code-elimination" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/simplifiers/hlo_dce.h"><code class="docutils literal notranslate"><span class="pre">HloDCE</span></code></a>
+.</p>
+<p>Removes operations with unused results (fast implementation).</p>
+</section>
+<section id="call-graph-flattening">
+<h3>Call Graph Flattening<a class="headerlink" href="#call-graph-flattening" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/simplifiers/flatten_call_graph.h"><code class="docutils literal notranslate"><span class="pre">FlattenCallGraph</span></code></a>.</p>
+<p>A legalization pass which converts the HLO call graph into a tree by cloning
+computations. Required because memory is statically assigned to HLO operations
+and not based on dynamic call context.</p>
+</section>
+<section id="reshape-mover">
+<h3>Reshape Mover<a class="headerlink" href="#reshape-mover" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/simplifiers/reshape_mover.h"><code class="docutils literal notranslate"><span class="pre">ReshapeMover</span></code></a>.</p>
+<p>Reshapes and transposes can be expensive, especially on TPU. This pass moves and
+reshapes and transposes across elementwise operations enabling the operations to
+be merged or eliminated.</p>
+</section>
+<section id="zero-sized-hlo-elimination">
+<h3>Zero-sized HLO Elimination<a class="headerlink" href="#zero-sized-hlo-elimination" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/simplifiers/zero_sized_hlo_elimination.h"><code class="docutils literal notranslate"><span class="pre">ZeroSizedHloElimination</span></code></a>.</p>
+<p>HLO supports arrays of zero size (one or more dimensions has a bound of zero).
+This pass simplifies the graph by replacing zero-sized operations with
+zero-sized constants.</p>
+</section>
+</section>
+<section id="tpu-specific-hlo-pass-examples">
+<h2>TPU-specific HLO Pass Examples<a class="headerlink" href="#tpu-specific-hlo-pass-examples" title="Link to this heading">#</a></h2>
+<p>Passes specific to the TPU backend.</p>
+<section id="model-parallelism">
+<h3>Model parallelism<a class="headerlink" href="#model-parallelism" title="Link to this heading">#</a></h3>
+<p>The partitioning of an XLA program across multiple cores is performed at the HLO
+level and the TPU HLO pipeline includes a number of passes for supporting
+multi-core execution.</p>
+<section id="spatial-partitioning">
+<h4>Spatial partitioning<a class="headerlink" href="#spatial-partitioning" title="Link to this heading">#</a></h4>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/service/sharding_propagation.h"><code class="docutils literal notranslate"><span class="pre">ShardingPropagation</span></code></a>.</p>
+<p>Pass to support dividing operations across devices along non-batch dimensions.</p>
+</section>
+</section>
+<section id="handling-of-bfloat16">
+<h3>Handling of bfloat16<a class="headerlink" href="#handling-of-bfloat16" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/simplifiers/bfloat16_conversion_folding.h"><code class="docutils literal notranslate"><span class="pre">BFloat16ConversionFolding</span></code></a>,
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/simplifiers/float_normalization.h"><code class="docutils literal notranslate"><span class="pre">BFloat16MixedPrecisionRemoval</span></code></a>,
+and
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/transforms/bfloat16_propagation.h"><code class="docutils literal notranslate"><span class="pre">BFloat16Propagation</span></code></a>.</p>
+<p>TPUs support bfloat16 as a lower-precision, more compact floating-point
+representation than 32-bit floats. Using bfloat16 reduces memory footprint and
+memory bandwidth. The TPU HLO pipeline includes various passes for replacing
+floats with bfloat16 into the program and propagating the precision through the
+graph.</p>
+</section>
+<section id="legalization-passes">
+<h3>Legalization passes<a class="headerlink" href="#legalization-passes" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/service/gather_expander.h"><code class="docutils literal notranslate"><span class="pre">GatherExpander</span></code></a>,
+and
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/service/batchnorm_expander.h"><code class="docutils literal notranslate"><span class="pre">BatchNormExpander</span></code></a>.</p>
+<p>Passes which transform unsupported HLO into a form which the backend can emit or
+for which the backend produces a more efficient lowering.</p>
+</section>
+</section>
+<section id="gpu-specific-hlo-pass-example">
+<h2>GPU-specific HLO Pass Example<a class="headerlink" href="#gpu-specific-hlo-pass-example" title="Link to this heading">#</a></h2>
+<p>Passes specific to the GPU backend are found in
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/service/gpu"><code class="docutils literal notranslate"><span class="pre">xla/service/gpu</span></code></a>.
+These passes can be identified as classes defined in <code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">gpu</span></code>.</p>
+<section id="cudnn-rewriter">
+<h3>cuDNN Rewriter<a class="headerlink" href="#cudnn-rewriter" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/service/gpu/transforms/cudnn_fused_conv_rewriter.h"><code class="docutils literal notranslate"><span class="pre">CudnnFusedConvRewriter</span></code></a>
+and
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/service/gpu/transforms/cudnn_norm_rewriter.h"><code class="docutils literal notranslate"><span class="pre">CudnnNormRewriter</span></code></a>.</p>
+<p>Rewrites fused convolution and norm operations into their respective library
+calls in cuDNN.</p>
+</section>
+</section>
+<section id="cpu-specific-hlo-pass-examples">
+<h2>CPU-specific HLO Pass Examples<a class="headerlink" href="#cpu-specific-hlo-pass-examples" title="Link to this heading">#</a></h2>
+<p>Passes specific to the CPU backend are found in
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/service/cpu"><code class="docutils literal notranslate"><span class="pre">xla/service/cpu</span></code></a>.
+These passes can be identified as classes defined in <code class="docutils literal notranslate"><span class="pre">namespace</span> <span class="pre">cpu</span></code>.</p>
+<section id="convolution-canonicalization">
+<h3>Convolution Canonicalization<a class="headerlink" href="#convolution-canonicalization" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/service/cpu/conv_canonicalization.h"><code class="docutils literal notranslate"><span class="pre">ConvCanonicalization</span></code></a>.</p>
+<p>Canonicalizes convolutions so that they can be lowered to a fast implementation
+in Eigen.</p>
+</section>
+<section id="operation-parallelization">
+<h3>Operation Parallelization<a class="headerlink" href="#operation-parallelization" title="Link to this heading">#</a></h3>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/service/cpu/parallel_task_assignment.h"><code class="docutils literal notranslate"><span class="pre">ParallelTaskAssigner</span></code></a>.</p>
+<p>Partitions HLOs into tasks to run on separate threads.</p>
+</section>
+</section>
+<section id="analysis-passes">
+<h2>Analysis passes<a class="headerlink" href="#analysis-passes" title="Link to this heading">#</a></h2>
+<p>Analysis passes are not considered “HLO passes” since they do not transform HLO
+and may not extend <code class="docutils literal notranslate"><span class="pre">HloModulePass</span></code>. Shared analyses are found in
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/hlo/analysis"><code class="docutils literal notranslate"><span class="pre">xla/hlo/analysis</span></code></a>.</p>
+<section id="analysis-pass-examples">
+<h3>Analysis Pass Examples<a class="headerlink" href="#analysis-pass-examples" title="Link to this heading">#</a></h3>
+<section id="dataflow-analysis">
+<h4>Dataflow Analysis<a class="headerlink" href="#dataflow-analysis" title="Link to this heading">#</a></h4>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/hlo/analysis/hlo_dataflow_analysis.h"><code class="docutils literal notranslate"><span class="pre">HloDataflowAnalysis</span></code></a>.</p>
+<p>Identifies all HLO values in the graph and their uses.</p>
+</section>
+<section id="alias-analysis">
+<h4>Alias Analysis<a class="headerlink" href="#alias-analysis" title="Link to this heading">#</a></h4>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/hlo/analysis/hlo_alias_analysis.h"><code class="docutils literal notranslate"><span class="pre">HloAliasAnalysis</span></code></a>.</p>
+<p>Identifies must-alias relationships between values in the program.</p>
+</section>
+<section id="computation-cost-analysis">
+<h4>Computation Cost Analysis<a class="headerlink" href="#computation-cost-analysis" title="Link to this heading">#</a></h4>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/service/hlo_cost_analysis.h"><code class="docutils literal notranslate"><span class="pre">HloCostAnalysis</span></code></a>.</p>
+<p>Computes FLOP count and memory usage for all operations in the program.</p>
+</section>
+<section id="hlo-verification">
+<h4>HLO Verification<a class="headerlink" href="#hlo-verification" title="Link to this heading">#</a></h4>
+<p>See also
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/service/hlo_verifier.h"><code class="docutils literal notranslate"><span class="pre">HloVerifier</span></code></a>.</p>
+<p>Verifies various invariants of the HLO graph.</p>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="flags_guidance.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">XLA Flags Guidance</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="test_hlo_passes.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Writing unit tests for HLO passes</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-details">Developer details</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tooling-and-testing">Tooling and Testing</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hardware-independent-hlo-pass-examples">Hardware-independent HLO Pass Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rematerialization">Rematerialization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#algebraic-simplifier">Algebraic Simplifier</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#constant-folding">Constant Folding</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dead-code-elimination">Dead Code Elimination</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#call-graph-flattening">Call Graph Flattening</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reshape-mover">Reshape Mover</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#zero-sized-hlo-elimination">Zero-sized HLO Elimination</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tpu-specific-hlo-pass-examples">TPU-specific HLO Pass Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-parallelism">Model parallelism</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#spatial-partitioning">Spatial partitioning</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handling-of-bfloat16">Handling of bfloat16</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#legalization-passes">Legalization passes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#gpu-specific-hlo-pass-example">GPU-specific HLO Pass Example</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cudnn-rewriter">cuDNN Rewriter</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cpu-specific-hlo-pass-examples">CPU-specific HLO Pass Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convolution-canonicalization">Convolution Canonicalization</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#operation-parallelization">Operation Parallelization</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-passes">Analysis passes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#analysis-pass-examples">Analysis Pass Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#dataflow-analysis">Dataflow Analysis</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#alias-analysis">Alias Analysis</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#computation-cost-analysis">Computation Cost Analysis</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#hlo-verification">HLO Verification</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

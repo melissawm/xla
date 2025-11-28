@@ -1,0 +1,750 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Broadcasting &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'broadcasting';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Indexing Analysis" href="indexing.html" />
+    <link rel="prev" title="Data representation" href="shapes.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="shapes.html">Data representation</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="error_codes.html">Error Codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/broadcasting.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Broadcasting</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-broadcasting">What is broadcasting?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principles">Principles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#broadcasting-a-lower-dimensional-array-onto-a-higher-dimensional-array">Broadcasting a lower-dimensional array onto a higher-dimensional array</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formal-definition">Formal definition</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#broadcasting-similar-dimensional-arrays-with-degenerate-dimensions">Broadcasting similar-dimensional arrays with degenerate dimensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#broadcast-composition">Broadcast composition</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="broadcasting">
+<h1>Broadcasting<a class="headerlink" href="#broadcasting" title="Link to this heading">#</a></h1>
+<p>This document describes the broadcasting semantics of XLA.</p>
+<section id="what-is-broadcasting">
+<h2>What is broadcasting?<a class="headerlink" href="#what-is-broadcasting" title="Link to this heading">#</a></h2>
+<p>Broadcasting is the process of making arrays with different shapes have
+compatible shapes for arithmetic operations. The terminology is borrowed from
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">NumPy broadcasting</a>.</p>
+<p>Broadcasting may be required for operations between multi-dimensional arrays of
+different ranks, or between multi-dimensional arrays with different but
+compatible shapes. Consider the addition <code class="docutils literal notranslate"><span class="pre">X+v</span></code> where <code class="docutils literal notranslate"><span class="pre">X</span></code> is a matrix (an array
+with 2 dimensions) and <code class="docutils literal notranslate"><span class="pre">v</span></code> is a vector (an array with 1 dimension). To perform
+element-wise addition, XLA needs to “broadcast” the vector <code class="docutils literal notranslate"><span class="pre">v</span></code> to the same
+number of dimensions as the matrix <code class="docutils literal notranslate"><span class="pre">X</span></code>, by replicating <code class="docutils literal notranslate"><span class="pre">v</span></code> a certain number of
+times. The vector’s length has to match at least one of the dimensions of the
+matrix.</p>
+<p>For example:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|1 2 3| + |7 8 9|
+|4 5 6|
+</pre></div>
+</div>
+<p>The matrix’s dimensions are (2,3), and the vector’s dimension is (3). The vector
+is broadcast by replicating it over rows to get:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|1 2 3| + |7 8 9| = |8  10 12|
+|4 5 6|   |7 8 9|   |11 13 15|
+</pre></div>
+</div>
+<p>In NumPy, this is called
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">broadcasting</a>.</p>
+</section>
+<section id="principles">
+<h2>Principles<a class="headerlink" href="#principles" title="Link to this heading">#</a></h2>
+<p>The XLA language is as strict and explicit as possible, avoiding implicit
+“magical” features. Such features might make some computations slightly easier
+to define, but at the cost of more assumptions baked into user code that will be
+difficult to change in the long term. If necessary, implicit magical features
+can be added in client-level wrappers.</p>
+<p>With regard to broadcasting, XLA requires explicit broadcasting specifications
+on operations between arrays of different ranks. This is different from NumPy,
+which infers the specification when possible.</p>
+</section>
+<section id="broadcasting-a-lower-dimensional-array-onto-a-higher-dimensional-array">
+<h2>Broadcasting a lower-dimensional array onto a higher-dimensional array<a class="headerlink" href="#broadcasting-a-lower-dimensional-array-onto-a-higher-dimensional-array" title="Link to this heading">#</a></h2>
+<p><em>Scalars</em> can always be broadcast over arrays without an explicit specification
+of broadcasting dimensions. An element-wise binary operation between a scalar
+and an array means applying the operation with the scalar to each element in the
+array. For example, adding a scalar to a matrix means producing a matrix in
+which each element is a sum of the scalar and the corresponding element of the
+input matrix.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|1 2 3| + 7 = |8  9  10|
+|4 5 6|       |11 12 13|
+</pre></div>
+</div>
+<p>Most broadcasting needs can be captured by using a tuple of dimensions on a
+binary operation. When the inputs to the operation have different ranks, this
+broadcasting tuple specifies which dimension(s) in the <strong>higher-dimensional</strong>
+array to match with the <strong>lower-dimensional</strong> array.</p>
+<p>Consider the previous example. Instead of adding a scalar to a (2,3) matrix, add
+a vector of dimension (3) to a matrix of dimensions (2,3). <em>Without specifying
+broadcasting, this operation is invalid.</em> To correctly request matrix-vector
+addition, specify the broadcasting dimension to be (1), meaning the vector’s
+dimension is matched to dimension 1 of the matrix. In 2D, if dimension 0
+represents rows and dimension 1 represents columns, this means that each element
+of the vector becomes a column of a size matching the number of rows in the
+matrix:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|7 8 9| ==&gt; |7 8 9|
+            |7 8 9|
+</pre></div>
+</div>
+<p>As a more complex example, consider adding a 3-element vector (dimension (3)) to
+a 3x3 matrix (dimensions (3,3)). There are two ways broadcasting can happen for
+this example:</p>
+<p>(1) A broadcasting dimension of 1 can be used. Each vector element becomes a
+column and the vector is duplicated for each row in the matrix.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|7 8 9| ==&gt; |7 8 9|
+            |7 8 9|
+            |7 8 9|
+</pre></div>
+</div>
+<p>(2) A broadcasting dimension of 0 can be used. Each vector element becomes a row
+and the vector is duplicated for each column in the matrix.</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span> |7| ==&gt; |7 7 7|
+ |8|     |8 8 8|
+ |9|     |9 9 9|
+</pre></div>
+</div>
+<p>Note: When adding a 2x3 matrix to a 3-element vector, a broadcasting dimension
+of 0 is invalid.</p>
+<p>The broadcasting dimensions can be a tuple that describes how a
+smaller-dimensional shape is broadcast into a larger-dimensional shape. For
+example, given a 2x3x4 cuboid and a 3x4 matrix, a broadcasting tuple (1,2)
+means matching the matrix to dimensions 1 and 2 of the cuboid.</p>
+<p>This type of broadcast is used in the binary ops in <code class="docutils literal notranslate"><span class="pre">XlaBuilder</span></code>, if the
+<code class="docutils literal notranslate"><span class="pre">broadcast_dimensions</span></code> argument is given. For example, see
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/hlo/builder/xla_builder.cc">XlaBuilder::Add</a>.
+In the XLA source code, this type of broadcasting is sometimes called “InDim”
+broadcasting.</p>
+<section id="formal-definition">
+<h3>Formal definition<a class="headerlink" href="#formal-definition" title="Link to this heading">#</a></h3>
+<p>The broadcasting attribute allows matching a lower-dimensional array to a
+higher-dimensional array by specifying which dimensions of the
+higher-dimensional array to match. For example, for an array with dimensions
+MxNxPxQ, a vector with dimension T can be matched as follows:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>          MxNxPxQ
+
+dim 3:          T
+dim 2:        T
+dim 1:      T
+dim 0:    T
+</pre></div>
+</div>
+<p>In each case, T has to be equal to the matching dimension of the
+higher-dimensional array. The vector’s values are then broadcast from the
+matched dimension to all the other dimensions.</p>
+<p>To match a TxV matrix onto the MxNxPxQ array, a pair of broadcasting dimensions
+is used:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>          MxNxPxQ
+dim 2,3:      T V
+dim 1,2:    T V
+dim 0,3:  T     V
+etc...
+</pre></div>
+</div>
+<p>The order of dimensions in the broadcasting tuple must be the order in which the
+dimensions of the lower-dimensional array are expected to match the dimensions
+of the higher-dimensional array. The first element in the tuple specifies which
+dimension in the higher-dimensional array has to match dimension 0 in the
+lower-dimensional array. The second element in the tuple specifies which
+dimension in the higher-dimensional array has to match dimension 1 in the
+lower-dimensional array, and so on. The order of broadcast dimensions must be
+strictly increasing. For example, in the previous example it is illegal to
+match V to N and T to P; it is also illegal to match V to both P and N.</p>
+</section>
+</section>
+<section id="broadcasting-similar-dimensional-arrays-with-degenerate-dimensions">
+<h2>Broadcasting similar-dimensional arrays with degenerate dimensions<a class="headerlink" href="#broadcasting-similar-dimensional-arrays-with-degenerate-dimensions" title="Link to this heading">#</a></h2>
+<p>A related problem is broadcasting two arrays that have the same number of
+dimensions but different dimension sizes. As with NumPy, this is only possible
+when the arrays are <em>compatible</em>. Two arrays are compatible when all their
+dimensions are compatible. Two dimensions are compatible if:</p>
+<ul class="simple">
+<li><p>They are equal, or</p></li>
+<li><p>One of them is 1 (a “degenerate” dimension)</p></li>
+</ul>
+<p>When two compatible arrays are encountered, the result shape has the maximum of
+the two inputs at every dimension index.</p>
+<p>Examples:</p>
+<ol class="arabic simple">
+<li><p>(2,1) and (2,3) broadcast to (2,3).</p></li>
+<li><p>(1,2,5) and (7,2,5) broadcast to (7,2,5).</p></li>
+<li><p>(7,2,5) and (7,1,5) broadcast to (7,2,5).</p></li>
+<li><p>(7,2,5) and (7,2,6) are incompatible and cannot be broadcast.</p></li>
+</ol>
+<p>A special case arises, and is also supported, where each of the input arrays has
+a degenerate dimension at a different index. In this case, the result is an
+“outer operation”: (2,1) and (1,3) broadcast to (2,3). For more examples,
+consult the
+<a class="reference external" href="http://docs.scipy.org/doc/numpy/user/basics.broadcasting.html">NumPy documentation on broadcasting</a>.</p>
+</section>
+<section id="broadcast-composition">
+<h2>Broadcast composition<a class="headerlink" href="#broadcast-composition" title="Link to this heading">#</a></h2>
+<p>Broadcasting of a lower-dimensional array to a higher-dimensional array <strong>and</strong>
+broadcasting using degenerate dimensions can both be performed in the same
+binary operation. For example, a vector of size 4 and a matrix of size 1x2 can
+be added together using broadcast dimensions of value (0):</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|1 2 3 4| + [5 6]    // [5 6] is a 1x2 matrix, not a vector.
+</pre></div>
+</div>
+<p>First the vector is broadcast up to 2-dimensional (matrix) using the broadcast
+dimensions. The single value (0) in the broadcast dimensions indicates that
+dimension zero of the vector matches dimension zero of the matrix. This produces
+a matrix of size 4xM where the value M is chosen to match the corresponding
+dimension size in the 1x2 array. Therefore, a 4x2 matrix is produced:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|1 1| + [5 6]
+|2 2|
+|3 3|
+|4 4|
+</pre></div>
+</div>
+<p>Then “degenerate dimension broadcasting” broadcasts dimension zero of the 1x2
+matrix to match the corresponding dimension size of the right hand side:</p>
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>|1 1| + |5 6|     |6  7|
+|2 2| + |5 6|  =  |7  8|
+|3 3| + |5 6|     |8  9|
+|4 4| + |5 6|     |9 10|
+</pre></div>
+</div>
+<p>A more complicated example is a matrix of size 1x2 added to an array of size
+4x3x1 using broadcast dimensions of (1, 2). First the 1x2 matrix is broadcast up
+to 3 dimensions using the broadcast dimensions to produce an intermediate Mx1x2
+array where the dimension size M is determined by the size of the larger operand
+(the 4x3x1 array) producing a 4x1x2 intermediate array. The M is at dimension 0
+(the left-most dimension) because the dimensions 1 and 2 are mapped to the
+dimensions of the original 1x2 matrix as the broadcast dimensions are (1, 2).
+This intermediate array can be added to the 4x3x1 matrix using broadcasting of
+degenerate dimensions to produce a 4x3x2 array result.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="shapes.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Data representation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="indexing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Indexing Analysis</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-is-broadcasting">What is broadcasting?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#principles">Principles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#broadcasting-a-lower-dimensional-array-onto-a-higher-dimensional-array">Broadcasting a lower-dimensional array onto a higher-dimensional array</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#formal-definition">Formal definition</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#broadcasting-similar-dimensional-arrays-with-degenerate-dimensions">Broadcasting similar-dimensional arrays with degenerate dimensions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#broadcast-composition">Broadcast composition</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

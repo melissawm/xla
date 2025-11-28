@@ -1,0 +1,828 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>From HLO to Thunks &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'hlo_to_thunks';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Operation semantics" href="operation_semantics.html" />
+    <link rel="prev" title="Tooling" href="tools.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tooling</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="error_codes.html">Error Codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/hlo_to_thunks.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>From HLO to Thunks</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-optimization-hlo">Pre-optimization HLO</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimize-hlo-module">Optimize HLO Module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sharding-related-passes">Sharding related passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-passes">Optimization passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collective-optimization-passes">Collective optimization passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layout-assignment-passes">Layout assignment passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layout-normalization-passes">Layout normalization passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#post-layout-assignment-optimization-passes">Post layout assignment optimization passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fusion-passes">Fusion passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#several-post-fusion-passes">Several post-fusion passes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scheduling">Scheduling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-assignment">Buffer Assignment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thunks">Thunks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#thunk-emission">Thunk Emission</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-buffers-optimizing-execution-on-the-gpu">Command Buffers: Optimizing Execution on the GPU</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executable">Executable</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="from-hlo-to-thunks">
+<h1>From HLO to Thunks<a class="headerlink" href="#from-hlo-to-thunks" title="Link to this heading">#</a></h1>
+<p>This document outlines the journey of an XLA <em>High Level Optimizer</em> (HLO) module
+from its initial state to a final executable. Sometimes we will omit the
+“module” and refer to it just as “HLO”.</p>
+<img src="./images/hlo_to_thunks.svg" alt="HLO to thunks diagram" width="50%">
+<section id="pre-optimization-hlo">
+<h2>Pre-optimization HLO<a class="headerlink" href="#pre-optimization-hlo" title="Link to this heading">#</a></h2>
+<p>We start with pre-optimization HLO module. Pre-optimization HLO does not contain
+operations (<em>ops</em>) that are considered internal to XLA, such as <code class="docutils literal notranslate"><span class="pre">fusion</span></code> or
+<code class="docutils literal notranslate"><span class="pre">bitcast</span></code>. Ops don’t have a layout at this stage, or if they do, it will be
+ignored. Pre-optimization HLO is usually produced by higher-level frameworks
+like TensorFlow and JAX. When using the XLA flag <code class="docutils literal notranslate"><span class="pre">--xla_dump_to</span></code>, the
+pre-optimization HLO is dumped to a file with file name suffix
+“before_optimizations.txt”.</p>
+</section>
+<section id="optimize-hlo-module">
+<h2>Optimize HLO Module<a class="headerlink" href="#optimize-hlo-module" title="Link to this heading">#</a></h2>
+<p>The XLA:GPU pipeline turns the pre-optimization HLO into optimized HLO by
+running a sequence of passes. The passes can be grouped together semantically
+and run in the following order:</p>
+<section id="sharding-related-passes">
+<h3>Sharding related passes<a class="headerlink" href="#sharding-related-passes" title="Link to this heading">#</a></h3>
+<p>This includes passes like the <a class="reference external" href="https://openxla.org/shardy/overview">Shardy
+Partitioner</a> or those for SPMD sharding.</p>
+</section>
+<section id="optimization-passes">
+<h3>Optimization passes<a class="headerlink" href="#optimization-passes" title="Link to this heading">#</a></h3>
+<p>This can include both legalization passes and simplification passes.</p>
+</section>
+<section id="collective-optimization-passes">
+<h3>Collective optimization passes<a class="headerlink" href="#collective-optimization-passes" title="Link to this heading">#</a></h3>
+<p>Similar to <strong>Optimization passes</strong>, but focuses on collective ops.</p>
+</section>
+<section id="layout-assignment-passes">
+<h3>Layout assignment passes<a class="headerlink" href="#layout-assignment-passes" title="Link to this heading">#</a></h3>
+<p>Each HLO op is assigned a layout which is a part of the instruction shape. The
+layout controls how the tensor is laid out physically in memory.</p>
+<p>Example of a shape with layout:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f32</span><span class="p">[</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">]{</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>After the element type, there are the logical dimensions of the shape, followed
+by the layout permutation in minor to major order. In this example, the most
+minor dimension is 30, the second most minor dimension is 10, and the major
+dimension is 20.</p>
+<p>The goal of layout assignment is to minimize the number of required physical
+transpositions using a greedy strategy. It starts with certain layout
+constraints (e.g., cuDNN/cuBLAS libraries expect consecutive dimensions) and
+propagates layouts “down” and then “up” the HLO graph. At the
+end of layout propagation, some instructions may have conflicting layouts, one
+propagated from an operand, one propagated from a user. To resolve this
+conflict, a <code class="docutils literal notranslate"><span class="pre">copy</span></code> HLO instruction is inserted that changes the layout from the
+operand layout to the instruction layout.</p>
+</section>
+<section id="layout-normalization-passes">
+<h3>Layout normalization passes<a class="headerlink" href="#layout-normalization-passes" title="Link to this heading">#</a></h3>
+<p>Given that it is somewhat difficult to figure out the physical shape, layout
+normalization attempts to rewrite the shape such that it uses the default layout
+<code class="docutils literal notranslate"><span class="pre">{rank-1,</span> <span class="pre">rank-2,</span> <span class="pre">…,</span> <span class="pre">0}</span></code>. In the example above, the normalized shape would be
+<code class="docutils literal notranslate"><span class="pre">f32[20,10,30]{2,1,0}</span></code>. Copy ops that change layouts are rewritten as a
+combination of <code class="docutils literal notranslate"><span class="pre">transpose</span></code> and <code class="docutils literal notranslate"><span class="pre">bitcast</span></code>. Given that currently we cannot
+normalize all ops, there are still some ops that may have non-default layouts,
+most notably <code class="docutils literal notranslate"><span class="pre">gather</span></code> and <code class="docutils literal notranslate"><span class="pre">dot</span></code>. At the boundaries between normalized ops and
+non-normalized ops there will be <code class="docutils literal notranslate"><span class="pre">bitcast</span></code> ops that represent a transpose, i.e.
+a transpose with a layout assigned that makes it a no-op physically.</p>
+<p>Layout normalization also makes some implicit transposes explicit which is
+important because codegen can handle explicit transposes with a dedicated
+emitter. For example, a reshape is technically allowed to have a different
+physical layout between operand and result (e.g. due to different rank). The
+<code class="docutils literal notranslate"><span class="pre">ReshapeDecomposer</span></code> pass that runs as part of the layout normalization passes
+turns a reshape into a sequence of <code class="docutils literal notranslate"><span class="pre">transpose</span></code>, reshape <code class="docutils literal notranslate"><span class="pre">bitcast</span></code> and
+<code class="docutils literal notranslate"><span class="pre">transpose</span></code>.</p>
+</section>
+<section id="post-layout-assignment-optimization-passes">
+<h3>Post layout assignment optimization passes<a class="headerlink" href="#post-layout-assignment-optimization-passes" title="Link to this heading">#</a></h3>
+<p>The most important passes here are Triton fusions (GEMM fusions +
+Softmax/Layernorm fusions) or rewrites to library calls. Autotuning also runs in
+this step, where XLA chooses chooses between different emitters, picks the best
+algorithm for convolutions or dots, finds the best tiling for fusions handled by
+the Triton emitter etc.</p>
+</section>
+<section id="fusion-passes">
+<h3>Fusion passes<a class="headerlink" href="#fusion-passes" title="Link to this heading">#</a></h3>
+<p>The two main passes are <code class="docutils literal notranslate"><span class="pre">PriorityFusion</span></code> and <code class="docutils literal notranslate"><span class="pre">Multi-Output</span></code> fusion.</p>
+<p>In <code class="docutils literal notranslate"><span class="pre">PriorityFusion</span></code>, we form fusions guided by the cost model. When fusing we
+would allow duplicating ops with several users if the op can be fused into all
+users. We would also allow extending existing Triton Softmax fusions if
+possible.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Multi-Output</span></code> fusion is a separate pass that allows fusing ops/fusions that
+share an operand. It can also fuse operands/operand fusions into users without
+duplication by adding extra output(s), so other users of the op to be fused can
+be redirected to these outputs. This pass needs to be careful not to introduce
+cycles into the HLO graph.</p>
+<p>After Multi-Output fusion, common subexpression elimination (<code class="docutils literal notranslate"><span class="pre">HloCSE</span></code> pass)
+runs, potentially merging previously duplicated ops back together if they ended
+up in the same fusion.</p>
+</section>
+<section id="several-post-fusion-passes">
+<h3>Several post-fusion passes<a class="headerlink" href="#several-post-fusion-passes" title="Link to this heading">#</a></h3>
+<p>Several passes related to collectives (like turning them to async, or enforcing
+a certain relative order of collectives).</p>
+<p>Finally we run <code class="docutils literal notranslate"><span class="pre">CopyInsertion</span></code> where copies are added to ensure that in-place
+operations don’t overwrite data that is still needed elsewhere.</p>
+<p>At the end of optimization, the optimized HLO is dumped if using the flag
+<code class="docutils literal notranslate"><span class="pre">--xla_dump_to</span></code> to a file that has the file name suffix
+“after_optimizations.txt”. If you want to dump the HLO after intermediate
+passes that actually change the HloModule, you can use the flag
+<code class="docutils literal notranslate"><span class="pre">--xla_dump_hlo_pass_re=.*</span></code> (or a specific regular expression to restrict it to
+certain passes).</p>
+</section>
+</section>
+<section id="scheduling">
+<h2>Scheduling<a class="headerlink" href="#scheduling" title="Link to this heading">#</a></h2>
+<p>An HLO Module without a schedule still has some degree of freedom in the order
+in which ops are processed. Any topological sort respecting operand/result
+relationships and control dependencies is valid. Scheduling determines what
+specific order to use. The main concern at this stage is the maximum memory
+consumption that depends on the lifetime of tensors. In an initial step, we try
+different scheduler algorithms and pick the schedule that should minimize the
+peak memory consumption. Note that at this point we don’t work with a physical
+buffers yet (that will happen in “Buffer Assignment”) and simulate the memory
+usage.</p>
+<p>Then <code class="docutils literal notranslate"><span class="pre">LatencyHidingScheduler</span></code> pass runs and tries to maximize
+compute-communication overlap. But that may increase memory usage again.</p>
+<p>Finally, in case peak memory consumption is higher than the amount of memory we
+have available we run <code class="docutils literal notranslate"><span class="pre">HloRematerialization</span></code>. This pass attempts to reduce
+memory usage at the cost of performance, as e.g. some fusions might be split and
+some ops might be duplicated to have shorter buffer lifetimes. If
+rematerialization occurs, it might be beneficial to investigate ways to reduce
+memory requirements on the model side (e.g., using smaller batch sizes).</p>
+</section>
+<section id="buffer-assignment">
+<h2>Buffer Assignment<a class="headerlink" href="#buffer-assignment" title="Link to this heading">#</a></h2>
+<p>Immediately before we lower to LLVM IR, we run the buffer assignment passes that
+will assign buffer slices to each instruction in the HLO graph. The buffer
+assignment runs in several steps:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">HloDataflowAnalysis</span></code> assigns <code class="docutils literal notranslate"><span class="pre">HloValues</span></code> (essentially logical buffers) to
+instructions. For in-place ops, the <code class="docutils literal notranslate"><span class="pre">HloValue</span></code> of an operand can be reused. An
+op may define more than one <code class="docutils literal notranslate"><span class="pre">HloValue</span></code> (e.g. with a tuple result shape).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HloAliasAnalysis</span></code> attempts to combine buffers for aliasing operations, and
+computes a mapping from <code class="docutils literal notranslate"><span class="pre">HloValue</span></code> to <code class="docutils literal notranslate"><span class="pre">HloBuffer</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">BufferAssignment</span></code> computes a mapping of <code class="docutils literal notranslate"><span class="pre">HloBuffers</span></code> to buffer slices inside
+a big buffer in such a way that the same buffer slice is not used for different
+<code class="docutils literal notranslate"><span class="pre">HloBuffers</span></code> with overlapping life times. For ops that may alias, it is ok that
+there is a slight overlap (the end time of the one <code class="docutils literal notranslate"><span class="pre">HloBuffer</span></code> may coincide with
+the start time of the other <code class="docutils literal notranslate"><span class="pre">HloBuffer</span></code>). When using the flag <code class="docutils literal notranslate"><span class="pre">-xla_dump_to</span></code>,
+some information about buffer assignment is dumped to a file with the name
+suffix “after_optimizations-buffer-assignment.txt”.</p></li>
+</ol>
+</section>
+<section id="thunks">
+<h2>Thunks<a class="headerlink" href="#thunks" title="Link to this heading">#</a></h2>
+<p>After an HLO graph is optimized and scheduled, it is lowered into a
+linear sequence of thunks for a specific backend (CPU or GPU).</p>
+<p>In XLA, a <strong>Thunk</strong> is an abstraction of a self-contained unit of work that the
+runtime executes. It might be a compiled kernel launch, specific operation,
+library call, control-flow construct, collective communication, and so on. A
+<strong>Thunk Sequence</strong> represents the entire executable for a specific backend.</p>
+<section id="thunk-emission">
+<h3>Thunk Emission<a class="headerlink" href="#thunk-emission" title="Link to this heading">#</a></h3>
+<p>The process of converting a scheduled HLO computation into a thunk sequence is
+called “thunk emission”. This is handled by a dedicated emitter class in each
+backend.</p>
+<p>For the GPU Backend, this is handled by
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/service/gpu/ir_emitter_unnested.h">IrEmitterUnnested</a>.
+<code class="docutils literal notranslate"><span class="pre">EmitHloComputation</span></code> iterates through the scheduled list of HLO Instructions in
+a computation and dispatches to a specialized <code class="docutils literal notranslate"><span class="pre">Emit...</span></code> method (e.g.,
+<code class="docutils literal notranslate"><span class="pre">EmitFusion</span></code>, <code class="docutils literal notranslate"><span class="pre">EmitConvolutionThunk</span></code>, <code class="docutils literal notranslate"><span class="pre">EmitWhile</span></code>). Each of these methods
+constructs the appropriate Thunk object(s) and appends them to the
+thunk sequence.</p>
+<p>For the CPU Backend,
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/service/cpu/thunk_emitter.h">ThunkEmitter</a>
+performs this role and is organized in a similar manner. Final <code class="docutils literal notranslate"><span class="pre">ThunkSequence</span></code>
+is embedded in the <code class="docutils literal notranslate"><span class="pre">CpuExecutable</span></code>.</p>
+<p>Note that each instruction in the entry computation of an HLO module might
+correspond to no (<code class="docutils literal notranslate"><span class="pre">kTuple</span></code>, <code class="docutils literal notranslate"><span class="pre">kConstant</span></code>, ..), one, or multiple (for example
+sort instruction) thunks in the final thunk sequence.</p>
+</section>
+<section id="command-buffers-optimizing-execution-on-the-gpu">
+<h3>Command Buffers: Optimizing Execution on the GPU<a class="headerlink" href="#command-buffers-optimizing-execution-on-the-gpu" title="Link to this heading">#</a></h3>
+<p>Modern GPU hardware allows recording a sequence of GPU operations (kernel
+launches, memory copies, etc.) once and then replaying the sequence multiple
+times with minimal CPU overhead. This is a critical performance optimization,
+especially for workloads with many small, fast-launching kernels. XLA uses
+<strong>Command Buffer</strong> as an abstraction of CUDA Graphs or HIP Graphs. The core
+interface is defined in
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/stream_executor/gpu/gpu_command_buffer.h">GpuCommandBuffer</a>.</p>
+<p>A command buffer is represented in a thunk sequence by
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/backends/gpu/runtime/command_buffer_thunk.h">CommandBufferThunk</a>.</p>
+<p>The emitter does not produce this thunk directly from HLO instructions. Instead,
+this is done by
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/backends/gpu/runtime/command_buffer_conversion_pass.h">CommandBufferConversionPass</a>
+that runs on the ThunkSequence itself.</p>
+<p>The pass identifies contiguous sub-sequences of compatible thunks (e.g., a
+series of <code class="docutils literal notranslate"><span class="pre">KernelThunk</span></code>s and <code class="docutils literal notranslate"><span class="pre">GemmThunk</span></code>s). It then replaces the found
+sub-sequence with a single <code class="docutils literal notranslate"><span class="pre">CommandBufferThunk</span></code>. The new thunk encapsulates the
+logic of the original thunks as a list of lightweight CommandBufferCmd objects.
+When a <code class="docutils literal notranslate"><span class="pre">CommandBufferThunk</span></code> executes for the first time on a given GPU stream,
+it “records” its sequence of commands into a hardware command buffer. On all
+subsequent executions, it simply issues a single command to the GPU to “replay”
+the recorded sequence. This avoids the CPU overhead of launching each individual
+kernel.</p>
+</section>
+</section>
+<section id="executable">
+<h2>Executable<a class="headerlink" href="#executable" title="Link to this heading">#</a></h2>
+<p>The final product of the XLA compilation pipeline is a self-contained,
+platform-specific
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/service/executable.h">Executable</a>.
+This object encapsulates all the information needed to run the compiled program
+on a target device, such as a CPU or GPU. It is the bridge between the compiler
+and the runtime. Modern runtimes like PJRT use slightly higher-level
+abstractions (see
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/pjrt/pjrt_executable.h">PjRtExecutable</a>),
+but these ultimately wrap a backend-specific executable.</p>
+<p>An <code class="docutils literal notranslate"><span class="pre">Executable</span></code> contains several key pieces of information generated
+during compilation. While the exact contents vary by backend, they generally
+include:</p>
+<ul class="simple">
+<li><p>Compiled Code: This is the low-level machine code that will run on the device.
+For CPUs, this is typically one or more object files. For GPUs, this is the
+compiled device code in PTX or HSACO format, which is loaded onto the GPU at
+runtime.</p></li>
+<li><p>Execution Plan (ThunkSequence): The core of the runtime logic. This is a
+linear sequence of Thunk objects. Each thunk represents a single unit of work,
+such as launching a kernel, calling a library function (e.g., cuBLAS), or
+handling control flow. The runtime executes the program by iterating through
+this sequence.</p></li>
+<li><p>Memory Layout (BufferAssignment): This critical piece of metadata, produced by
+the BufferAssigner, describes the complete memory layout for the computation.
+It specifies the size of every buffer and how memory is allocated and reused
+for parameters, outputs, and temporary values. The runtime uses this to
+allocate device memory and pass the correct pointers to each thunk.</p></li>
+<li><p>(optional) HLO Module: For debugging and profiling, the executable often
+retains a reference to the final, optimized HloModule that it was compiled
+from.</p></li>
+</ul>
+<p>The creation of the final executable is orchestrated by the compiler for each
+specific backend. The <code class="docutils literal notranslate"><span class="pre">RunBackend</span></code> method of a Compiler implementation is the
+final step in the compilation process, which packages all the compiled artifacts
+into an Executable object.
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/service/gpu/gpu_compiler.cc">GpuCompiler</a>
+and
+<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/service/cpu/cpu_compiler.cc">CpuCompiler</a>
+target GPU and CPU respectively.</p>
+<p>When a user calls <code class="docutils literal notranslate"><span class="pre">Execute...</span></code> on an executable, the runtime uses the
+<code class="docutils literal notranslate"><span class="pre">BufferAssignment</span></code> to allocate memory, and then invokes the <code class="docutils literal notranslate"><span class="pre">ThunkSequence</span></code> to
+launch the operations on the device using the compiled code.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tools.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tooling</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="operation_semantics.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Operation semantics</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pre-optimization-hlo">Pre-optimization HLO</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimize-hlo-module">Optimize HLO Module</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#sharding-related-passes">Sharding related passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-passes">Optimization passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#collective-optimization-passes">Collective optimization passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layout-assignment-passes">Layout assignment passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layout-normalization-passes">Layout normalization passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#post-layout-assignment-optimization-passes">Post layout assignment optimization passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fusion-passes">Fusion passes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#several-post-fusion-passes">Several post-fusion passes</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scheduling">Scheduling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-assignment">Buffer Assignment</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#thunks">Thunks</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#thunk-emission">Thunk Emission</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#command-buffers-optimizing-execution-on-the-gpu">Command Buffers: Optimizing Execution on the GPU</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#executable">Executable</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

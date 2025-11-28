@@ -1,0 +1,710 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>PJRT plugin integration &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pjrt/pjrt_integration';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PJRT C++ Device API Overview" href="cpp_api_overview.html" />
+    <link rel="prev" title="PJRT - Uniform Device API" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparsecore.html">SparseCore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../lsp.html">Using LSP autocompletion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../error_codes.html">Error Codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_0102.html">Error code: 0102</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/pjrt/pjrt_integration.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>PJRT plugin integration</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-integrate-with-pjrt">How to integrate with PJRT</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-implement-pjrt-c-api-interface">Step 1: Implement PJRT C API interface</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-implement-getpjrtapi">Step 2: Implement GetPjRtApi</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-test-c-api-implementations">Step 3: Test C API implementations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-a-pjrt-plugin-from-jax">How to use a PJRT plugin from JAX</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-set-up-jax">Step 1: Set up JAX</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-use-jax-plugins-namespace-or-set-up-entry-point">Step 2: Use jax_plugins namespace or set up entry_point</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-implement-an-initialize-method">Step 3: Implement an initialize() method</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-test-with-jax">How to test with JAX</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="pjrt-plugin-integration">
+<h1>PJRT plugin integration<a class="headerlink" href="#pjrt-plugin-integration" title="Link to this heading">#</a></h1>
+<p>This doc focuses on the recommendations about how to integrate with PJRT, and
+how to test PJRT integration with JAX.</p>
+<section id="how-to-integrate-with-pjrt">
+<h2>How to integrate with PJRT<a class="headerlink" href="#how-to-integrate-with-pjrt" title="Link to this heading">#</a></h2>
+<section id="step-1-implement-pjrt-c-api-interface">
+<h3>Step 1: Implement <a class="reference external" href="https://github.com/openxla/xla/blob/71a4e6e6e4e9f0f8b8f25c07a32ad489aff19239/xla/pjrt/c/pjrt_c_api.h">PJRT C API interface</a><a class="headerlink" href="#step-1-implement-pjrt-c-api-interface" title="Link to this heading">#</a></h3>
+<p><strong>Option A</strong>: You can implement the PJRT C API directly.</p>
+<p><strong>Option B</strong>: If you’re able to build against C++ code in the <a class="reference external" href="https://github.com/openxla/xla">xla repo</a> (via forking or bazel), you can also implement the PJRT C++ API and use the C→C++ wrapper:</p>
+<ol class="arabic simple">
+<li><p>Implement a C++ PJRT client inheriting from the <a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/pjrt/pjrt_client.h">base PJRT client</a> (and related PJRT classes). Here are some examples of C++ PJRT client: <a class="reference external" href="https://github.com/openxla/xla/blob/c23fbd601a017be25726fd6d624b22daa6a8a4e5/xla/pjrt/pjrt_stream_executor_client.h">pjrt_stream_executor_client.h</a>, <a class="reference external" href="https://github.com/openxla/xla/blob/c23fbd601a017be25726fd6d624b22daa6a8a4e5/xla/pjrt/tfrt_cpu_pjrt_client.h">tfrt_cpu_pjrt_client.h</a>.</p></li>
+<li><p>Implement a few C API methods that are not part of C++ PJRT client:</p></li>
+</ol>
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/openxla/xla/blob/c23fbd601a017be25726fd6d624b22daa6a8a4e5/xla/pjrt/c/pjrt_c_api.h#L344-L365">PJRT_Client_Create</a>. Below is some sample pseudo code (assuming <code class="docutils literal notranslate"><span class="pre">GetPluginPjRtClient</span></code> returns a C++ PJRT client implemented above):</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;third_party/tensorflow/compiler/xla/pjrt/c/pjrt_c_api_wrapper_impl.h&quot;</span>
+
+<span class="n">namespace</span> <span class="n">my_plugin</span> <span class="p">{</span>
+<span class="n">PJRT_Error</span><span class="o">*</span> <span class="n">PJRT_Client_Create</span><span class="p">(</span><span class="n">PJRT_Client_Create_Args</span><span class="o">*</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+  <span class="n">std</span><span class="p">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">xla</span><span class="p">::</span><span class="n">PjRtClient</span><span class="o">&gt;</span> <span class="n">client</span> <span class="o">=</span> <span class="n">GetPluginPjRtClient</span><span class="p">();</span>
+  <span class="n">args</span><span class="o">-&gt;</span><span class="n">client</span> <span class="o">=</span> <span class="n">pjrt</span><span class="p">::</span><span class="n">CreateWrapperClient</span><span class="p">(</span><span class="n">std</span><span class="p">::</span><span class="n">move</span><span class="p">(</span><span class="n">client</span><span class="p">));</span>
+  <span class="k">return</span> <span class="n">nullptr</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">}</span>  <span class="o">//</span> <span class="n">namespace</span> <span class="n">my_plugin</span>
+</pre></div>
+</div>
+<p>Note <a class="reference external" href="https://github.com/openxla/xla/blob/c23fbd601a017be25726fd6d624b22daa6a8a4e5/xla/pjrt/c/pjrt_c_api.h#L344-L365">PJRT_Client_Create</a> can take options passed from the framework. <a class="reference external" href="https://github.com/openxla/xla/blob/c23fbd601a017be25726fd6d624b22daa6a8a4e5/xla/pjrt/c/pjrt_c_api_gpu_internal.cc#L48-L102">Here</a> is an example of how a GPU client uses this feature.</p>
+<ul class="simple">
+<li><p>[Optional] <a class="reference external" href="https://github.com/openxla/xla/blob/c23fbd601a017be25726fd6d624b22daa6a8a4e5/xla/pjrt/c/pjrt_c_api.h#L1815-L1830">PJRT_TopologyDescription_Create</a>.</p></li>
+<li><p>[Optional] <a class="reference external" href="https://github.com/openxla/xla/blob/c23fbd601a017be25726fd6d624b22daa6a8a4e5/xla/pjrt/c/pjrt_c_api.h#L173-L180">PJRT_Plugin_Initialize</a>. This is a one-time plugin setup, which will be called by the framework before any other functions are called.</p></li>
+<li><p>[Optional] <a class="reference external" href="https://github.com/openxla/xla/blob/c23fbd601a017be25726fd6d624b22daa6a8a4e5/xla/pjrt/c/pjrt_c_api.h#L182-L194">PJRT_Plugin_Attributes</a>.</p></li>
+</ul>
+<p>With the <a class="reference external" href="https://github.com/openxla/xla/blob/c23fbd601a017be25726fd6d624b22daa6a8a4e5/xla/pjrt/c/pjrt_c_api_wrapper_impl.h">wrapper</a>, you do not need to implement the remaining C APIs.</p>
+</section>
+<section id="step-2-implement-getpjrtapi">
+<h3>Step 2: Implement GetPjRtApi<a class="headerlink" href="#step-2-implement-getpjrtapi" title="Link to this heading">#</a></h3>
+<p>You need to implement a method <code class="docutils literal notranslate"><span class="pre">GetPjRtApi</span></code> which returns a <code class="docutils literal notranslate"><span class="pre">PJRT_Api*</span></code> containing function pointers to PJRT C API implementations. Below is an example assuming implementing through wrapper (similar to <a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/pjrt/c/pjrt_c_api_cpu.cc">pjrt_c_api_cpu.cc</a>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">const</span> <span class="n">PJRT_Api</span><span class="o">*</span> <span class="n">GetPjrtApi</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">static</span> <span class="n">const</span> <span class="n">PJRT_Api</span> <span class="n">pjrt_api</span> <span class="o">=</span>
+      <span class="n">pjrt</span><span class="p">::</span><span class="n">CreatePjrtApi</span><span class="p">(</span><span class="n">my_plugin</span><span class="p">::</span><span class="n">PJRT_Client_Create</span><span class="p">);</span>
+  <span class="k">return</span> <span class="o">&amp;</span><span class="n">pjrt_api</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="step-3-test-c-api-implementations">
+<h3>Step 3: Test C API implementations<a class="headerlink" href="#step-3-test-c-api-implementations" title="Link to this heading">#</a></h3>
+<p>You can call <a class="reference external" href="https://github.com/openxla/xla/blob/c23fbd601a017be25726fd6d624b22daa6a8a4e5/xla/pjrt/c/pjrt_c_api_test.h#L31C6-L31C33">RegisterPjRtCApiTestFactory</a> to run a small set of tests for basic PJRT C API behaviors.</p>
+</section>
+</section>
+<section id="how-to-use-a-pjrt-plugin-from-jax">
+<h2>How to use a PJRT plugin from JAX<a class="headerlink" href="#how-to-use-a-pjrt-plugin-from-jax" title="Link to this heading">#</a></h2>
+<section id="step-1-set-up-jax">
+<h3>Step 1: Set up JAX<a class="headerlink" href="#step-1-set-up-jax" title="Link to this heading">#</a></h3>
+<p>You can either use JAX nightly</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">pre</span> <span class="o">-</span><span class="n">U</span> <span class="n">jaxlib</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">us</span><span class="o">-</span><span class="n">python</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">dev</span><span class="o">/</span><span class="n">ml</span><span class="o">-</span><span class="n">oss</span><span class="o">-</span><span class="n">artifacts</span><span class="o">-</span><span class="n">published</span><span class="o">/</span><span class="n">jax</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span>
+
+<span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">google</span><span class="o">/</span><span class="n">jax</span>
+</pre></div>
+</div>
+<p>or <a class="reference external" href="https://jax.readthedocs.io/en/latest/developer.html#building-jaxlib-from-source">build JAX from source</a>.</p>
+<p>For now, you need to match the jaxlib version with the PJRT C API version. It’s usually sufficient to use a jaxlib nightly version from the same day as the TF commit you’re building your plugin against, e.g.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">pre</span> <span class="o">-</span><span class="n">U</span> <span class="n">jaxlib</span><span class="o">==</span><span class="mf">0.6.1</span><span class="o">.</span><span class="n">dev20250428</span> <span class="o">-</span><span class="n">i</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">us</span><span class="o">-</span><span class="n">python</span><span class="o">.</span><span class="n">pkg</span><span class="o">.</span><span class="n">dev</span><span class="o">/</span><span class="n">ml</span><span class="o">-</span><span class="n">oss</span><span class="o">-</span><span class="n">artifacts</span><span class="o">-</span><span class="n">published</span><span class="o">/</span><span class="n">jax</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span>
+</pre></div>
+</div>
+<p>You can also build a jaxlib from source at exactly the XLA commit you’re building against (<a class="reference external" href="https://jax.readthedocs.io/en/latest/developer.html#building-jaxlib-from-source-with-a-modified-xla-repository">instructions</a>).</p>
+<p>We will start supporting ABI compatibility soon.</p>
+</section>
+<section id="step-2-use-jax-plugins-namespace-or-set-up-entry-point">
+<h3>Step 2: Use jax_plugins namespace or set up entry_point<a class="headerlink" href="#step-2-use-jax-plugins-namespace-or-set-up-entry-point" title="Link to this heading">#</a></h3>
+<p>There are two options for your plugin to be discovered by JAX.</p>
+<ol class="arabic simple">
+<li><p>Using namespace packages (<a class="reference external" href="https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/#using-naming-convention">ref</a>). Define a globally unique module under the <code class="docutils literal notranslate"><span class="pre">jax_plugins</span></code> namespace package (i.e. just create a <code class="docutils literal notranslate"><span class="pre">jax_plugins</span></code> directory and define your module below it). Here is an example directory structure:</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jax_plugins</span><span class="o">/</span>
+  <span class="n">my_plugin</span><span class="o">/</span>
+    <span class="fm">__init__</span><span class="o">.</span><span class="n">py</span>
+    <span class="n">my_plugin</span><span class="o">.</span><span class="n">so</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li><p>Using package metadata (<a class="reference external" href="https://packaging.python.org/en/latest/guides/creating-and-discovering-plugins/#using-package-metadata">ref</a>). If building a package via pyproject.toml or <a class="reference external" href="http://setup.py">setup.py</a>, advertise your plugin module name by including an entry-point under the <code class="docutils literal notranslate"><span class="pre">jax_plugins</span></code> group which points to your full module name. Here is an example via pyproject.toml or <a class="reference external" href="http://setup.py">setup.py</a>:</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># use pyproject.toml</span>
+<span class="p">[</span><span class="n">project</span><span class="o">.</span><span class="n">entry</span><span class="o">-</span><span class="n">points</span><span class="o">.</span><span class="s1">&#39;jax_plugins&#39;</span><span class="p">]</span>
+<span class="n">my_plugin</span> <span class="o">=</span> <span class="s1">&#39;my_plugin&#39;</span>
+
+<span class="c1"># use setup.py</span>
+<span class="n">entry_points</span><span class="o">=</span><span class="p">{</span>
+  <span class="s2">&quot;jax_plugins&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;my_plugin = my_plugin&quot;</span><span class="p">,</span>
+  <span class="p">],</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Here are examples of how openxla-pjrt-plugin is implemented using Option 2: <a class="github reference external" href="https://github.com/openxla/openxla-pjrt-plugin/pull/119">openxla/openxla-pjrt-plugin#119</a>, <a class="github reference external" href="https://github.com/openxla/openxla-pjrt-plugin/pull/120">openxla/openxla-pjrt-plugin#120</a>.</p>
+</section>
+<section id="step-3-implement-an-initialize-method">
+<h3>Step 3: Implement an initialize() method<a class="headerlink" href="#step-3-implement-an-initialize-method" title="Link to this heading">#</a></h3>
+<p>You need to implement an initialize() method in your python module to register the plugin, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">jax._src.xla_bridge</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xb</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">():</span>
+  <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;my_plugin.so&#39;</span><span class="p">)</span>
+  <span class="n">xb</span><span class="o">.</span><span class="n">register_plugin</span><span class="p">(</span><span class="s1">&#39;my_plugin&#39;</span><span class="p">,</span> <span class="n">priority</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">library_path</span><span class="o">=</span><span class="n">path</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Please refer to <a class="reference external" href="https://github.com/google/jax/blob/8f283bc9ed50d3828bd468ae57b1ee4df1527624/jax/_src/xla_bridge.py#L420">here</a> about how to use <code class="docutils literal notranslate"><span class="pre">xla_bridge.register_plugin</span></code>. It is currently a private method. A public API will be released in the future.</p>
+<p>You can run the line below to verify that the plugin is registered and raise an error if it can’t be loaded.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">jax</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="s2">&quot;jax_platforms&quot;</span><span class="p">,</span> <span class="s2">&quot;my_plugin&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>JAX may have multiple backends/plugins. There are a few options to ensure your plugin is used as the default backend:</p>
+<ul class="simple">
+<li><p>Option 1: run <code class="docutils literal notranslate"><span class="pre">jax.config.update(&quot;jax_platforms&quot;,</span> <span class="pre">&quot;my_plugin&quot;)</span></code> in the beginning of the program.</p></li>
+<li><p>Option 2: set ENV <code class="docutils literal notranslate"><span class="pre">JAX_PLATFORMS=my_plugin</span></code>.</p></li>
+<li><p>Option 3: set a high enough priority when calling xb.register_plugin (the default value is 400 which is higher than other existing backends). Note the backend with highest priority will be used only when <code class="docutils literal notranslate"><span class="pre">JAX_PLATFORMS=''</span></code>. The default value of <code class="docutils literal notranslate"><span class="pre">JAX_PLATFORMS</span></code> is <code class="docutils literal notranslate"><span class="pre">''</span></code> but sometimes it will get overwritten.</p></li>
+</ul>
+</section>
+</section>
+<section id="how-to-test-with-jax">
+<h2>How to test with JAX<a class="headerlink" href="#how-to-test-with-jax" title="Link to this heading">#</a></h2>
+<p>Some basic test cases to try:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># JAX 1+1</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="c1"># =&gt; 2</span>
+
+<span class="c1"># jit</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">jit</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)(</span><span class="mf">1.</span><span class="p">))</span>
+<span class="c1"># =&gt; 2.0</span>
+
+<span class="c1"># pmap</span>
+
+<span class="n">arr</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">device_count</span><span class="p">())</span> <span class="nb">print</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">pmap</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span>
+<span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">psum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;i&#39;</span><span class="p">),</span> <span class="n">axis_name</span><span class="o">=</span><span class="s1">&#39;i&#39;</span><span class="p">)(</span><span class="n">arr</span><span class="p">))</span>
+
+<span class="c1"># single device: [0]</span>
+
+<span class="c1"># 4 devices: [6 7 8 9]</span>
+</pre></div>
+</div>
+<p>(We’ll add instructions for running the jax unit tests against your plugin soon!)</p>
+<p>For more examples of PJRT plugins see <a class="reference internal" href="examples.html"><span class="std std-doc">PJRT Examples</span></a>.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./pjrt"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">PJRT - Uniform Device API</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="cpp_api_overview.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">PJRT C++ Device API Overview</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-integrate-with-pjrt">How to integrate with PJRT</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-implement-pjrt-c-api-interface">Step 1: Implement PJRT C API interface</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-implement-getpjrtapi">Step 2: Implement GetPjRtApi</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-test-c-api-implementations">Step 3: Test C API implementations</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-use-a-pjrt-plugin-from-jax">How to use a PJRT plugin from JAX</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-set-up-jax">Step 1: Set up JAX</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-use-jax-plugins-namespace-or-set-up-entry-point">Step 2: Use jax_plugins namespace or set up entry_point</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-implement-an-initialize-method">Step 3: Implement an initialize() method</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-test-with-jax">How to test with JAX</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

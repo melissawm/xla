@@ -1,0 +1,811 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>XLA:GPU Architecture Overview &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'gpu_architecture';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="XLA:GPU Emitters" href="emitters.html" />
+    <link rel="prev" title="XLA:GPU" href="xla_gpu.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="xla_gpu.html">XLA:GPU</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
+<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="error_codes.html">Error Codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/gpu_architecture.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>XLA:GPU Architecture Overview</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">XLA:GPU Architecture Overview</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#xla-gpu-pipeline">XLA:GPU Pipeline</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-example-jax">Running Example: JAX</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizations-on-hlo-key-components">Optimizations on HLO: Key Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spmd-partitioner">SPMD Partitioner</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layout-assignment">Layout Assignment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fusion">Fusion</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hlo-optimizations-on-running-example">HLO Optimizations on Running Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-assignment-and-scheduling">Buffer Assignment and Scheduling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compiler-backend-codegen-and-library-selection">Compiler Backend: Codegen and Library Selection</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#library-selection">Library Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct-code-generation">Direct code generation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#triton-code-generation">Triton code generation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime">Runtime</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="xla-gpu-architecture-overview">
+<h1>XLA:GPU Architecture Overview<a class="headerlink" href="#xla-gpu-architecture-overview" title="Link to this heading">#</a></h1>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h1>
+<p>XLA is a hardware- and framework- domain-specific compiler for linear algebra,
+offering best-in-class performance. JAX, TF, Pytorch and others use XLA by
+converting the user input to
+<a class="reference external" href="https://github.com/openxla/stablehlo/tree/main">StableHLO</a> (“high-level
+operation”: a set of ~100 statically shaped instructions like addition,
+subtraction, matmul, etc) operation set, from which XLA produces optimized code
+for a variety of backends:</p>
+<p><img alt="" src="_images/xla_hardware.png" /></p>
+<p>During the execution, the frameworks invoke the
+<a class="reference external" href="https://opensource.googleblog.com/2023/05/pjrt-simplifying-ml-hardware-and-framework-integration.html">PJRT runtime</a>
+API, which lets the frameworks perform the operation “populate the specified
+buffers using a given StableHLO program on a specific device”.</p>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="xla-gpu-pipeline">
+<h1>XLA:GPU Pipeline<a class="headerlink" href="#xla-gpu-pipeline" title="Link to this heading">#</a></h1>
+<p>XLA:GPU uses a combination of “native” (PTX, via LLVM) emitters and TritonIR
+emitters to generate high-performance GPU kernels (blue color indicates 3P
+components):</p>
+<p><img alt="" src="_images/gpu_pipeline.png" /></p>
+<section id="running-example-jax">
+<h2>Running Example: JAX<a class="headerlink" href="#running-example-jax" title="Link to this heading">#</a></h2>
+<p>To illustrate the pipeline, let’s start with a running example in JAX, which
+computes a matmul combined with multiplication by a constant and negation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">-</span><span class="p">((</span><span class="n">a</span> <span class="o">@</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.125</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We can inspect the HLO generated by the function:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">M</span> <span class="o">=</span> <span class="mi">1024</span>
+<span class="n">K</span> <span class="o">=</span> <span class="mi">512</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">2048</span>
+<span class="n">key</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">PRNGKey</span><span class="p">(</span><span class="mi">1701</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">K</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jax</span><span class="o">.</span><span class="n">numpy</span><span class="o">.</span><span class="n">int8</span><span class="p">,</span> <span class="n">minval</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">maxval</span><span class="o">=</span><span class="mi">255</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="n">K</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">jax</span><span class="o">.</span><span class="n">dtypes</span><span class="o">.</span><span class="n">bfloat16</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">jax</span><span class="o">.</span><span class="n">xla_computation</span><span class="p">(</span><span class="n">f</span><span class="p">)(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">as_hlo_text</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>which generates:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">HloModule</span> <span class="n">xla_computation_f</span><span class="p">,</span> <span class="n">entry_computation_layout</span><span class="o">=</span><span class="p">{(</span><span class="n">s8</span><span class="p">[</span><span class="mi">1024</span><span class="p">,</span><span class="mi">512</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">},</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">512</span><span class="p">,</span><span class="mi">2048</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">})</span><span class="o">-&gt;</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">1024</span><span class="p">,</span><span class="mi">2048</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">})}</span>
+
+<span class="n">ENTRY</span> <span class="n">main</span><span class="mf">.10</span> <span class="p">{</span>
+  <span class="n">Arg_0</span><span class="mf">.1</span> <span class="o">=</span> <span class="n">s8</span><span class="p">[</span><span class="mi">1024</span><span class="p">,</span><span class="mi">512</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+  <span class="n">convert</span><span class="mf">.5</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">1024</span><span class="p">,</span><span class="mi">512</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">convert</span><span class="p">(</span><span class="n">Arg_0</span><span class="mf">.1</span><span class="p">)</span>
+  <span class="n">Arg_1</span><span class="mf">.2</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">512</span><span class="p">,</span><span class="mi">2048</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">dot</span><span class="mf">.6</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">1024</span><span class="p">,</span><span class="mi">2048</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">dot</span><span class="p">(</span><span class="n">convert</span><span class="mf">.5</span><span class="p">,</span> <span class="n">Arg_1</span><span class="mf">.2</span><span class="p">),</span> <span class="n">lhs_contracting_dims</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">},</span> <span class="n">rhs_contracting_dims</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}</span>
+  <span class="n">constant</span><span class="mf">.3</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[]</span> <span class="n">constant</span><span class="p">(</span><span class="mf">0.125</span><span class="p">)</span>
+  <span class="n">broadcast</span><span class="mf">.4</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">1024</span><span class="p">,</span><span class="mi">2048</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">broadcast</span><span class="p">(</span><span class="n">constant</span><span class="mf">.3</span><span class="p">),</span> <span class="n">dimensions</span><span class="o">=</span><span class="p">{}</span>
+  <span class="n">multiply</span><span class="mf">.7</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">1024</span><span class="p">,</span><span class="mi">2048</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">multiply</span><span class="p">(</span><span class="n">dot</span><span class="mf">.6</span><span class="p">,</span> <span class="n">broadcast</span><span class="mf">.4</span><span class="p">)</span>
+  <span class="n">ROOT</span> <span class="n">negate</span><span class="mf">.8</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">1024</span><span class="p">,</span><span class="mi">2048</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">negate</span><span class="p">(</span><span class="n">multiply</span><span class="mf">.7</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We can visualize the input HLO computation as well, using
+<code class="docutils literal notranslate"><span class="pre">jax.xla_computation(f)(a,</span> <span class="pre">b).as_hlo_dot_graph()</span></code>:</p>
+<p><img alt="" src="_images/lowered_hlo.png" /></p>
+</section>
+<section id="optimizations-on-hlo-key-components">
+<h2>Optimizations on HLO: Key Components<a class="headerlink" href="#optimizations-on-hlo-key-components" title="Link to this heading">#</a></h2>
+<p>A number of notable optimization passes happen on HLO, as HLO-&gt;HLO rewrites.</p>
+<section id="spmd-partitioner">
+<h3>SPMD Partitioner<a class="headerlink" href="#spmd-partitioner" title="Link to this heading">#</a></h3>
+<p>The XLA SPMD partitioner, as described in
+<a class="reference external" href="https://arxiv.org/pdf/2105.04663.pdf">GSPMD: General and Scalable Parallelization for MLComputation Graphs</a>,
+consumes HLO with sharding annotations (produced e.g. by <code class="docutils literal notranslate"><span class="pre">jax.pjit</span></code>), and
+produces a sharded HLO which can then run on a number of hosts and devices.
+Apart from partitioning, the SPMD attempts to optimize HLO for an optimal
+execution schedule,
+<a class="reference external" href="https://dl.acm.org/doi/pdf/10.1145/3567955.3567959">overlapping</a> computation
+and communication between the nodes.</p>
+<section id="example">
+<h4>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h4>
+<p>Consider starting from a simple JAX program sharded across two devices:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Defines a mesh with two axes called ‘x’ and ‘y’,</span>
+<span class="c1"># sharded across two devices: first and second CPU.</span>
+<span class="k">with</span> <span class="n">jax</span><span class="o">.</span><span class="n">sharding</span><span class="o">.</span><span class="n">Mesh</span><span class="p">(</span>
+      <span class="p">[[</span><span class="s1">&#39;cpu:0&#39;</span><span class="p">,</span> <span class="s1">&#39;cpu:1&#39;</span><span class="p">]],</span> <span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">)):</span>
+
+    <span class="nd">@pjit</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="o">-</span><span class="p">((</span><span class="n">a</span> <span class="o">@</span> <span class="n">b</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.125</span><span class="p">)</span>
+        <span class="c1"># Shard output matrix access across ‘x’</span>
+        <span class="c1"># and ‘y’ respectively. Generates ‘Sharding’</span>
+        <span class="c1"># custom call.</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">with_sharding_constraint</span><span class="p">(</span>
+          <span class="n">out</span><span class="p">,</span> <span class="n">jax</span><span class="o">.</span><span class="n">lax</span><span class="o">.</span><span class="n">PartitionSpec</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">out</span>
+
+<span class="c1"># Random inputs to call our function.</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="mi">1024</span><span class="p">,</span> <span class="mi">512</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">int8</span><span class="p">)</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">jax</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="p">(</span><span class="mi">512</span><span class="p">,</span> <span class="mi">2048</span><span class="p">),</span> <span class="n">jnp</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">compiler_ir</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Visualizing it, the sharding annotations are presented as custom calls:</p>
+<p><img alt="" src="_images/annotated_module.png" /></p>
+<p>To check how the SPMD partitioner expands the custom call, we can look at HLO
+after optimizations:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">lower</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span><span class="o">.</span><span class="n">compile</span><span class="p">()</span><span class="o">.</span><span class="n">as_text</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>Which generates HLO with a collective:</p>
+<p><img alt="" src="_images/partitioned_module.png" /></p>
+</section>
+</section>
+<section id="layout-assignment">
+<h3>Layout Assignment<a class="headerlink" href="#layout-assignment" title="Link to this heading">#</a></h3>
+<p>HLO decouples logical shape and physical layout (how tensors are laid out in
+memory). For example, a matrix <code class="docutils literal notranslate"><span class="pre">f32[32,</span> <span class="pre">64]</span></code> can be represented either in
+row-major or column-major order, represented as <code class="docutils literal notranslate"><span class="pre">{1,0}</span></code> or <code class="docutils literal notranslate"><span class="pre">{0,1}</span></code> respectively.
+In general, layout is represented as a part of shape, showing a permutation over
+the number of dimensions indicating physical layout in memory.</p>
+<p>For each operation present in the HLO, the Layout Assignment pass chooses an
+optimal layout (e.g. NHWC for a convolution on Ampere). For example, an
+<code class="docutils literal notranslate"><span class="pre">int8xint8-&gt;int32</span></code>  matmul operation prefers <code class="docutils literal notranslate"><span class="pre">{0,1}</span></code> layout for the RHS of the
+computation. Similarly, “transposes” inserted by the user are ignored, and
+encoded as a layout change.</p>
+<p>The layouts are then propagated through the graph, and conflicts between layouts
+or at graph endpoints are materialized as <code class="docutils literal notranslate"><span class="pre">copy</span></code> operations, which perform the
+physical transposition. For example, starting from the graph</p>
+<p><img alt="" src="_images/pre_layout_module.png" /></p>
+<p>Running the layout assignment we see the following layouts and <code class="docutils literal notranslate"><span class="pre">copy</span></code> operation
+inserted:</p>
+<p><img alt="" src="_images/layout_assigned_module.png" /></p>
+</section>
+<section id="fusion">
+<h3>Fusion<a class="headerlink" href="#fusion" title="Link to this heading">#</a></h3>
+<p>Fusion is XLA’s single most important optimization, which groups multiple
+operations (e.g. addition into exponentiation into matmul) to a single kernel.
+Since many GPU workloads tend to be memory-bound, fusion dramatically speeds up
+the execution by avoiding the writing of intermediate tensors to HBM and then
+reading them back, and instead passes them around in either registers or shared
+memory.</p>
+<p>Fused HLO instructions are blocked together in a single fusion computation,
+which establishes the following invariants:</p>
+<ul class="simple">
+<li><p>No intermediate storage inside the fusion is materialized in HBM (it has to
+be all passed through either registers or shared memory).</p></li>
+<li><p>A fusion is always compiled to exactly one GPU kernel</p></li>
+</ul>
+</section>
+</section>
+<section id="hlo-optimizations-on-running-example">
+<h2>HLO Optimizations on Running Example<a class="headerlink" href="#hlo-optimizations-on-running-example" title="Link to this heading">#</a></h2>
+<p>We can inspect the post-optimization HLO using <code class="docutils literal notranslate"><span class="pre">jax.jit(f).lower(a,</span> <span class="pre">b).compile().as_text()</span></code>, and verify that a single fusion got generated:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">HloModule</span> <span class="n">jit_f</span><span class="p">,</span> <span class="n">is_scheduled</span><span class="o">=</span><span class="n">true</span><span class="p">,</span> <span class="n">entry_computation_layout</span><span class="o">=</span><span class="p">{(</span><span class="n">s8</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">},</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">})</span><span class="o">-&gt;</span><span class="n">bf16</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}},</span> <span class="n">allow_spmd_sharding_propagation_to_output</span><span class="o">=</span><span class="p">{</span><span class="n">true</span><span class="p">}</span>
+
+<span class="o">%</span><span class="n">triton_gemm_dot</span><span class="mf">.6</span><span class="n">_computation</span> <span class="p">(</span><span class="n">parameter_0</span><span class="p">:</span> <span class="n">s8</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">parameter_1</span><span class="p">:</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="p">{</span>
+  <span class="o">%</span><span class="n">parameter_0</span> <span class="o">=</span> <span class="n">s8</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">convert</span><span class="mf">.0</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">convert</span><span class="p">(</span><span class="n">s8</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="o">%</span><span class="n">parameter_0</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">parameter_1</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">dot</span><span class="mf">.0</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">dot</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="o">%</span><span class="n">convert</span><span class="mf">.0</span><span class="p">,</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="o">%</span><span class="n">parameter_1</span><span class="p">),</span> <span class="n">lhs_contracting_dims</span><span class="o">=</span><span class="p">{</span><span class="mi">1</span><span class="p">},</span> <span class="n">rhs_contracting_dims</span><span class="o">=</span><span class="p">{</span><span class="mi">0</span><span class="p">}</span>
+  <span class="o">%</span><span class="n">convert</span><span class="mf">.1</span> <span class="o">=</span> <span class="n">f32</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">convert</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="o">%</span><span class="n">dot</span><span class="mf">.0</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">constant_0</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[]</span> <span class="n">constant</span><span class="p">(</span><span class="mf">0.125</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">broadcast</span><span class="mf">.0</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">broadcast</span><span class="p">(</span><span class="n">bf16</span><span class="p">[]</span> <span class="o">%</span><span class="n">constant_0</span><span class="p">),</span> <span class="n">dimensions</span><span class="o">=</span><span class="p">{}</span>
+  <span class="o">%</span><span class="n">convert</span><span class="mf">.2</span> <span class="o">=</span> <span class="n">f32</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">convert</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="o">%</span><span class="n">broadcast</span><span class="mf">.0</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">multiply</span><span class="mf">.0</span> <span class="o">=</span> <span class="n">f32</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">multiply</span><span class="p">(</span><span class="n">f32</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="o">%</span><span class="n">convert</span><span class="mf">.1</span><span class="p">,</span> <span class="n">f32</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="o">%</span><span class="n">convert</span><span class="mf">.2</span><span class="p">)</span>
+  <span class="o">%</span><span class="n">negate</span><span class="mf">.0</span> <span class="o">=</span> <span class="n">f32</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">negate</span><span class="p">(</span><span class="n">f32</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="o">%</span><span class="n">multiply</span><span class="mf">.0</span><span class="p">)</span>
+  <span class="n">ROOT</span> <span class="o">%</span><span class="n">convert</span><span class="mf">.6</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">convert</span><span class="p">(</span><span class="n">f32</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="o">%</span><span class="n">negate</span><span class="mf">.0</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">ENTRY</span> <span class="o">%</span><span class="n">main</span><span class="mf">.9</span> <span class="p">(</span><span class="n">Arg_0</span><span class="mf">.1</span><span class="p">:</span> <span class="n">s8</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">Arg_1</span><span class="mf">.2</span><span class="p">:</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]</span> <span class="p">{</span>
+  <span class="o">%</span><span class="n">Arg_1</span><span class="mf">.2</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">parameter</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="n">sharding</span><span class="o">=</span><span class="p">{</span><span class="n">replicated</span><span class="p">}</span>
+  <span class="o">%</span><span class="n">Arg_0</span><span class="mf">.1</span> <span class="o">=</span> <span class="n">s8</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">parameter</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">sharding</span><span class="o">=</span><span class="p">{</span><span class="n">replicated</span><span class="p">}</span>
+  <span class="n">ROOT</span> <span class="o">%</span><span class="n">triton_gemm_dot</span><span class="mf">.6</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="n">fusion</span><span class="p">(</span><span class="n">s8</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="o">%</span><span class="n">Arg_0</span><span class="mf">.1</span><span class="p">,</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]{</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">}</span> <span class="o">%</span><span class="n">Arg_1</span><span class="mf">.2</span><span class="p">),</span> <span class="n">kind</span><span class="o">=</span><span class="n">kCustom</span><span class="p">,</span> <span class="n">calls</span><span class="o">=%</span><span class="n">triton_gemm_dot</span><span class="mf">.6</span><span class="n">_computation</span><span class="p">,</span> <span class="n">backend_config</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;kind&quot;</span><span class="p">:</span><span class="s2">&quot;__triton_gemm&quot;</span><span class="p">,</span><span class="s2">&quot;triton_gemm_config&quot;</span><span class="p">:{</span><span class="s2">&quot;block_m&quot;</span><span class="p">:</span><span class="s2">&quot;64&quot;</span><span class="p">,</span><span class="s2">&quot;block_n&quot;</span><span class="p">:</span><span class="s2">&quot;64&quot;</span><span class="p">,</span><span class="s2">&quot;block_k&quot;</span><span class="p">:</span><span class="s2">&quot;64&quot;</span><span class="p">,</span><span class="s2">&quot;split_k&quot;</span><span class="p">:</span><span class="s2">&quot;1&quot;</span><span class="p">,</span><span class="s2">&quot;num_stages&quot;</span><span class="p">:</span><span class="s2">&quot;2&quot;</span><span class="p">,</span><span class="s2">&quot;num_warps&quot;</span><span class="p">:</span><span class="s2">&quot;4&quot;</span><span class="p">}}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Note that the fusion <code class="docutils literal notranslate"><span class="pre">backend_config</span></code> tells us that Triton will be used as a
+code generation strategy, and it specifies the chosen tiling.</p>
+<p>We can also visualize the resulting module:</p>
+<p><img alt="" src="_images/fused_module.png" /></p>
+</section>
+<section id="buffer-assignment-and-scheduling">
+<h2>Buffer Assignment and Scheduling<a class="headerlink" href="#buffer-assignment-and-scheduling" title="Link to this heading">#</a></h2>
+<p>A buffer assignment pass takes into account the shape information, and aims to
+produce an optimal buffer allocation for the program, minimizing the amount of
+intermediate memory consumed. Unlike TF or PyTorch immediate-mode (non-compiled)
+execution, where the memory allocator does not know the graph in advance, the
+XLA scheduler can “look into the future” and produce an optimal computation
+schedule.</p>
+</section>
+<section id="compiler-backend-codegen-and-library-selection">
+<h2>Compiler Backend: Codegen and Library Selection<a class="headerlink" href="#compiler-backend-codegen-and-library-selection" title="Link to this heading">#</a></h2>
+<p>For every HLO instruction in the computation, XLA chooses whether to run it
+using a library linked into a runtime, or to codegen it to PTX.</p>
+<section id="library-selection">
+<h3>Library Selection<a class="headerlink" href="#library-selection" title="Link to this heading">#</a></h3>
+<p>For many common operations, XLA:GPU uses fast-performance libraries from NVIDIA,
+such as cuBLAS, cuDNN, and NCCL. The libraries have an advantage of verified
+fast performance, but often preclude complex fusion opportunities.</p>
+</section>
+<section id="direct-code-generation">
+<h3>Direct code generation<a class="headerlink" href="#direct-code-generation" title="Link to this heading">#</a></h3>
+<p>The XLA:GPU backend generates high-performance LLVM IR directly for a number of
+operations (reductions, transposes, etc).</p>
+</section>
+<section id="triton-code-generation">
+<h3>Triton code generation<a class="headerlink" href="#triton-code-generation" title="Link to this heading">#</a></h3>
+<p>For more advanced fusions which include matrix multiplication or softmax,
+XLA:GPU uses <a class="reference external" href="https://github.com/openai/triton">Triton</a> as a code-generation
+layer. HLO Fusions are converted to TritonIR (an MLIR dialect which serves as an
+input to Triton), selects tiling parameters and invokes Triton for PTX
+generation:</p>
+<p><img alt="" src="_images/triton_opt_pipeline.png" /></p>
+<p>We have observed the resulting code to perform very well on Ampere, at
+near-roofline performance with properly tuned tile sizes.</p>
+</section>
+</section>
+<section id="runtime">
+<h2>Runtime<a class="headerlink" href="#runtime" title="Link to this heading">#</a></h2>
+<p>XLA Runtime converts the resulting sequence of CUDA kernel calls and library
+invocations into a RuntimeIR (an MLIR dialect in XLA), on which CUDA graph
+extraction is performed. CUDA graph is still work in progress, only some nodes
+are currently supported. Once CUDA graph boundaries are extracted, RuntimeIR is
+compiled via LLVM to a CPU executable, which can then be stored or transferred
+for Ahead-Of-Time compilation.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="xla_gpu.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">XLA:GPU</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="emitters.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">XLA:GPU Emitters</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">XLA:GPU Architecture Overview</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#xla-gpu-pipeline">XLA:GPU Pipeline</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-example-jax">Running Example: JAX</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizations-on-hlo-key-components">Optimizations on HLO: Key Components</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#spmd-partitioner">SPMD Partitioner</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layout-assignment">Layout Assignment</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fusion">Fusion</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#hlo-optimizations-on-running-example">HLO Optimizations on Running Example</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#buffer-assignment-and-scheduling">Buffer Assignment and Scheduling</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#compiler-backend-codegen-and-library-selection">Compiler Backend: Codegen and Library Selection</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#library-selection">Library Selection</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#direct-code-generation">Direct code generation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#triton-code-generation">Triton code generation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime">Runtime</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
