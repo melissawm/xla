@@ -91,7 +91,8 @@ docker exec xla_gpu bazel build \
 **Note:** You can build XLA on a machine without GPUs. In that case:
 
 - Do **not** use `--gpus all` flag when starting the Docker container.
-- Specify CUDA compute capabilities manually, For example:
+- During `./configure.py`, manually specify the CUDA compute capabilities
+using the `--cuda_compute_capabilities` flag. For example:
 
 ```
 docker exec xla_gpu ./configure.py --backend=CUDA \
@@ -101,11 +102,14 @@ docker exec xla_gpu ./configure.py --backend=CUDA \
 For more details regarding
 [TensorFlow's GPU docker images you can check out this document.](https://www.tensorflow.org/install/source#gpu_support_2)
 
-You can build XLA targets with GPU support without Docker as well. Configure and
-build targets using the following commands:
+Thanks to hermetic CUDA rules, you can build XLA targets with GPU support without Docker as well. You can build XLA for GPU directly on your machine - even if it doesn't have a GPU or the NVIDIA driver installed. Configure and build targets using the following commands:
 
 ```sh
+# Automatically detects compute capabilities (requires GPUs)
 ./configure.py --backend=CUDA
+
+# Manually specify compute capabilities (for builds without GPUs)
+./configure.py --backend=CUDA --cuda_compute_capabilities="9.0"
 
 bazel build \
   --spawn_strategy=sandboxed \
