@@ -52,8 +52,6 @@ parts:
       file: custom_call
     - title: SparseCore
       file: sparsecore
-    - title: Using LSP autocompletion
-      file: lsp
   - caption: Debugging
     chapters:
     # This is the default tab for the Debugging section.
@@ -67,6 +65,17 @@ parts:
       - file: errors/error_0100
       - file: errors/error_0101
       - file: errors/error_0102
+      - file: errors/error_0200
+      - file: errors/error_1000
+      - file: errors/error_1001
+      - file: errors/error_1200
+      - file: errors/error_2001
+      - file: errors/error_2002
+      - file: errors/error_2003
+      - file: errors/error_3000
+      - file: errors/error_3001
+    - title: Debug OOM errors with XProf
+      file: oom_debugging
   - caption: Reference
     chapters:
     - title: XLA Flags guidance
@@ -83,6 +92,8 @@ parts:
       file: contributing
     - title: Developer guide
       file: developer_guide
+    - title: Setting up a development environment
+      file: developer_environment
     - title: Build from source
       file: build_from_source
     - title: Develop a new backend for XLA

@@ -1,4 +1,4 @@
-# Setting Up Developer Environment
+# Setting up a development environment
 
 ## Setting up LSP with clangd
 

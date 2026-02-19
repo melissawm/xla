@@ -199,7 +199,6 @@ and iteratively running it on generated programs.
 ## Further reading
 
 -   [OpenXLA Documentation](https://openxla.org) OpenXLA Documentation
--   [Known Issues](./known_issues.md) List of known issues with XLA+TF
 -   [XLA - TensorFlow, Compiled](https://developers.googleblog.com/2017/03/xla-tensorflow-compiled.html):
     Read on Google Developers Blog
 -   Check out the
