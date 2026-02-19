@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
@@ -50,7 +50,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js?v=1ae7504c"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -210,7 +210,6 @@
 <li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
 <ul class="nav bd-sidenav">
@@ -220,8 +219,18 @@
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0200.html">Error Code: E0200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1000.html">Error code: 1000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1001.html">Error code: 1001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1200.html">Error code: 1200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2001.html">Error code: E2001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2002.html">Error code: E2002</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2003.html">Error code: E2003</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_3000.html">Error code: E3000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_3001.html">Error code: E3001</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="oom_debugging.html">Debug OOM errors with XProf</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -233,6 +242,7 @@
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_environment.html">Setting up a development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
@@ -247,8 +257,10 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
 
 
 </ul>
@@ -410,6 +422,22 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contribution-process">Contribution process</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-guide">Developer Guide</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#contribution-guide">Contribution guide</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-passes">Optimization passes</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-generally-accept">What we generally accept:</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-generally-reject">What we generally reject:</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fusion-passes">Fusion passes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#horizontal-scaling">Horizontal scaling</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">What we generally accept:</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">What we generally reject:</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#backends-autotuning">Backends &amp; Autotuning</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime">Runtime</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-standards">Code standards</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#review-process">Review Process</a></li>
 </ul>
@@ -470,6 +498,93 @@ sign a new one.</p>
 <p>For a guide on how to setup a development environment for OpenXLA, including
 getting code, building it, running tests and submitting changes, please refer to
 the <a class="reference internal" href="developer_guide.html"><span class="std std-doc">Developer guide</span></a>.</p>
+</section>
+<section id="contribution-guide">
+<h3>Contribution guide<a class="headerlink" href="#contribution-guide" title="Link to this heading">#</a></h3>
+<p>The architecture of the compiler consists of the following components.</p>
+<p><img alt="img" src="_images/gpu_compiler.png" /></p>
+<section id="optimization-passes">
+<h4>Optimization passes<a class="headerlink" href="#optimization-passes" title="Link to this heading">#</a></h4>
+<p>Optimization passes execute transformations on the HLO to enhance computational
+efficiency. These transformations span from architecture-agnostic, high-level
+improvements to hardware-specific adjustments (e.g., for NVIDIA GPUs).</p>
+<section id="what-we-generally-accept">
+<h5>What we generally accept:<a class="headerlink" href="#what-we-generally-accept" title="Link to this heading">#</a></h5>
+<ul class="simple">
+<li><p>Passes that generalize across multiple workloads and demonstrate a clear and
+significant positive impact on performance benchmarks.</p></li>
+</ul>
+</section>
+<section id="what-we-generally-reject">
+<h5>What we generally reject:<a class="headerlink" href="#what-we-generally-reject" title="Link to this heading">#</a></h5>
+<ul class="simple">
+<li><p>Passes that perform unique optimizations targeting specific models.</p></li>
+</ul>
+</section>
+</section>
+<section id="fusion-passes">
+<h4>Fusion passes<a class="headerlink" href="#fusion-passes" title="Link to this heading">#</a></h4>
+<p>Fusion is a critical optimization that combines multiple HLO operations into a
+single kernel to reduce memory I/O and kernel launch overhead.</p>
+<p>All fusion passes should be added to the fusion pipeline only, not before or
+after. That also means that the pre-optimized HLO module should not contain
+fusion instructions. If the fusion is formed early in the pipeline, it becomes a
+barrier for the optimization passes. If the fusion is formed late, then we lose
+an ability to select and tune the backend for the generated fusion.</p>
+<p>Fusion into the custom calls, i.e. pattern-matching custom calls with the
+producers/consumers and rewriting them into the new custom calls is not allowed.
+In that case, it should be replaced with a proper fusion pass.</p>
+</section>
+<section id="horizontal-scaling">
+<h4>Horizontal scaling<a class="headerlink" href="#horizontal-scaling" title="Link to this heading">#</a></h4>
+<p>Contributions to horizontal scaling encompass HLO optimizations, cost model
+improvements, library updates, and various infrastructure modifications. Due to
+the difficulty of reproducing the performance gains and the limited need for the
+multi-host configurations internally, we adhere to strict acceptance criteria:</p>
+<p>We prioritize minimally invasive changes that carry low risk.</p>
+<section id="id1">
+<h5>What we generally accept:<a class="headerlink" href="#id1" title="Link to this heading">#</a></h5>
+<ul class="simple">
+<li><p>Updates to libraries handling inter-GPU or interhost communication.</p></li>
+<li><p>Performance table updates for new platforms.</p></li>
+</ul>
+</section>
+<section id="id2">
+<h5>What we generally reject:<a class="headerlink" href="#id2" title="Link to this heading">#</a></h5>
+<ul class="simple">
+<li><p>HLO rewrites or runtime changes tailored to a specific model.</p></li>
+<li><p>Infrastructure changes that introduce new flags, technical debt or regressions.</p></li>
+</ul>
+</section>
+</section>
+<section id="backends-autotuning">
+<h4>Backends &amp; Autotuning<a class="headerlink" href="#backends-autotuning" title="Link to this heading">#</a></h4>
+<p>Backends for the unnested ops, e.g. custom calls and fusions, should implement
+<a class="reference external" href="https://github.com/openxla/xla/blob/main/xla/backends/autotuner/codegen_backend.h">CodegenBackend</a>
+interface.</p>
+<p>This interface is necessary to enable optimal backend selection, because it
+provides the methods to include the parameters for the given HLO instructions
+into the search space of the autotuner.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">//</span> <span class="n">Returns</span> <span class="nb">all</span> <span class="n">supported</span> <span class="n">configs</span> <span class="k">for</span> <span class="n">the</span> <span class="n">given</span> <span class="n">HLO</span> <span class="n">instruction</span><span class="o">.</span>
+<span class="n">virtual</span> <span class="n">absl</span><span class="p">::</span><span class="n">StatusOr</span><span class="o">&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">BackendConfig</span><span class="o">&gt;&gt;&gt;</span>
+  <span class="n">GetSupportedConfigs</span><span class="p">(</span><span class="n">const</span> <span class="n">HloInstruction</span><span class="o">&amp;</span> <span class="n">instr</span><span class="p">);</span>
+
+<span class="o">//</span> <span class="n">Returns</span> <span class="n">a</span> <span class="n">default</span> <span class="n">config</span> <span class="k">for</span> <span class="n">the</span> <span class="n">given</span> <span class="n">HLO</span> <span class="n">instruction</span><span class="o">.</span>
+<span class="n">virtual</span> <span class="n">absl</span><span class="p">::</span><span class="n">StatusOr</span><span class="o">&lt;</span><span class="n">std</span><span class="p">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">BackendConfig</span><span class="o">&gt;&gt;</span> <span class="n">GetDefaultConfig</span><span class="p">(</span>
+  <span class="n">const</span> <span class="n">HloInstruction</span><span class="o">&amp;</span> <span class="n">instr</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="runtime">
+<h4>Runtime<a class="headerlink" href="#runtime" title="Link to this heading">#</a></h4>
+<p>The end result of the XLA compilation pipeline is a thunk sequence that can be
+serialized.</p>
+<p>All of the new thunk types should be serializable, i.e. <code class="docutils literal notranslate"><span class="pre">GpuCompiler</span></code> or
+<code class="docutils literal notranslate"><span class="pre">CpuCompiler</span></code> should be able to compile the program, serialize it, so that later
+the XLA runner could load and execute the program. That means that there should
+be no pointers to <code class="docutils literal notranslate"><span class="pre">HloInstruction</span></code> or to other parts of the compiler or the
+<code class="docutils literal notranslate"><span class="pre">StreamExecutor</span></code>.</p>
+</section>
 </section>
 <section id="code-standards">
 <h3>Code standards<a class="headerlink" href="#code-standards" title="Link to this heading">#</a></h3>
@@ -647,6 +762,22 @@ experience, this is rarely the case.</p></li>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#contribution-process">Contribution process</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-guide">Developer Guide</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#contribution-guide">Contribution guide</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#optimization-passes">Optimization passes</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-generally-accept">What we generally accept:</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#what-we-generally-reject">What we generally reject:</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#fusion-passes">Fusion passes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#horizontal-scaling">Horizontal scaling</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">What we generally accept:</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">What we generally reject:</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#backends-autotuning">Backends &amp; Autotuning</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#runtime">Runtime</a></li>
+</ul>
+</li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#code-standards">Code standards</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#review-process">Review Process</a></li>
 </ul>

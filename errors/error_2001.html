@@ -1,0 +1,644 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Error code: E2001 &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'errors/error_2001';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Error code: E2002" href="error_2002.html" />
+    <link rel="prev" title="Error code: 1200" href="error_1200.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparsecore.html">SparseCore</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../error_codes.html">Error Codes</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_0102.html">Error code: 0102</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_0200.html">Error Code: E0200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_1000.html">Error code: 1000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_1001.html">Error code: 1001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_1200.html">Error code: 1200</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Error code: E2001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_2002.html">Error code: E2002</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_2003.html">Error code: E2003</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_3000.html">Error code: E3000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_3001.html">Error code: E3001</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../oom_debugging.html">Debug OOM errors with XProf</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_environment.html">Setting up a development environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/autoclustering_xla.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/jit_compile.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/errors/error_2001.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Error code: E2001</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging">Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cast-to-native-types">1. Cast to Native Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-compatibility-mode">2. Check Compatibility Mode</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#upgrade-hardware-or-request-support">3. Upgrade Hardware or Request Support</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="error-code-e2001">
+<h1>Error code: E2001<a class="headerlink" href="#error-code-e2001" title="Link to this heading">#</a></h1>
+<p><strong>Category:</strong> Compile Time: Unsupported RHS DataType on Hardware</p>
+<p>This error occurs when the data type used for the <strong>Right-Hand Side (RHS)</strong>
+operand in a matrix multiplication (e.g., <code class="docutils literal notranslate"><span class="pre">jax.lax.dot_general</span></code>, <code class="docutils literal notranslate"><span class="pre">jax.lax.conv</span></code>,
+<code class="docutils literal notranslate"><span class="pre">jax.numpy.matmul</span></code>, or the <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> operator) is not natively supported by the
+specific TPU generation being used.</p>
+<p><strong>Sample Error Messages:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">INTERNAL</span><span class="p">:</span> <span class="n">Mosaic</span> <span class="n">failed</span> <span class="n">to</span> <span class="nb">compile</span> <span class="n">TPU</span> <span class="n">kernel</span><span class="p">:</span> <span class="n">Unsupported</span> <span class="n">matmul</span> <span class="n">RHS</span> <span class="nb">type</span> <span class="n">on</span> <span class="n">target</span><span class="p">:</span> <span class="s1">&#39;vector&lt;256x256xi8&gt;&#39;</span>
+<span class="o">...</span>
+
+<span class="n">The</span> <span class="n">MLIR</span> <span class="n">operation</span> <span class="n">involved</span><span class="p">:</span>
+<span class="o">%</span><span class="mi">13440</span> <span class="o">=</span> <span class="s2">&quot;tpu.matmul&quot;</span><span class="p">(</span><span class="o">%</span><span class="mi">13435</span><span class="p">,</span> <span class="o">%</span><span class="mi">13437</span><span class="p">,</span> <span class="o">%</span><span class="mi">13439</span><span class="p">)</span> <span class="o">&lt;</span><span class="n">dimension_numbers</span> <span class="o">=</span> <span class="c1">#tpu.dot_dimension_numbers&lt;...&gt;</span>
+</pre></div>
+</div>
+<p><strong>XLA Backends:</strong> TPU</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>The TPU’s Matrix Multiply Unit (MXU) natively supports <code class="docutils literal notranslate"><span class="pre">Float32</span></code> operations on
+all hardware generations.</p>
+<p>However, native support for <code class="docutils literal notranslate"><span class="pre">BFloat16</span></code> and other quantized data types
+(e.g., Int4, Int8, or Float8) varies by hardware generation. This error is
+triggered when your kernel attempts to map a matrix multiplication to the MXU
+using a data type that your specific TPU generation does not have the physical
+circuitry to execute.</p>
+<p>This error typically indicates that the compiler’s <strong>Canonicalization</strong> pass—
+which attempts to automatically convert unsupported types into supported ones
+(e.g., via software emulation)—was unable to find a valid conversion rule or
+was prevented from doing so because <strong>Compatibility Mode</strong> was disabled.</p>
+</section>
+<section id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading">#</a></h2>
+<p>To resolve this error, you must align your data types with the capabilities of
+your hardware. You have following options:</p>
+<section id="cast-to-native-types">
+<h3>1. Cast to Native Types<a class="headerlink" href="#cast-to-native-types" title="Link to this heading">#</a></h3>
+<p>The most reliable fix is to manually cast your operands to a hardware-supported
+datatype (like <code class="docutils literal notranslate"><span class="pre">Float32</span></code> or <code class="docutils literal notranslate"><span class="pre">BFloat16</span></code> on TPU v4+) inside your kernel before the
+matmul operation.</p>
+<ul class="simple">
+<li><p><strong>Why:</strong> <code class="docutils literal notranslate"><span class="pre">Float32</span></code> is the universal data type supported natively by the
+MXU on all TPU generations.</p></li>
+<li><p><strong>Trade-off:</strong> This comes with a VPU (Vector Processing Unit) cost - the
+cycles required to perform the cast, but it guarantees your kernel
+will run on the current hardware.</p></li>
+</ul>
+</section>
+<section id="check-compatibility-mode">
+<h3>2. Check Compatibility Mode<a class="headerlink" href="#check-compatibility-mode" title="Link to this heading">#</a></h3>
+<p>Typically the compiler can automatically handle these type mismatch issues in
+<strong>Compatibility Mode</strong> which is enabled by default. Double check XLA configs
+to make sure <code class="docutils literal notranslate"><span class="pre">--xla_mosaic_compat_mode</span></code> is not set to false.</p>
+<p>This acts as a “polyfill,” injecting software emulation sequences for operations
+your hardware does not natively support.</p>
+<p><strong>What Compatibility Mode enables:</strong></p>
+<ul class="simple">
+<li><p><strong>Mixed-Precision MatMuls:</strong> Allows mixing Integer operands with Float
+accumulators by automatically inserting cast operations (e.g., extending
+integers to <code class="docutils literal notranslate"><span class="pre">Float32</span></code> before the matmul).</p></li>
+<li><p><strong>Low-Precision Emulation:</strong> On certain hardware generations, emulates
+unsupported types like <code class="docutils literal notranslate"><span class="pre">4-bit</span></code> floating point (<code class="docutils literal notranslate"><span class="pre">4E2M1FN</span></code>) or <code class="docutils literal notranslate"><span class="pre">8-bit</span></code> floating
+point (<code class="docutils literal notranslate"><span class="pre">8E4M3FN</span></code>) by extending them to supported types like <code class="docutils literal notranslate"><span class="pre">BFloat16</span></code> or
+<code class="docutils literal notranslate"><span class="pre">Float32</span></code> before execution.</p></li>
+</ul>
+<p>Note that this mode prioritizes compatibility over peak performance as emulation
+requires additional instructions to convert data formats before the MXU can
+operate on them.</p>
+</section>
+<section id="upgrade-hardware-or-request-support">
+<h3>3. Upgrade Hardware or Request Support<a class="headerlink" href="#upgrade-hardware-or-request-support" title="Link to this heading">#</a></h3>
+<p>If your algorithm strictly requires native performance for types like <code class="docutils literal notranslate"><span class="pre">Int4</span></code> or
+<code class="docutils literal notranslate"><span class="pre">Float8</span></code> without the overhead of casting or emulation, you will need to run on
+a newer TPU generation with native support.</p>
+<p><strong>Feature Request:</strong> If you believe your hardware supports this operation, or
+if the compiler is missing a valid emulation path even in Compatibility Mode,
+please file a feature request. We usually guarantee that operations are forward
+compatible. So if your kernel runs on a TPU generation then it should run on all
+future generations. But it is not guaranteed to have emulation for older
+generations (for some of which the casts would be very expensive).</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./errors"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="error_1200.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Error code: 1200</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="error_2002.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Error code: E2002</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging">Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cast-to-native-types">1. Cast to Native Types</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-compatibility-mode">2. Check Compatibility Mode</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#upgrade-hardware-or-request-support">3. Upgrade Hardware or Request Support</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

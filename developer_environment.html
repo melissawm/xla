@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Setting up LSP with clangd &#8212; XLA Documentation</title>
+    <title>Setting up a development environment &#8212; XLA Documentation</title>
   
   
   
@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
@@ -50,18 +50,18 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js?v=1ae7504c"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'lsp';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'developer_environment';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Dump HLO Computations" href="hlo_dumps.html" />
-    <link rel="prev" title="A deep dive into SparseCore for Large Embedding Models (LEM)" href="sparsecore.html" />
+    <link rel="next" title="Build from source" href="build_from_source.html" />
+    <link rel="prev" title="XLA developer guide" href="developer_guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -182,7 +182,7 @@
 <li class="toctree-l1"><a class="reference internal" href="hlo_to_thunks.html">From HLO to Thunks</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
-<ul class="current nav bd-sidenav">
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="broadcasting.html">Broadcasting</a></li>
@@ -210,7 +210,6 @@
 <li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Using LSP autocompletion</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
 <ul class="nav bd-sidenav">
@@ -220,8 +219,18 @@
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0200.html">Error Code: E0200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1000.html">Error code: 1000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1001.html">Error code: 1001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1200.html">Error code: 1200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2001.html">Error code: E2001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2002.html">Error code: E2002</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2003.html">Error code: E2003</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_3000.html">Error code: E3000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_3001.html">Error code: E3001</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="oom_debugging.html">Debug OOM errors with XProf</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -230,9 +239,10 @@
 <li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Setting up a development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
@@ -247,8 +257,10 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
 
 
 </ul>
@@ -309,7 +321,7 @@
       
       
       
-      <li><a href="_sources/lsp.md" target="_blank"
+      <li><a href="_sources/developer_environment.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -393,7 +405,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Setting up LSP with clangd</h1>
+    <h1>Setting up a development environment</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -403,8 +415,16 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-generate-compile-commands-json-for-xla-source-code">How do I generate <code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code> for XLA source code?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-lsp-with-clangd">Setting up LSP with clangd</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-generate-compile-commands-json-for-xla-source-code">How do I generate <code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code> for XLA source code?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-cleaner">Build Cleaner</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layering-check">Layering Check</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remove-unused-dependencies-from-build-files">Remove unused dependencies from BUILD files</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -416,10 +436,12 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section class="tex2jax_ignore mathjax_ignore" id="setting-up-lsp-with-clangd">
-<h1>Setting up LSP with clangd<a class="headerlink" href="#setting-up-lsp-with-clangd" title="Link to this heading">#</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="setting-up-a-development-environment">
+<h1>Setting up a development environment<a class="headerlink" href="#setting-up-a-development-environment" title="Link to this heading">#</a></h1>
+<section id="setting-up-lsp-with-clangd">
+<h2>Setting up LSP with clangd<a class="headerlink" href="#setting-up-lsp-with-clangd" title="Link to this heading">#</a></h2>
 <section id="background">
-<h2>Background<a class="headerlink" href="#background" title="Link to this heading">#</a></h2>
+<h3>Background<a class="headerlink" href="#background" title="Link to this heading">#</a></h3>
 <p>Editors such as Emacs, Vim, or VS Code support features like code navigation,
 code completion, inline compiler error messages, and others, through
 <a class="reference external" href="https://en.wikipedia.org/wiki/Language_Server_Protocol">LSP</a>, the Language
@@ -429,11 +451,53 @@ Server Protocol. A common language server with LSP support is
 each file in a project.</p>
 </section>
 <section id="how-do-i-generate-compile-commands-json-for-xla-source-code">
-<h2>How do I generate <code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code> for XLA source code?<a class="headerlink" href="#how-do-i-generate-compile-commands-json-for-xla-source-code" title="Link to this heading">#</a></h2>
+<h3>How do I generate <code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code> for XLA source code?<a class="headerlink" href="#how-do-i-generate-compile-commands-json-for-xla-source-code" title="Link to this heading">#</a></h3>
 <p>Use the
 <a class="reference external" href="https://github.com/openxla/xla/blob/main/build_tools/lint/generate_compile_commands.py">build_tools/lint/generate_compile_commands.py</a>
 script. The following invocation from XLA repo root generates a
 <code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code> file in place: <code class="docutils literal notranslate"><span class="pre">bazel</span> <span class="pre">aquery</span> <span class="pre">&quot;mnemonic(CppCompile,</span> <span class="pre">//xla/...)&quot;</span> <span class="pre">--output=jsonproto</span> <span class="pre">|</span> <span class="pre">python3</span> <span class="pre">build_tools/lint/generate_compile_commands.py</span></code></p>
+</section>
+</section>
+<section id="build-cleaner">
+<h2>Build Cleaner<a class="headerlink" href="#build-cleaner" title="Link to this heading">#</a></h2>
+<p>XLA CI inside Google runs additional checks to verify that all targets correctly
+list all dependencies in the BUILD files, which are not enabled by default in
+OSS Bazel CI. Running following commands before sending PR to XLA team will
+massively speedup the time it takes to merge the PR as otherwise you will need
+some Googler to make this fixes for you internally, or a few more rounds of PR
+reviews to fix them based on the Googlers feedback.</p>
+<section id="layering-check">
+<h3>Layering Check<a class="headerlink" href="#layering-check" title="Link to this heading">#</a></h3>
+<p>Building with <code class="docutils literal notranslate"><span class="pre">--features=layering_check</span></code> makes sure that you don’t accidentally
+include a header via transitive dependency without listing it in your target
+dependencies</p>
+</section>
+<section id="remove-unused-dependencies-from-build-files">
+<h3>Remove unused dependencies from BUILD files<a class="headerlink" href="#remove-unused-dependencies-from-build-files" title="Link to this heading">#</a></h3>
+<p>Install
+<a class="reference external" href="https://github.com/bazelbuild/buildtools/blob/main/buildozer/README.md">Buildozer</a>
+tool:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">curl</span> <span class="o">-</span><span class="n">fsSL</span> <span class="o">-</span><span class="n">o</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">buildozer</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">bazelbuild</span><span class="o">/</span><span class="n">buildtools</span><span class="o">/</span><span class="n">releases</span><span class="o">/</span><span class="n">download</span><span class="o">/</span><span class="mf">6.0.0</span><span class="o">/</span><span class="n">buildozer</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">amd64</span>
+<span class="n">sudo</span> <span class="n">chmod</span> <span class="mi">755</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">buildozer</span>
+</pre></div>
+</div>
+<p>Install <a class="reference external" href="https://github.com/hzeller/bant">Bant</a> tool:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># To some writable directory that does not require root access</span>
+<span class="n">bazel</span> <span class="n">build</span> <span class="o">-</span><span class="n">c</span> <span class="n">opt</span> <span class="o">//</span><span class="n">bant</span> <span class="o">&amp;&amp;</span> <span class="n">install</span> <span class="o">-</span><span class="n">D</span> <span class="o">--</span><span class="n">strip</span> <span class="n">bazel</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span><span class="n">bant</span><span class="o">/</span><span class="n">bant</span> <span class="o">~/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bant</span>
+
+<span class="c1"># For a system directory that requires root-access</span>
+<span class="n">sudo</span> <span class="n">install</span> <span class="o">-</span><span class="n">D</span> <span class="o">--</span><span class="n">strip</span> <span class="n">bazel</span><span class="o">-</span><span class="nb">bin</span><span class="o">/</span><span class="n">bant</span><span class="o">/</span><span class="n">bant</span> <span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="n">local</span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bant</span>
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">bant</span></code> to generate buildozer commands to remove unused deps:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bant</span> <span class="n">dwyu</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">collectives</span><span class="p">:</span><span class="n">symmetric_memory</span>
+</pre></div>
+</div>
+<p>if you feel lucky, you can execute them directly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">.</span> <span class="o">&lt;</span><span class="p">(</span><span class="n">bant</span> <span class="n">dwyu</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">core</span><span class="o">/</span><span class="n">collectives</span><span class="p">:</span><span class="n">symmetric_memory</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 </section>
 
@@ -468,20 +532,20 @@ script. The following invocation from XLA repo root generates a
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="sparsecore.html"
+       href="developer_guide.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">A deep dive into SparseCore for Large Embedding Models (LEM)</p>
+        <p class="prev-next-title">XLA developer guide</p>
       </div>
     </a>
     <a class="right-next"
-       href="hlo_dumps.html"
+       href="build_from_source.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Dump HLO Computations</p>
+        <p class="prev-next-title">Build from source</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -501,8 +565,16 @@ script. The following invocation from XLA repo root generates a
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-generate-compile-commands-json-for-xla-source-code">How do I generate <code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code> for XLA source code?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setting-up-lsp-with-clangd">Setting up LSP with clangd</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#background">Background</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-do-i-generate-compile-commands-json-for-xla-source-code">How do I generate <code class="docutils literal notranslate"><span class="pre">compile_commands.json</span></code> for XLA source code?</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#build-cleaner">Build Cleaner</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layering-check">Layering Check</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remove-unused-dependencies-from-build-files">Remove unused dependencies from BUILD files</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

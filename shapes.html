@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
@@ -50,13 +50,15 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js?v=1ae7504c"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'shapes';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -210,7 +212,6 @@
 <li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
 <ul class="nav bd-sidenav">
@@ -220,8 +221,18 @@
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0200.html">Error Code: E0200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1000.html">Error code: 1000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1001.html">Error code: 1001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1200.html">Error code: 1200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2001.html">Error code: E2001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2002.html">Error code: E2002</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2003.html">Error code: E2003</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_3000.html">Error code: E3000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_3001.html">Error code: E3001</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="oom_debugging.html">Debug OOM errors with XProf</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -233,6 +244,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_environment.html">Setting up a development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
@@ -247,8 +259,10 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
 
 
 </ul>
@@ -403,7 +417,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#terminology-notation-and-conventions">Terminology, notation, and conventions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-of-an-xla-op">Structure of an XLA Op</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shapes">Shapes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#terminology-notation-and-conventions">Terminology, notation, and conventions</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#layout">Layout</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minor-to-major-dimension-ordering">Minor-to-major dimension ordering</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#default-minor-to-major-ordering">Default minor-to-major ordering</a></li>
@@ -413,6 +431,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-into-arrays">Indexing into arrays</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-space-identifiers">Memory Space Identifiers</a></li>
 </ul>
             </nav>
         </div>
@@ -426,12 +445,83 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="data-representation">
 <h1>Data representation<a class="headerlink" href="#data-representation" title="Link to this heading">#</a></h1>
+<section id="structure-of-an-xla-op">
+<h2>Structure of an XLA Op<a class="headerlink" href="#structure-of-an-xla-op" title="Link to this heading">#</a></h2>
+<p>Consider an example HLO:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">add</span><span class="mf">.936</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1280</span><span class="p">,</span><span class="mi">16384</span><span class="p">]{</span><span class="mi">3</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="n">T</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">128</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)}</span>
+          <span class="n">add</span><span class="p">(</span><span class="n">exponential</span><span class="mf">.183</span><span class="p">,</span> <span class="n">broadcast</span><span class="mf">.3115</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This consists of the following components:</p>
+<ul class="simple">
+<li><p>Op Name: <code class="docutils literal notranslate"><span class="pre">add.936</span></code></p>
+<ul>
+<li><p>This is the unique name for the operation.</p></li>
+</ul>
+</li>
+<li><p>Shape: <code class="docutils literal notranslate"><span class="pre">bf16[8,1,1280,16384]</span></code></p>
+<ul>
+<li><p>This is the output shape of the Op. Here the dtype is
+<a class="reference external" href="https://en.wikipedia.org/wiki/Bfloat16_floating-point_format">bf16</a> and
+the shape is <code class="docutils literal notranslate"><span class="pre">[8,1,1280,16384]</span></code>.</p></li>
+</ul>
+</li>
+<li><p>Layout (with Tiling): <code class="docutils literal notranslate"><span class="pre">3,2,0,1:T(8,128)(2,1)</span></code></p>
+<ul>
+<li><p>This describes how the array is stored in memory. <code class="docutils literal notranslate"><span class="pre">3,2,0,1</span></code> denotes the
+order of the axes in memory (i.e., column major, row major, etc.) and
+<code class="docutils literal notranslate"><span class="pre">T(8,128)(2,1)</span></code> denotes the tiling &amp; padding used.</p></li>
+<li><p>Layout is optional. If not specified, there is no tiling and the
+dimensions are assumed to be ordered from most-major to most-minor.</p></li>
+</ul>
+</li>
+<li><p>Operation: <code class="docutils literal notranslate"><span class="pre">add</span></code></p>
+<ul>
+<li><p>The operation being performed. Here, it is
+<a class="reference internal" href="operation_semantics.html#add"><span class="std std-ref">Add</span></a>, which is also mentioned in the Op
+name.</p></li>
+</ul>
+</li>
+<li><p>Arguments: <code class="docutils literal notranslate"><span class="pre">exponential.183</span></code>, <code class="docutils literal notranslate"><span class="pre">broadcast.3115</span></code></p>
+<ul>
+<li><p>This operation takes two arguments, specified with their unique names.</p></li>
+</ul>
+</li>
+</ul>
+<p>Let’s consider another example, a fusion Op:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="n">fusion</span><span class="mf">.3</span> <span class="o">=</span> <span class="n">bf16</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">4096</span><span class="p">]{</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">T</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">128</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="n">S</span><span class="p">(</span><span class="mi">1</span><span class="p">)}</span>
+            <span class="n">fusion</span><span class="p">(</span><span class="n">bf16</span><span class="p">[</span><span class="mi">32</span><span class="p">,</span><span class="mi">32</span><span class="p">,</span><span class="mi">8192</span><span class="p">]{</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">:</span><span class="n">T</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span><span class="mi">128</span><span class="p">)(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="n">S</span><span class="p">(</span><span class="mi">1</span><span class="p">)}</span> <span class="o">%</span><span class="n">fusion</span><span class="mf">.32</span><span class="p">),</span>
+            <span class="n">kind</span><span class="o">=</span><span class="n">kCustom</span><span class="p">,</span> <span class="n">calls</span><span class="o">=%</span><span class="nb">all</span><span class="o">-</span><span class="n">reduce</span><span class="o">-</span><span class="n">scatter</span><span class="mf">.3</span>
+</pre></div>
+</div>
+<p>In addition to the previously described components, this consists of:</p>
+<ul class="simple">
+<li><p>Attributes: <code class="docutils literal notranslate"><span class="pre">kind</span></code> and <code class="docutils literal notranslate"><span class="pre">calls</span></code></p>
+<ul>
+<li><p>These provide more information about the operation being performed, in
+this case: fusion.</p></li>
+</ul>
+</li>
+<li><p>Memory location (memory space identifier): <code class="docutils literal notranslate"><span class="pre">S(1)</span></code></p>
+<ul>
+<li><p>This denotes the memory space/location where the array is stored. <code class="docutils literal notranslate"><span class="pre">S(1)</span></code>
+here denotes this array lives in VMEM (on a TPU).</p></li>
+</ul>
+</li>
+<li><p>Shape and layout details for the input argument <code class="docutils literal notranslate"><span class="pre">%fusion.32</span></code></p></li>
+</ul>
+<p>The following sections describe Shapes, <a class="reference internal" href="#layout"><span class="xref myst">Layout</span></a>, and
+<a class="reference internal" href="#memory-space-identifiers"><span class="xref myst">Memory Space Identifiers</span></a>. You can learn more about
+Tiling in <a class="reference internal" href="tiled_layout.html"><span class="std std-doc">Tiled Layout</span></a>.</p>
+</section>
+<section id="shapes">
+<h2>Shapes<a class="headerlink" href="#shapes" title="Link to this heading">#</a></h2>
 <p>The XLA <code class="docutils literal notranslate"><span class="pre">ShapeProto</span></code> proto
 (<a class="reference external" href="https://github.com/openxla/xla/tree/main/xla/xla_data.proto">xla_data.proto</a>)
 describes the number of dimensions, size, and data type of an N-dimensional
 array (<em>array</em> in short).</p>
 <section id="terminology-notation-and-conventions">
-<h2>Terminology, notation, and conventions<a class="headerlink" href="#terminology-notation-and-conventions" title="Link to this heading">#</a></h2>
+<h3>Terminology, notation, and conventions<a class="headerlink" href="#terminology-notation-and-conventions" title="Link to this heading">#</a></h3>
 <p>NOTE: in the past, XLA has used the term “rank” to mean the number of dimensions
 of an array. We have stopped this usage as it’s inconsistent with the matrix
 rank concept in linear algebra. However, you may still see the name <code class="docutils literal notranslate"><span class="pre">rank</span></code> used
@@ -481,6 +571,7 @@ an <code class="docutils literal notranslate"><span class="pre">initializer_list
 <p>will create a shape whose dimension size array consists of the sequence <code class="docutils literal notranslate"><span class="pre">[A,</span> <span class="pre">B,</span> <span class="pre">C,</span> <span class="pre">D]</span></code>.</p>
 </li>
 </ul>
+</section>
 </section>
 <section id="layout">
 <h2>Layout<a class="headerlink" href="#layout" title="Link to this heading">#</a></h2>
@@ -551,6 +642,18 @@ indexes into the buffer holding the array. See <code class="docutils literal not
 manipulation of shapes and layouts.</p>
 </section>
 </section>
+<section id="memory-space-identifiers">
+<h2>Memory Space Identifiers<a class="headerlink" href="#memory-space-identifiers" title="Link to this heading">#</a></h2>
+<p>In HLO, each array may be annotated with a memory space identifier, written as
+S(n).</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">S(0)</span></code> (often omitted) denotes device high bandwidth memory (HBM).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">S(1)</span></code> represents on device virtual memory (VMEM).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">S(2)</span></code>, <code class="docutils literal notranslate"><span class="pre">S(3)</span></code>, etc., correspond to additional device specific memory
+spaces.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">S(5)</span></code> indicates host memory.</p></li>
+</ul>
+</section>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -619,7 +722,11 @@ manipulation of shapes and layouts.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#terminology-notation-and-conventions">Terminology, notation, and conventions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#structure-of-an-xla-op">Structure of an XLA Op</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shapes">Shapes</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#terminology-notation-and-conventions">Terminology, notation, and conventions</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#layout">Layout</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#minor-to-major-dimension-ordering">Minor-to-major dimension ordering</a><ul class="nav section-nav flex-column">
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#default-minor-to-major-ordering">Default minor-to-major ordering</a></li>
@@ -629,6 +736,7 @@ manipulation of shapes and layouts.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#indexing-into-arrays">Indexing into arrays</a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memory-space-identifiers">Memory Space Identifiers</a></li>
 </ul>
   </nav></div>
 

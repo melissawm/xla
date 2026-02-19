@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
@@ -50,7 +50,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -210,7 +210,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../async_ops.html">Async HLO instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../custom_call.html">Writing custom calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sparsecore.html">SparseCore</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../lsp.html">Using LSP autocompletion</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
 <ul class="current nav bd-sidenav">
@@ -220,8 +219,18 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Error code: 0100</a></li>
 <li class="toctree-l2"><a class="reference internal" href="error_0101.html">Error code: 0101</a></li>
 <li class="toctree-l2"><a class="reference internal" href="error_0102.html">Error code: 0102</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_0200.html">Error Code: E0200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_1000.html">Error code: 1000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_1001.html">Error code: 1001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_1200.html">Error code: 1200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_2001.html">Error code: E2001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_2002.html">Error code: E2002</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_2003.html">Error code: E2003</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_3000.html">Error code: E3000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_3001.html">Error code: E3001</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../oom_debugging.html">Debug OOM errors with XProf</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -233,6 +242,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_environment.html">Setting up a development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../build_from_source.html">Build from source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developing_new_backend.html">Develop a new backend for XLA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../copybara.html">Copybara quirks</a></li>
@@ -247,8 +257,10 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/autoclustering_xla.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/jit_compile.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
 
 
 </ul>
@@ -403,10 +415,11 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#error-log-example">Error log example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-do-these-happen">Why do these happen?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-can-a-user-fix-their-program-when-they-do-happen">How can a user fix their program when they do happen?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-can-a-user-debug-these-failures">How can a user debug these failures?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging">Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tooling">Tooling</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -420,44 +433,41 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="error-code-0100">
 <h1>Error code: 0100<a class="headerlink" href="#error-code-0100" title="Link to this heading">#</a></h1>
-<p><strong>Category:</strong> Buffer allocation failure - TPU</p>
-<p><strong>Type:</strong> Runtime</p>
-<section id="error-log-example">
-<h2>Error log example<a class="headerlink" href="#error-log-example" title="Link to this heading">#</a></h2>
+<p><strong>Category:</strong> Runtime: Buffer Allocation Failure</p>
+<p>This error indicates that XLA:TPU runtime’s memory allocator failed to find a
+suitable block of memory on the accelerator’s HBM for the requested allocation.</p>
+<p><strong>Sample Error Message:</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="ne">ValueError</span><span class="p">:</span> <span class="n">RESOURCE_EXHAUSTED</span><span class="p">:</span> <span class="n">Error</span> <span class="n">allocating</span> <span class="n">device</span> <span class="n">buffer</span><span class="p">:</span> <span class="n">Attempting</span> <span class="n">to</span> <span class="n">allocate</span> <span class="mf">8.00</span><span class="n">M</span><span class="o">.</span> <span class="n">That</span> <span class="n">was</span> <span class="ow">not</span> <span class="n">possible</span><span class="o">.</span> <span class="n">There</span> <span class="n">are</span> <span class="mf">6.43</span><span class="n">M</span> <span class="n">free</span><span class="o">.</span><span class="p">;</span> <span class="p">(</span><span class="mh">0x0</span><span class="n">x1_HBM0</span><span class="p">)</span>
 </pre></div>
 </div>
-</section>
-<section id="why-do-these-happen">
-<h2>Why do these happen?<a class="headerlink" href="#why-do-these-happen" title="Link to this heading">#</a></h2>
-<p>XLA:TPU runtime’s memory allocator failed to find a suitable block of memory on
-the accelerator’s HBM for the requested operation. These operations are
-typically user initiated buffer allocations via
-<a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.device_put.html"><code class="docutils literal notranslate"><span class="pre">jax.device_put</span></code></a>
-or allocations for program outputs. These failures stem from a couple of
-reasons:</p>
+<p><strong>XLA backends:</strong> TPU</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>This error is thrown on</p>
 <ul class="simple">
-<li><p>Out of Memory (OOM)</p>
-<ul>
-<li><p>The user is trying to allocate a chunk of memory that is larger than the
-total amount of free memory available on the TPU’s HBM.</p></li>
+<li><p>failures of user-initiated buffer allocation via
+<a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.device_put.html"><code class="docutils literal notranslate"><span class="pre">jax.device_put</span></code></a>
+or</p></li>
+<li><p>failures of user-scheduled program’s output allocations.</p></li>
 </ul>
-</li>
-<li><p>Memory Fragmentation</p>
-<ul>
-<li><p>The allocation fails because <strong>no single contiguous free block</strong> in the
-memory space is large enough to satisfy the requested size. The total amount
-of free memory is sufficient for the allocation, but it is scattered across
-the memory space in small, non-contiguous blocks.</p></li>
-</ul>
-</li>
+<p>These failures are typically caused due to a couple of reasons:</p>
+<ul class="simple">
+<li><p><strong>Out of Memory (OOM):</strong> The user is trying to allocate a chunk of
+memory that is larger than the total amount of free memory available on the
+TPU’s HBM.</p></li>
+<li><p><strong>Memory Fragmentation:</strong> The allocation fails because <strong>no single
+contiguous free block</strong> in the memory space is large enough to satisfy the
+requested size. The total amount of free memory is sufficient for the
+allocation, but it is scattered across the memory space in small, non-contiguous
+blocks.</p></li>
 </ul>
 <p>The TPU runtime has a number of mechanisms in-place to retry allocation failures
 including:</p>
 <ul class="simple">
-<li><p>If there are queued deallocations, the runtime retries failed allocations,</p></li>
-<li><p>On OOMs caused by a fragmentation the runtime can automatically trigger a
-defragmentation and a retry.</p></li>
+<li><p>If there are queued deallocations, the runtime retries failed
+allocations,</p></li>
+<li><p>On OOMs caused by a fragmentation the runtime can automatically
+trigger a defragmentation and a retry.</p></li>
 <li><p>The TPU runtime prioritizes buffer allocations over keeping programs loaded.
 If a buffer allocation fails due to insufficient HBM, the system will evict
 loaded TPU programs until enough memory is available for the buffer.</p></li>
@@ -465,8 +475,8 @@ loaded TPU programs until enough memory is available for the buffer.</p></li>
 <p>So an error encountered after the above mitigations typically require user
 action.</p>
 </section>
-<section id="how-can-a-user-fix-their-program-when-they-do-happen">
-<h2>How can a user fix their program when they do happen?<a class="headerlink" href="#how-can-a-user-fix-their-program-when-they-do-happen" title="Link to this heading">#</a></h2>
+<section id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Reduce your model’s memory footprint:</p>
 <ul>
@@ -499,12 +509,12 @@ de-allocation even after program compilation is completed.</p></li>
 </ul>
 </li>
 </ul>
-</section>
-<section id="how-can-a-user-debug-these-failures">
-<h2>How can a user debug these failures?<a class="headerlink" href="#how-can-a-user-debug-these-failures" title="Link to this heading">#</a></h2>
+<section id="tooling">
+<h3>Tooling<a class="headerlink" href="#tooling" title="Link to this heading">#</a></h3>
 <p>Enable the <code class="docutils literal notranslate"><span class="pre">tpu_log_allocations_on_oom</span></code> flag for which the allocator will dump a
 detailed report of all current allocations when an OOM occurs, which can be
 invaluable for debugging.</p>
+</section>
 </section>
 </section>
 
@@ -572,10 +582,11 @@ invaluable for debugging.</p>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#error-log-example">Error log example</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-do-these-happen">Why do these happen?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-can-a-user-fix-their-program-when-they-do-happen">How can a user fix their program when they do happen?</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-can-a-user-debug-these-failures">How can a user debug these failures?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging">Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tooling">Tooling</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Use XLA with tf.function &#8212; XLA Documentation</title>
+    <title>Copyright 2019 The TensorFlow Authors. &#8212; XLA Documentation</title>
   
   
   
@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
@@ -50,7 +50,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="../../_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -60,7 +60,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'tf2xla/tutorials/jit_compile';</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="prev" title="Classifying CIFAR-10 with XLA" href="autoclustering_xla.html" />
+    <link rel="prev" title="Copyright 2019 The TensorFlow Authors." href="autoclustering_xla.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -209,7 +209,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../async_ops.html">Async HLO instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../custom_call.html">Writing custom calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../sparsecore.html">SparseCore</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../lsp.html">Using LSP autocompletion</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
 <ul class="nav bd-sidenav">
@@ -219,8 +218,18 @@
 <li class="toctree-l2"><a class="reference internal" href="../../errors/error_0100.html">Error code: 0100</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../errors/error_0101.html">Error code: 0101</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../errors/error_0102.html">Error code: 0102</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../errors/error_0200.html">Error Code: E0200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../errors/error_1000.html">Error code: 1000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../errors/error_1001.html">Error code: 1001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../errors/error_1200.html">Error code: 1200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../errors/error_2001.html">Error code: E2001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../errors/error_2002.html">Error code: E2002</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../errors/error_2003.html">Error code: E2003</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../errors/error_3000.html">Error code: E3000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../errors/error_3001.html">Error code: E3001</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../oom_debugging.html">Debug OOM errors with XProf</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -232,6 +241,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../developer_environment.html">Setting up a development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../build_from_source.html">Build from source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../developing_new_backend.html">Develop a new backend for XLA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../copybara.html">Copybara quirks</a></li>
@@ -246,8 +256,10 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Using XLA in TensorFlow</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="autoclustering_xla.html">Autoclustering tutorial</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Use XLA with tf.function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="autoclustering_xla.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Copyright 2019 The TensorFlow Authors.</a></li>
+
 
 
 </ul>
@@ -392,7 +404,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Use XLA with tf.function</h1>
+    <h1>Copyright 2019 The TensorFlow Authors.</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -402,7 +414,8 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Use XLA with tf.function</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Copyright 2019 The TensorFlow Authors.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-xla-with-tf-function">Use XLA with tf.function</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-training-function">Define the training function</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#train-and-test-the-model">Train and test the model</a></li>
 </ul>
@@ -417,10 +430,11 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="cell docutils container">
+  <section id="copyright-2019-the-tensorflow-authors">
+<h1>Copyright 2019 The TensorFlow Authors.<a class="headerlink" href="#copyright-2019-the-tensorflow-authors" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>###### Copyright 2019 The TensorFlow Authors.
-# @title Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#@title Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -435,6 +449,7 @@ document.write(`
 </div>
 </div>
 </div>
+</section>
 <section class="tex2jax_ignore mathjax_ignore" id="use-xla-with-tf-function">
 <h1>Use XLA with tf.function<a class="headerlink" href="#use-xla-with-tf-function" title="Link to this heading">#</a></h1>
 <table class="tfo-notebook-buttons" align="left">
@@ -588,7 +603,7 @@ print(&quot;Prediction accuracy after training: %s&quot; % accuracy)
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Classifying CIFAR-10 with XLA</p>
+        <p class="prev-next-title">Copyright 2019 The TensorFlow Authors.</p>
       </div>
     </a>
 </div>
@@ -607,7 +622,8 @@ print(&quot;Prediction accuracy after training: %s&quot; % accuracy)
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Use XLA with tf.function</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Copyright 2019 The TensorFlow Authors.</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#use-xla-with-tf-function">Use XLA with tf.function</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#define-the-training-function">Define the training function</a></li>
 <li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#train-and-test-the-model">Train and test the model</a></li>
 </ul>

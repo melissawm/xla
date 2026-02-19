@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
@@ -50,7 +50,7 @@
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script src="_static/togglebutton.js?v=1ae7504c"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script src="_static/design-tabs.js?v=f930bc37"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
@@ -210,7 +210,6 @@
 <li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
-<li class="toctree-l1"><a class="reference internal" href="lsp.html">Using LSP autocompletion</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
 <ul class="nav bd-sidenav">
@@ -220,8 +219,18 @@
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0100.html">Error code: 0100</a></li>
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0101.html">Error code: 0101</a></li>
 <li class="toctree-l2"><a class="reference internal" href="errors/error_0102.html">Error code: 0102</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_0200.html">Error Code: E0200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1000.html">Error code: 1000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1001.html">Error code: 1001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_1200.html">Error code: 1200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2001.html">Error code: E2001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2002.html">Error code: E2002</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_2003.html">Error code: E2003</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_3000.html">Error code: E3000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="errors/error_3001.html">Error code: E3001</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="oom_debugging.html">Debug OOM errors with XProf</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
@@ -233,6 +242,7 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer_environment.html">Setting up a development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
@@ -247,8 +257,10 @@
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Autoclustering tutorial</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Use XLA with tf.function</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/autoclustering_xla.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="tf2xla/tutorials/jit_compile.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
 
 
 </ul>
@@ -428,6 +440,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-hlo-proto-or-hlo-proto-binary-hlo-text">Convert <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span></code> or <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span> <span class="pre">Binary</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Text</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ptx-opt-compiler-llvm-module-down-to-ptx">[<code class="docutils literal notranslate"><span class="pre">ptx-opt</span></code>] Compiler LLVM Module down to PTX</a></li>
 </ul>
             </nav>
         </div>
@@ -699,6 +712,17 @@ execution time caused by new code changes.</p>
 </div>
 </section>
 </section>
+<section id="ptx-opt-compiler-llvm-module-down-to-ptx">
+<h2>[<code class="docutils literal notranslate"><span class="pre">ptx-opt</span></code>] Compiler LLVM Module down to PTX<a class="headerlink" href="#ptx-opt-compiler-llvm-module-down-to-ptx" title="Link to this heading">#</a></h2>
+<p>The tool will run LLVMIR optimization pipeline and then call CompileToPtx.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bazel</span> <span class="n">run</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">hlo</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">ptx</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span> <span class="o">--</span><span class="n">arch</span><span class="o">=</span><span class="mf">9.0</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>The tool can also dump LLVMIR after every path.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bazel</span> <span class="n">run</span> <span class="o">//</span><span class="n">xla</span><span class="o">/</span><span class="n">hlo</span><span class="o">/</span><span class="n">tools</span><span class="o">/</span><span class="n">ptx</span><span class="o">-</span><span class="n">opt</span> <span class="o">--</span> <span class="o">--</span><span class="n">arch</span><span class="o">=</span><span class="mf">9.0</span> <span class="o">--</span><span class="n">xla_dump_to</span><span class="o">=&lt;</span><span class="n">path</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">xla_gpu_dump_llvmir</span> <span class="o">&lt;</span><span class="n">filename</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -790,6 +814,7 @@ execution time caused by new code changes.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#convert-hlo-proto-or-hlo-proto-binary-hlo-text">Convert <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span></code> or <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Proto</span> <span class="pre">Binary</span></code> -&gt; <code class="docutils literal notranslate"><span class="pre">HLO</span> <span class="pre">Text</span></code></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#ptx-opt-compiler-llvm-module-down-to-ptx">[<code class="docutils literal notranslate"><span class="pre">ptx-opt</span></code>] Compiler LLVM Module down to PTX</a></li>
 </ul>
   </nav></div>
 

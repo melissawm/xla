@@ -1,7 +1,5 @@
 # LHS Cost Model
 
----
-
 ## tldr;
 
 This page describes the internals of the cost model used by Latency Hiding
@@ -16,8 +14,6 @@ performance tables and analytical models. In particular XLA embeds performance
 tables for a GEMMs and fast-interconnect collectives, and uses analytical
 networking and fusion cost model for other cases. The rest of the document
 describes the inner workings of these on a high level.
-
----
 
 ## Performance tables – ICI collectives
 
@@ -116,8 +112,6 @@ to provide their own, it is the responsibility of the user generating the tables
 to ensure they are representative and include measurements in the
 bandwidth-saturated region for the target hardware.
 
----
-
 ## Performance tables – GEMMs
 
 Similar to the system for collectives, GEMM latency tables are supported by two
@@ -177,8 +171,6 @@ a performance estimate, it performs a **weighted-average interpolation** within
 this 4D space. If there's no table for a certain data type, as a heuristic each
 dimension is normalized to the number of bytes.
 
----
-
 ## Analytical Cost Model - DCN
 
 ### S-curve Collective Cost Model
@@ -213,14 +205,10 @@ The model requires two categories of inputs:
 The S-curve model is integrated into `XLA:GPU` and is being used on Hopper, and
 Blackwell.
 
----
-
 ## Analytical Cost Model - Fusions
 
 For other kernels we rely on the [GPU performance cost model](https://github.com/openxla/xla/blob/e6a0a911eb79f540d501458f953393ede9e0048c/xla/service/gpu/model/gpu_performance_model.h) to estimate the
 right runtimes. You can read more about it [here](https://github.com/openxla/xla/discussions/10065).
-
----
 
 ## Tuning
 

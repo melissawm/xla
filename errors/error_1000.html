@@ -1,0 +1,829 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Error code: 1000 &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'errors/error_1000';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Error code: 1001" href="error_1001.html" />
+    <link rel="prev" title="Error Code: E0200" href="error_0200.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hlo_to_thunks.html">From HLO to Thunks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../lhs_cost_model.html">LHS Cost Model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../effort_levels.html">Effort Levels</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../emitters.html">XLA:GPU Emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../determinism.html">Determinism</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sparsecore.html">SparseCore</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hlo_dumps.html">Dump HLO Computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors_overview.html">Errors Overview</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../error_codes.html">Error Codes</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_0102.html">Error code: 0102</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_0200.html">Error Code: E0200</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Error code: 1000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_1001.html">Error code: 1001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_1200.html">Error code: 1200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_2001.html">Error code: E2001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_2002.html">Error code: E2002</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_2003.html">Error code: E2003</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_3000.html">Error code: E3000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="error_3001.html">Error code: E3001</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../oom_debugging.html">Debug OOM errors with XProf</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../flags_guidance.html">XLA Flags guidance</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../test_hlo_passes.html">Testing HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_environment.html">Setting up a development environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing_new_backend.html">Develop a new backend for XLA</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/examples.html">PJRT Examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/autoclustering_xla.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/jit_compile.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/errors/error_1000.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Error code: 1000</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging">Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#section-1-balance-tc-and-sc-hbm-usage">Section 1. Balance TC and SC HBM usage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#section-2-unexpectedly-large-allocations">Section 2. Unexpectedly Large Allocations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#section-3-aggregate-allocations-exceed-hbm-limit">Section 3. Aggregate Allocations Exceed HBM Limit</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-check-tensor-padding-and-alignment">A. Check tensor padding and alignment</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#b-adjust-configuration">B. Adjust configuration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#c-optimize-architecture-and-sharding">C. Optimize architecture and sharding</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#d-tune-key-memory-impacting-xla-flags">D. Tune key memory impacting XLA flags:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#e-tune-xla-rematerialization-pass-manual-checkpointing">E. Tune XLA Rematerialization Pass / Manual Checkpointing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#f-use-advanced-profiling-tools">F. Use advanced profiling tools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="error-code-1000">
+<h1>Error code: 1000<a class="headerlink" href="#error-code-1000" title="Link to this heading">#</a></h1>
+<p><strong>Category:</strong> Compile Time: HBM OOM</p>
+<p>This error indicates that the program requires more High Bandwidth Memory (HBM)
+than is physically available on the TPU device.</p>
+<p><strong>Sample Error Messages:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RESOURCE_EXHAUSTED</span><span class="p">:</span> <span class="n">XLA</span><span class="p">:</span><span class="n">TPU</span> <span class="nb">compile</span> <span class="n">permanent</span> <span class="n">error</span><span class="o">.</span> <span class="n">Ran</span> <span class="n">out</span> <span class="n">of</span> <span class="n">memory</span> <span class="ow">in</span> <span class="n">memory</span> <span class="n">space</span> <span class="n">hbm</span><span class="o">.</span> <span class="n">Used</span> <span class="mf">49.34</span><span class="n">G</span> <span class="n">of</span> <span class="mf">32.00</span><span class="n">G</span> <span class="n">hbm</span><span class="o">.</span> <span class="n">Exceeded</span> <span class="n">hbm</span> <span class="n">capacity</span> <span class="n">by</span> <span class="mf">17.34</span><span class="n">G</span><span class="o">.</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">RESOURCE_EXHAUSTED</span><span class="p">:</span> <span class="n">TPU</span> <span class="n">TensorCore</span> <span class="n">Hbm</span> <span class="n">usage</span><span class="p">:</span> <span class="mf">34.82</span><span class="n">G</span><span class="p">,</span> <span class="n">SparseCore</span> <span class="n">Hbm</span> <span class="n">usage</span> <span class="mf">174.10</span><span class="n">G</span><span class="p">,</span> <span class="n">exceeding</span> <span class="n">available</span> <span class="nb">bytes</span><span class="p">:</span> <span class="mf">95.74</span><span class="n">G</span>
+</pre></div>
+</div>
+<p><strong>XLA Backends:</strong> TPU</p>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<p>XLA performs checks to ensure that the aggregate size of all necessary static
+allocations fit in the device’s HBM.</p>
+<p>The compiler manages the TPU’s fixed HBM capacity for several types of
+allocations:</p>
+<ul class="simple">
+<li><p><strong>Program Inputs and Outputs:</strong> Training batches, optimizer states etc.</p></li>
+<li><p><strong>TensorCore + SparseCore Temporaries:</strong> Dynamic memory required for
+intermediate calculations (e.g. activations, gradients, etc).</p></li>
+<li><p><strong>Compiled Binary:</strong> The machine code for both TensorCore (TC) and SparseCore
+(SC).</p></li>
+<li><p><strong>System Overhead:</strong> Reserved space for the XLA Runtime (e.g. infeed buffers
+on older TPU generations).</p></li>
+<li><p><strong>Constants:</strong> Constant values embedded in the HLO IR are allocated on HBM.</p></li>
+<li><p><strong>Compiler Internals:</strong> Program level and per-HLO allocations (e.g. routing
+info for nodes in the mesh)</p></li>
+</ul>
+<p>This error occurs when the XLA compiler cannot fit all of the above allocations
+into the device HBM.</p>
+</section>
+<section id="debugging">
+<h2>Debugging<a class="headerlink" href="#debugging" title="Link to this heading">#</a></h2>
+<p>Carefully analyze the error message and logs to determine which category of HBM
+OOM below best describes your error:</p>
+<ul class="simple">
+<li><p><strong>TensorCore (TC) + SparseCore (SC) HBM Usage Exceeds Limit</strong>:
+If the error explicitly breaks down usage, e.g., <em>“TC Hbm usage: X, SC Hbm
+usage Y”</em>. → Jump to
+<a class="reference internal" href="#section_1_balance_tc_and_sc_hbm_usage"><span class="xref myst">Section 1. Balance TC and SC HBM usage</span></a>.</p></li>
+<li><p><strong>Unexpectedly Large Allocations</strong>:
+If the error reads <em>“Ran out of memory in memory space HBM”</em>, check the logs
+for an enumeration of the largest allocations on HBM. In case, one or more
+unexpectedly large tensors (e.g. &gt; 50% of HBM limit) are present → Jump to
+<a class="reference internal" href="#section_2_unexpectedly_large_allocations"><span class="xref myst">Section 2. Unexpectedly Large Allocations</span></a>.</p></li>
+<li><p><strong>Aggregate Allocations Exceed HBM Limit</strong>:
+If the error reads <em>“Ran out of memory in memory space HBM”</em> but no unexpectedly
+large tensors are present in the logs → Jump to
+<a class="reference internal" href="#section_3_aggregate_allocations_exceed_hbm_limit"><span class="xref myst">Section 3. Aggregate Allocations Exceed HBM Limit</span></a>.</p></li>
+</ul>
+<section id="section-1-balance-tc-and-sc-hbm-usage">
+<h3>Section 1. Balance TC and SC HBM usage<a class="headerlink" href="#section-1-balance-tc-and-sc-hbm-usage" title="Link to this heading">#</a></h3>
+<p>If the error explicitly breaks down usage, e.g., <em>“TC Hbm usage: X, SC Hbm
+usage Y”</em> compare the two values to identify the bottleneck</p>
+<ul class="simple">
+<li><p><strong>High SparseCore Usage:</strong></p>
+<ul>
+<li><p><strong>Optimize HBM Stack Usage:</strong> HBM stack memory consumption scales with
+<code class="docutils literal notranslate"><span class="pre">feature_width</span></code>, <code class="docutils literal notranslate"><span class="pre">max_unique_nz_per_row</span></code> and <code class="docutils literal notranslate"><span class="pre">logical_replica_count</span></code>. You
+can reduce peak stack usage by tuning the
+<code class="docutils literal notranslate"><span class="pre">--xla_sc_num_serialized_tables_to_optimize_hbm</span></code> flag which serializes the
+processing of tables. This comes at the cost of reduced parallelism.</p></li>
+<li><p><strong>Check Padding Overhead:</strong> SparseCore aligns embedding tables to 32B (8
+floats). Tables with small feature widths (e.g., &lt; 8 floats) incur
+significant padding overhead, wasting HBM.</p></li>
+<li><p><strong>Reduce Heap Usage:</strong> High values for <code class="docutils literal notranslate"><span class="pre">maximum_parallel_iterations</span></code>
+increase the amount of input data prefetched into the HBM heap. Lowering
+this value can free up significant memory.</p></li>
+<li><p><strong>Verify Sharding:</strong> Ensure embedding tables are properly mod-sharded across
+all chips. See
+<a class="reference external" href="https://www.google.com/search?q=https://openxla.org/xla/sparsecore%237-how-limits-translate-to-tables-on-sparsecore">How limits translate to tables</a>.</p></li>
+<li><p>Checkout <a class="reference external" href="https://openxla.org/xla/sparsecore#10_performance_memory_bottlenecks">SC: Performance and memory bottlenecks</a> for more ideas.</p></li>
+</ul>
+</li>
+<li><p><strong>High TensorCore Usage:</strong></p>
+<ul>
+<li><p>Proceed to <a class="reference internal" href="#section_2_unexpectedly_large_allocations"><span class="xref myst">Section 2</span></a>.</p></li>
+</ul>
+</li>
+<li><p><strong>Balanced</strong></p>
+<ul>
+<li><p>If neither is individually excessive but the sum is too high, you are at the
+chip’s capacity. You must try lowering usage of both components. Follow
+recommendations in all three sections.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="section-2-unexpectedly-large-allocations">
+<h3>Section 2. Unexpectedly Large Allocations<a class="headerlink" href="#section-2-unexpectedly-large-allocations" title="Link to this heading">#</a></h3>
+<p>If one or more unexpectedly large allocations are present in the logs
+(&gt; 50% of HBM limit), it is almost never a hardware capacity issue. It is
+typically a configuration error. Check the XLA label (if present) of the large
+allocations, for hints on their JAX source code.</p>
+<ul class="simple">
+<li><p><strong>Remove Debugging Artifacts:</strong></p>
+<ul>
+<li><p>Using <a class="reference external" href="https://docs.jax.dev/en/latest/_autosummary/jax.debug.print.html">jax.debug.print()</a>
+in large-scale runs can force the compiler to materialize the full tensor in
+HBM to transfer it to the CPU, breaking fusion and increasing peak memory
+usage. Remove any left-over <code class="docutils literal notranslate"><span class="pre">jax.debug.print()</span></code>s.</p></li>
+</ul>
+</li>
+<li><p><strong>Fix Inefficient Mesh Shapes or Sharding:</strong></p>
+<ul>
+<li><p>Incorrect mesh shapes or missing sharding annotations can cause the compiler
+to default to <strong>Replication</strong> - forcing the compiler to try to fit really
+large tensors on a single chip</p></li>
+<li><p>Check the shapes of the large allocations and verify sharding is correctly
+specified and propagated by XLA.</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="section-3-aggregate-allocations-exceed-hbm-limit">
+<h3>Section 3. Aggregate Allocations Exceed HBM Limit<a class="headerlink" href="#section-3-aggregate-allocations-exceed-hbm-limit" title="Link to this heading">#</a></h3>
+<p>If the program runs out of capacity due to the aggregate sum of allocations
+exceeding the HBM limit, it is often helpful to visualize the memory profile to
+identify the specific buffers contributing to the peak usage. See
+<a class="reference external" href="https://openxla.org/xla/oom_debugging.md">Debug OOM errors with XProf</a> for a
+step-by-step guide on identifying peak memory contributors.</p>
+<p>Once you have identified some of the top contributors, use the following steps
+to optimize the memory footprint.</p>
+<section id="a-check-tensor-padding-and-alignment">
+<h4>A. Check tensor padding and alignment<a class="headerlink" href="#a-check-tensor-padding-and-alignment" title="Link to this heading">#</a></h4>
+<p>Inefficient tensor shapes are a common, silent cause of OOMs on TPUs. To get
+peak performance on TPU’s, XLA pads tensor dimensions—typically to multiples of
+128 for the minor-most dimension and 8 for the second-minor. This padding
+affects both input arrays and intermediate tensors (HLO temporaries),
+potentially inflating memory usage significantly, especially with small
+dimension sizes. See
+<a class="reference external" href="https://docs.jax.dev/en/latest/pallas/tpu/details.html#array-layouts">Array Layouts</a>.</p>
+<ul class="simple">
+<li><p><strong>Audit shapes of large buffers:</strong> (On TPU v5 with default layouts)</p>
+<ul>
+<li><p>Hovering over a buffer in
+<a class="reference external" href="https://openxla.org/xprof/memory_viewer#memory_viewer_components">Xprof Memory Viewer</a>
+brings up the buffer details card which contains buffer details including
+padding information.</p></li>
+<li><p><em>Example</em>: A shape of <code class="docutils literal notranslate"><span class="pre">(129,</span> <span class="pre">1024)</span></code> might be padded to <code class="docutils literal notranslate"><span class="pre">(256,</span> <span class="pre">1024)</span></code>,
+resulting in nearly 50% memory waste.</p></li>
+<li><p><em>Correction:</em> A shape of <code class="docutils literal notranslate"><span class="pre">(128,</span> <span class="pre">1024)</span></code> requires no padding and incurs 0%
+memory waste.</p></li>
+</ul>
+</li>
+<li><p><strong>Align dimensions:</strong> Ensure all large tensor dimensions (batch size,
+embedding dimension, hidden size) are multiples of 128.</p></li>
+</ul>
+</section>
+<section id="b-adjust-configuration">
+<h4>B. Adjust configuration<a class="headerlink" href="#b-adjust-configuration" title="Link to this heading">#</a></h4>
+<p>You can often resolve OOMs with these configuration adjustments:</p>
+<ul class="simple">
+<li><p><strong>Reduce Batch Size:</strong> The memory needed for intermediate activations and
+gradients is directly proportional to the batch size. Reducing the batch size
+can often help reduce memory usage.</p></li>
+<li><p><strong>Donate Input Buffers:</strong> When using <code class="docutils literal notranslate"><span class="pre">jax.jit</span></code>, specify
+<a class="reference external" href="https://docs.jax.dev/en/latest/buffer_donation.html">donate_argnums</a> for your
+model parameters. This allows XLA to overwrite the input memory with the output.</p></li>
+<li><p><strong>Enable Mixed Precision (bfloat16):</strong> Use bfloat16 or quantization (int8 etc)
+for the largest tensors in the program if the model architecture and quality
+requirements allow.</p></li>
+</ul>
+</section>
+<section id="c-optimize-architecture-and-sharding">
+<h4>C. Optimize architecture and sharding<a class="headerlink" href="#c-optimize-architecture-and-sharding" title="Link to this heading">#</a></h4>
+<p>If configuration changes are insufficient, the model topology might be too large
+for the current hardware setup.</p>
+<ul class="simple">
+<li><p><strong>Use Newer TPU Generations:</strong> Newer TPUs generally offer more HBM per chip;
+switch to newer TPU generations if available.</p></li>
+<li><p><strong>Run on a larger chip topology:</strong> If the model weights are too large for the
+existing topology, you can try sharding them across more chips.</p></li>
+<li><p><strong>Implement advanced sharding techniques:</strong></p>
+<ul>
+<li><p>Explore more advanced data, tensor, or pipeline parallelism approaches.</p></li>
+<li><p>Specify <a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/Distributed_arrays_and_automatic_parallelization.html#constraining-shardings-of-intermediates-in-jitted-code">sharding hints</a>
+for intermediate values and outputs.</p></li>
+</ul>
+</li>
+<li><p><strong>Use JAX Host Offloading:</strong> Offload large tensors to the host CPU memory.
+e.g. <a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/host-offloading.html#activation-offloading">activation offloading</a>
+and <a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/host-offloading.html#optimizer-state-offloading">optimizer state offloading</a>.</p></li>
+</ul>
+</section>
+<section id="d-tune-key-memory-impacting-xla-flags">
+<h4>D. Tune key memory impacting XLA flags:<a class="headerlink" href="#d-tune-key-memory-impacting-xla-flags" title="Link to this heading">#</a></h4>
+<p><a class="reference external" href="https://openxla.org/xla/flags_guidance#memory_flags">Key memory flags</a> can be
+tuned to trade-off performance for lower memory usage. But these should be used
+as a last resort measure because it can adversely affect performance.</p>
+</section>
+<section id="e-tune-xla-rematerialization-pass-manual-checkpointing">
+<h4>E. Tune XLA Rematerialization Pass / Manual Checkpointing<a class="headerlink" href="#e-tune-xla-rematerialization-pass-manual-checkpointing" title="Link to this heading">#</a></h4>
+<p>If the model is close to fitting into memory, you can force the
+<code class="docutils literal notranslate"><span class="pre">XLA::Rematerialization</span></code> pass to prioritize memory savings, potentially at the
+cost of slower compilations:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Flag</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Impact / Trade-off</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--xla_tpu_max_hbm_size_mib</span></code></p></td>
+<td><p>Manually sets the limit on HBM size used by the Rematerialization pass.</p></td>
+<td><p>Forces the compiler to work harder to fit the program into a limit smaller than the actual physical HBM.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--xla_tpu_rematerialization_algo=PEAK_PRIORITY</span></code></p></td>
+<td><p>Focuses efforts at the points of peak memory usage.</p></td>
+<td><p>Can be more efficient for aggressive memory reduction than the default algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--xla_tpu_rematerialization_max_block_size_limit=32</span></code></p></td>
+<td><p>Controls the maximum number of instructions in a block that can be rematerialized at once.</p></td>
+<td><p>Increasing this allows for memory savings at the cost of <strong>significantly increases compile time</strong>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">--xla_tpu_rematerialization_block_effort_factor=10.0</span></code></p></td>
+<td><p>Defines the amount of effort (compile time) spent searching for blocks to rematerialize.</p></td>
+<td><p>Higher values allow a more exhaustive search for memory savings at the cost of <strong>increased compile times</strong>.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">--xla_tpu_pre_fusion_remat=true</span></code></p></td>
+<td><p>Enables an additional Rematerialization pass <em>before</em> the fusion pass.</p></td>
+<td><p>Can find more memory savings, but increases compile times and may <strong>potentially impact numerical stability</strong>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Alternatively, use the
+<a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/autodiff_remat.html">jax.checkpoint</a>
+decorator with <code class="docutils literal notranslate"><span class="pre">jax.grad</span></code> to manually control which intermediates are saved on
+the forward pass versus recomputed on the backward pass, trading compute cycles
+for HBM.</p>
+</section>
+<section id="f-use-advanced-profiling-tools">
+<h4>F. Use advanced profiling tools<a class="headerlink" href="#f-use-advanced-profiling-tools" title="Link to this heading">#</a></h4>
+<p><a class="reference external" href="https://openxla.org/xla/oom_debugging.md">Debug OOM errors with XProf</a> provides
+a tutorial on using the
+<a class="reference external" href="https://openxla.org/xprof/memory_viewer">XProf Memory Viewer</a> to visualize the
+compiler’s view of HBM usage.</p>
+<p>This tool allows you to see peak memory allocation and buffer lifetimes, which
+is crucial for understanding exactly what consumes HBM at the point of peak
+utilization. For general profiling setup, see
+<a class="reference external" href="https://openxla.org/xprof#getting_started">Getting started with Xprof</a> and
+<a class="reference external" href="https://docs.jax.dev/en/latest/profiling.html#xprof-tensorboard-profiling">TensorBoard Profiling</a>.</p>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./errors"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="error_0200.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Error Code: E0200</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="error_1001.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Error code: 1001</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging">Debugging</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#section-1-balance-tc-and-sc-hbm-usage">Section 1. Balance TC and SC HBM usage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#section-2-unexpectedly-large-allocations">Section 2. Unexpectedly Large Allocations</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#section-3-aggregate-allocations-exceed-hbm-limit">Section 3. Aggregate Allocations Exceed HBM Limit</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#a-check-tensor-padding-and-alignment">A. Check tensor padding and alignment</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#b-adjust-configuration">B. Adjust configuration</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#c-optimize-architecture-and-sharding">C. Optimize architecture and sharding</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#d-tune-key-memory-impacting-xla-flags">D. Tune key memory impacting XLA flags:</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#e-tune-xla-rematerialization-pass-manual-checkpointing">E. Tune XLA Rematerialization Pass / Manual Checkpointing</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#f-use-advanced-profiling-tools">F. Use advanced profiling tools</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
