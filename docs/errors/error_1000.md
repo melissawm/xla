@@ -58,8 +58,6 @@ If the error reads *"Ran out of memory in memory space HBM"* but no unexpectedly
 large tensors are present in the logs → Jump to
 [Section 3. Aggregate Allocations Exceed HBM Limit](#section_3_aggregate_allocations_exceed_hbm_limit).
 
----
-
 ### Section 1. Balance TC and SC HBM usage
 
 If the error explicitly breaks down usage, e.g., *"TC Hbm usage: X, SC Hbm

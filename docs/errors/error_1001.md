@@ -54,8 +54,6 @@ Ran out of memory in memory space vmem while allocating on stack for %my-custom-
     non-custom-kernel op, it is likely an internal compiler bug. Please file a
     bug on XLA with an HLO dump.
 
----
-
 ### Retune the Kernel
 
 If the error originates from a custom kernel, use the following techniques to
