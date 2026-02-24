@@ -60,8 +60,8 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'tools_multihost_hlo_runner';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Determinism (GPU)" href="determinism.html" />
-    <link rel="prev" title="Persisted autotuning (GPU only)" href="persisted_autotuning.html" />
+    <link rel="next" title="Dump HLO Computations" href="hlo_dumps.html" />
+    <link rel="prev" title="Determinism (GPU)" href="determinism.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -179,37 +179,41 @@
 <li class="toctree-l1"><a class="reference internal" href="architecture.html">XLA architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="terminology.html">Terminology</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">Tooling</a></li>
-<li class="toctree-l1"><a class="reference internal" href="hlo_to_thunks.html">From HLO to Thunks</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Conceptual guides</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="broadcasting.html">Broadcasting</a></li>
 <li class="toctree-l2"><a class="reference internal" href="indexing.html">Indexing Analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="tiled_layout.html">Tiled layout</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="hlo_to_thunks.html">From HLO to Thunks</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="lhs_cost_model.html">LHS Cost Model</a></li>
 <li class="toctree-l2"><a class="reference internal" href="effort_levels.html">Effort Levels</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="xla_gpu.html">XLA:GPU</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
 
 
 <li class="toctree-l2"><a class="reference internal" href="emitters.html">XLA:GPU Emitters</a></li>
 <li class="toctree-l2"><a class="reference internal" href="persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="determinism.html">Determinism</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Multi-Host HLO Runner</a></li>
 
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="determinism.html">Determinism</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aliasing.html">Aliasing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="async_ops.html">Async HLO instructions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="custom_call.html">Writing custom calls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sparsecore.html">SparseCore</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
 <ul class="nav bd-sidenav">
@@ -234,9 +238,9 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
 <ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="operation_semantics.html">Operation semantics</a></li>
 <li class="toctree-l1"><a class="reference internal" href="flags_guidance.html">XLA Flags guidance</a></li>
 <li class="toctree-l1"><a class="reference internal" href="hlo_passes.html">HLO Passes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="test_hlo_passes.html">Testing HLO passes</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
 <ul class="nav bd-sidenav">
@@ -244,7 +248,6 @@
 <li class="toctree-l1"><a class="reference internal" href="developer_guide.html">Developer guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="developer_environment.html">Setting up a development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="build_from_source.html">Build from source</a></li>
-<li class="toctree-l1"><a class="reference internal" href="developing_new_backend.html">Develop a new backend for XLA</a></li>
 <li class="toctree-l1"><a class="reference internal" href="copybara.html">Copybara quirks</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
@@ -625,20 +628,20 @@ variables to the HLO runner like so in your SLURM job:</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="persisted_autotuning.html"
+       href="determinism.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Persisted autotuning (GPU only)</p>
+        <p class="prev-next-title">Determinism (GPU)</p>
       </div>
     </a>
     <a class="right-next"
-       href="determinism.html"
+       href="hlo_dumps.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Determinism (GPU)</p>
+        <p class="prev-next-title">Dump HLO Computations</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
