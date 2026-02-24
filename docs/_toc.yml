@@ -2,9 +2,7 @@ root: newindex
 format: jb-book
 parts:
   - caption: Getting started
-    # These should be in alphabetical order unless otherwise noted.
     chapters:
-    # This is the default tab for the Getting started section.
     - title: Overview
       file: index
     - title: XLA architecture
@@ -13,19 +11,26 @@ parts:
       file: terminology
     - title: Tooling
       file: tools
-    - title: From HLO to Thunks
-      file: hlo_to_thunks
-  - caption: Advanced topics
-    # These should be in alphabetical order unless otherwise noted.
+  - caption: How-to guides
     chapters:
-    - title: Operation semantics
-      file: operation_semantics
+    - title: Aliasing
+      file: aliasing
+    - title: Writing custom calls
+      file: custom_call
+    - title: Testing HLO passes
+      file: test_hlo_passes
+    - title: Develop a new backend for XLA
+      file: developing_new_backend
+  - caption: Conceptual guides
+    chapters:
     - title: Data representation
       file: shapes
       sections:
         - file: broadcasting
         - file: indexing
         - file: tiled_layout
+    - title: From HLO to Thunks
+      file: hlo_to_thunks
     - title: Performance
       file: performance
       sections:
@@ -33,6 +38,10 @@ parts:
           file: lhs_cost_model
         - title: Effort Levels
           file: effort_levels
+    - title: Async HLO instructions
+      file: async_ops
+    - title: SparseCore
+      file: sparsecore
     - title: XLA:GPU
       file: xla_gpu
       sections:
@@ -40,21 +49,12 @@ parts:
           file: gpu_architecture
         - file: emitters
         - file: persisted_autotuning
+        - title: Determinism
+          file: determinism
         - title: Multi-host HLO runner
           file: tools_multihost_hlo_runner
-    - title: Determinism
-      file: determinism
-    - title: Aliasing
-      file: aliasing
-    - title: Async HLO instructions
-      file: async_ops
-    - title: Writing custom calls
-      file: custom_call
-    - title: SparseCore
-      file: sparsecore
   - caption: Debugging
     chapters:
-    # This is the default tab for the Debugging section.
     - title: Dump HLO Computations
       file: hlo_dumps
     - title: Errors Overview
@@ -78,16 +78,14 @@ parts:
       file: oom_debugging
   - caption: Reference
     chapters:
+    - title: Operation semantics
+      file: operation_semantics
     - title: XLA Flags guidance
       file: flags_guidance
     - title: HLO Passes
       file: hlo_passes
-    - title: Testing HLO passes
-      file: test_hlo_passes
   - caption: Contributing
-    # These should be in alphabetical order unless otherwise noted.
     chapters:
-    # This is the default tab for the Contributing section.
     - title: Contributing
       file: contributing
     - title: Developer guide
@@ -96,8 +94,6 @@ parts:
       file: developer_environment
     - title: Build from source
       file: build_from_source
-    - title: Develop a new backend for XLA
-      file: developing_new_backend
     - title: Copybara quirks
       file: copybara
   - caption: PJRT Plugins
@@ -110,7 +106,6 @@ parts:
     - title: PJRT Examples
       file: pjrt/examples
   - caption: Using XLA in other ecosystems
-    # These should be in alphabetical order unless otherwise noted.
     chapters:
     - title: Using XLA in TensorFlow
       file: tf2xla/index
