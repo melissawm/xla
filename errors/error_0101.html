@@ -16,37 +16,40 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
@@ -64,6 +67,7 @@
     <link rel="prev" title="Error code: 0100" href="error_0100.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -79,19 +83,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../search.html"
       method="get">
@@ -99,7 +92,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search this book..."
          aria-label="Search this book..."
          autocomplete="off"
@@ -107,8 +99,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -124,7 +116,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -154,15 +147,11 @@
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         
@@ -178,48 +167,43 @@
 <li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../architecture.html">XLA architecture</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../terminology.html">Terminology</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flags_guidance.html">XLA flags guidance</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">How-to guides</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">XLA: Ops</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../aliasing.html">Aliasing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../custom_call.html">Writing custom calls</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../test_hlo_passes.html">Testing HLO passes</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../developing_new_backend.html">Develop a new backend for XLA</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Conceptual guides</span></p>
-<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../operation_semantics.html">Operation semantics</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../broadcasting.html">Broadcasting</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../indexing.html">Indexing Analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../indexing.html">Indexing analysis</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../tiled_layout.html">Tiled layout</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../hlo_to_thunks.html">From HLO to Thunks</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../performance.html">Performance</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../lhs_cost_model.html">LHS Cost Model</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../effort_levels.html">Effort Levels</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../aliasing.html">Aliasing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../async_ops.html">Async HLO instructions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../sparsecore.html">SparseCore</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
-
-
-<li class="toctree-l2"><a class="reference internal" href="../emitters.html">XLA:GPU Emitters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../persisted_autotuning.html">Persisted autotuning (GPU only)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../determinism.html">Determinism</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
-
+<li class="toctree-l1"><a class="reference internal" href="../hlo_passes.html">HLO passes</a></li>
 </ul>
-</details></li>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">XLA: Tools</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../sparsecore.html">SparseCore</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../lhs_cost_model.html">LHS cost model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../effort_levels.html">Effort levels</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Scaling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../scaling.html">Scaling content</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
 <ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../hlo_dumps.html">Dump HLO Computations</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../errors_overview.html">Errors Overview</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../error_codes.html">Error Codes</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hlo_dumps.html">Dump HLO computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../oom_debugging.html">Debug OOM errors with XProf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors_overview.html">Errors overview</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../error_codes.html">Error codes</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="error_0100.html">Error code: 0100</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Error code: 0101</a></li>
 <li class="toctree-l2"><a class="reference internal" href="error_0102.html">Error code: 0102</a></li>
@@ -234,13 +218,21 @@
 <li class="toctree-l2"><a class="reference internal" href="error_3001.html">Error code: E3001</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../oom_debugging.html">Debug OOM errors with XProf</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Reference</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">CPU &amp; GPU</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../operation_semantics.html">Operation semantics</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../flags_guidance.html">XLA Flags guidance</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../hlo_passes.html">HLO Passes</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../emitters.html">XLA:GPU emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../persisted_autotuning.html">Persisted autotuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../determinism.html">Determinism</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../hlo_to_thunks.html">From HLO to Thunks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing_new_backend.html">Develop a new backend for XLA</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
 <ul class="nav bd-sidenav">
@@ -248,14 +240,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../developer_environment.html">Setting up a development environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../test_hlo_passes.html">Testing HLO passes</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../copybara.html">Copybara quirks</a></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT Plugins</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT plugins</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../pjrt/index.html">PJRT - Uniform Device API</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pjrt/cpp_api_overview.html">PJRT C++ API Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../pjrt/examples.html">PJRT Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/cpp_api_overview.html">PJRT C++ API overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/examples.html">PJRT examples</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
 <ul class="nav bd-sidenav">
@@ -278,9 +271,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -363,7 +361,7 @@
 
 
 <button onclick="toggleFullScreen()"
-  class="btn btn-sm btn-fullscreen-button"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
   title="Fullscreen mode"
   data-bs-placement="bottom" data-bs-toggle="tooltip"
 >
@@ -377,25 +375,17 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
-<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </button>
 </div></div>
@@ -572,14 +562,16 @@ help identify unexpected peaks in memory consumption.</p></li>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
-  <div class="sidebar-secondary-item">
-  <div class="page-toc tocsection onthispage">
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> Contents
   </div>
-  <nav class="bd-toc-nav page-toc">
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#debugging">Debugging</a><ul class="nav section-nav flex-column">
@@ -634,8 +626,8 @@ By XLA Community
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

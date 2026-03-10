@@ -1,0 +1,706 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Hangs &#8212; XLA Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'megascale/hangs';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../newindex.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">XLA Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../newindex.html">
+                    XLA Developer Guide
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">XLA architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../terminology.html">Terminology</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../flags_guidance.html">XLA flags guidance</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">XLA: Ops</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../operation_semantics.html">Operation semantics</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../shapes.html">Data representation</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../broadcasting.html">Broadcasting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../indexing.html">Indexing analysis</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tiled_layout.html">Tiled layout</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../aliasing.html">Aliasing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../async_ops.html">Async HLO instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../hlo_passes.html">HLO passes</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">XLA: Tools</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../tools.html">Tooling</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tools_multihost_hlo_runner.html">Multi-Host HLO Runner</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="../sparsecore.html">SparseCore</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Performance</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../lhs_cost_model.html">LHS cost model</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../effort_levels.html">Effort levels</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Scaling</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../scaling.html">Scaling content</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Debugging</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../hlo_dumps.html">Dump HLO computations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../oom_debugging.html">Debug OOM errors with XProf</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../errors_overview.html">Errors overview</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../error_codes.html">Error codes</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_0100.html">Error code: 0100</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_0101.html">Error code: 0101</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_0102.html">Error code: 0102</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_0200.html">Error Code: E0200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_1000.html">Error code: 1000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_1001.html">Error code: 1001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_1200.html">Error code: 1200</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_2001.html">Error code: E2001</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_2002.html">Error code: E2002</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_2003.html">Error code: E2003</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_3000.html">Error code: E3000</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../errors/error_3001.html">Error code: E3001</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">CPU &amp; GPU</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../xla_gpu.html">XLA:GPU</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../gpu_architecture.html">XLA:GPU Architecture Overview</a></li>
+
+
+<li class="toctree-l2"><a class="reference internal" href="../emitters.html">XLA:GPU emitters</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../persisted_autotuning.html">Persisted autotuning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../determinism.html">Determinism</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../hlo_to_thunks.html">From HLO to Thunks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../custom_call.html">Writing custom calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developing_new_backend.html">Develop a new backend for XLA</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Contributing</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_guide.html">Developer guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../developer_environment.html">Setting up a development environment</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../build_from_source.html">Build from source</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../test_hlo_passes.html">Testing HLO passes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../copybara.html">Copybara quirks</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">PJRT plugins</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/index.html">PJRT - Uniform Device API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/pjrt_integration.html">Develop a new PJRT plugin</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/cpp_api_overview.html">PJRT C++ API overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pjrt/examples.html">PJRT examples</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Using XLA in other ecosystems</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../tf2xla/index.html">Using XLA in TensorFlow</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/autoclustering_xla.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+<li class="toctree-l2"><a class="reference internal" href="../tf2xla/tutorials/jit_compile.html">Copyright 2019 The TensorFlow Authors.</a></li>
+
+
+
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.jax.dev/en/latest/notebooks/thinking_in_jax.html">Using XLA in JAX</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://docs.pytorch.org/xla/release/r2.8/learn/pytorch-on-xla-devices.html">Using XLA in PyTorch</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/megascale/hangs.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Hangs</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#locate-the-megascale-hang-detected-error">Locate the Megascale Hang Detected Error</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnosis">Diagnosis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bad-tpu-chip-tensor-core-or-sparse-core">Bad TPU Chip (tensor core or sparse core)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#networking-issue">Networking issue</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#different-modules">Different modules</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fingerprint-mismatch-for-hlo-module">Fingerprint mismatch for HLO module</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input-stall">Data input stall</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unrecoverable-error">Unrecoverable error</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unknown-error">Unknown Error</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <!-- linter style off -->
+<section class="tex2jax_ignore mathjax_ignore" id="hangs">
+<h1>Hangs<a class="headerlink" href="#hangs" title="Link to this heading">#</a></h1>
+<section id="locate-the-megascale-hang-detected-error">
+<h2>Locate the Megascale Hang Detected Error<a class="headerlink" href="#locate-the-megascale-hang-detected-error" title="Link to this heading">#</a></h2>
+<p>If you see the following error message in your TPU worker logs, this means that
+MXLA timed out after detecting no progress:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Megascale</span> <span class="n">hang</span> <span class="n">detected</span><span class="p">:</span> <span class="n">Timed</span> <span class="n">out</span> <span class="n">waiting</span> <span class="k">for</span> <span class="mi">4</span> <span class="n">graphs</span> <span class="n">to</span> <span class="n">complete</span> <span class="n">at</span> <span class="n">launch_id</span> <span class="mf">13650.</span> <span class="n">Already</span> <span class="n">completed</span><span class="p">:</span> <span class="mf">100.</span> <span class="n">StepGloballyInProgress</span><span class="p">:</span> <span class="n">true</span><span class="o">.</span> <span class="n">Timeout</span><span class="p">:</span> <span class="mi">1</span><span class="n">m</span>
+</pre></div>
+</div>
+<ol class="arabic simple">
+<li><p>Workers will report errors to a coordinator for processing.</p>
+<ul class="simple">
+<li><p>For <strong>Pathways</strong> jobs: the digest can be found in the logs of
+<code class="docutils literal notranslate"><span class="pre">resource_manager</span></code> job.</p></li>
+<li><p>For <strong>McJAX</strong> jobs: the logs can be found on MXLA Coordinator. This is
+typically task 0 of slice 0.</p></li>
+</ul>
+</li>
+<li><p>Check logs around time of error detection, and look for <code class="docutils literal notranslate"><span class="pre">Megascale</span> <span class="pre">detects</span> <span class="pre">a</span> <span class="pre">hang</span></code>.</p></li>
+<li><p>Follow steps below to diagnose the issue based on the identified cause.</p></li>
+</ol>
+</section>
+<section id="diagnosis">
+<h2>Diagnosis<a class="headerlink" href="#diagnosis" title="Link to this heading">#</a></h2>
+<section id="bad-tpu-chip-tensor-core-or-sparse-core">
+<h3>Bad TPU Chip (tensor core or sparse core)<a class="headerlink" href="#bad-tpu-chip-tensor-core-or-sparse-core" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Megascale</span> <span class="n">detects</span> <span class="n">a</span> <span class="n">hang</span> <span class="n">that</span> <span class="ow">is</span> <span class="n">likely</span> <span class="n">caused</span> <span class="n">by</span> <span class="n">bad</span> <span class="n">TPU</span> <span class="n">chips</span> <span class="n">on</span> <span class="n">the</span> <span class="n">following</span> <span class="n">hosts</span><span class="o">.</span> <span class="n">Please</span> <span class="n">remove</span> <span class="n">the</span> <span class="n">hosts</span> <span class="kn">from</span><span class="w"> </span><span class="nn">the</span> <span class="n">fleet</span> <span class="ow">and</span> <span class="n">restart</span> <span class="n">the</span> <span class="n">workload</span><span class="o">.</span> <span class="n">If</span> <span class="n">problem</span> <span class="n">persists</span> <span class="n">please</span> <span class="n">contact</span> <span class="n">Megascale</span> <span class="n">XLA</span> <span class="n">team</span><span class="o">.</span>
+  <span class="n">The</span> <span class="n">host</span> <span class="n">that</span> <span class="n">have</span> <span class="n">bad</span> <span class="n">TPUs</span> <span class="n">are</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+  <span class="n">Full</span> <span class="n">error</span> <span class="n">digest</span><span class="p">:</span>
+    <span class="n">Potential</span> <span class="n">cause</span><span class="p">:</span> <span class="n">Bad</span> <span class="n">TPU</span> <span class="n">chips</span>
+    <span class="n">Potential</span> <span class="n">culprit</span> <span class="n">workers</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">job_name</span><span class="o">&gt;/&lt;</span><span class="n">task_id</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This error means that the issue is potentially caused by a faulty TPU chip. The
+error message should include the job information and host name of the faulty
+chip. In the example above, the faulty chip is on host <code class="docutils literal notranslate"><span class="pre">&lt;host_name&gt;</span></code>, affecting
+task <code class="docutils literal notranslate"><span class="pre">&lt;task_id&gt;</span></code> of the job <code class="docutils literal notranslate"><span class="pre">&lt;job_name&gt;</span></code>. You can configure your job to avoid
+that host.</p>
+<p><strong>Note:</strong> There are some cases that the hang was caused by a XLA or custom
+pallas kernel bug, but if you see the same host appearing multiple times (for
+example more than 3 times) in multiple hang events, the TPU on that host is very
+likely faulty.</p>
+</section>
+<section id="networking-issue">
+<h3>Networking issue<a class="headerlink" href="#networking-issue" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Megascale</span> <span class="n">detects</span> <span class="n">a</span> <span class="n">hang</span> <span class="n">that</span> <span class="ow">is</span> <span class="n">likely</span> <span class="n">caused</span> <span class="n">by</span> <span class="n">a</span> <span class="n">networking</span> <span class="n">issue</span><span class="o">.</span> <span class="n">Please</span> <span class="n">examine</span> <span class="n">the</span> <span class="n">underlying</span> <span class="n">networking</span> <span class="n">stack</span> <span class="k">for</span> <span class="n">the</span> <span class="n">following</span> <span class="n">hosts</span><span class="o">.</span>
+  <span class="n">The</span> <span class="n">hosts</span> <span class="n">are</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+  <span class="n">Full</span> <span class="n">error</span> <span class="n">digest</span><span class="p">:</span>
+    <span class="n">Potential</span> <span class="n">cause</span><span class="p">:</span> <span class="n">Networking</span> <span class="n">issue</span>
+    <span class="n">Potential</span> <span class="n">culprit</span> <span class="n">workers</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">host_name_1</span><span class="o">&gt;</span><span class="p">,</span> <span class="o">&lt;</span><span class="n">host_name_2</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This error indicates that your job has encountered a failed network link. The
+error message should include a single or pair of job name, task id, host name of
+the faulty network link. In the example above, the faulty network link is
+between host <code class="docutils literal notranslate"><span class="pre">host_name_1</span></code> and <code class="docutils literal notranslate"><span class="pre">host_name_2</span></code>. Sometimes RapidEye can further
+localize the faulty host if a single host appears in multiple broken network
+links. You can configure your job to avoid those hosts.</p>
+</section>
+<section id="different-modules">
+<h3>Different modules<a class="headerlink" href="#different-modules" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Megascale</span> <span class="n">detects</span> <span class="n">a</span> <span class="n">hang</span> <span class="n">that</span> <span class="ow">is</span> <span class="n">likely</span> <span class="n">caused</span> <span class="n">by</span> <span class="n">running</span> <span class="n">different</span> <span class="n">modules</span> <span class="n">on</span> <span class="n">different</span> <span class="n">devices</span><span class="o">.</span> <span class="n">Please</span> <span class="n">confirm</span> <span class="n">that</span> <span class="nb">all</span> <span class="n">workers</span> <span class="ow">is</span> <span class="n">running</span> <span class="n">the</span> <span class="n">exact</span> <span class="n">same</span> <span class="n">program</span><span class="o">.</span> <span class="n">It</span> <span class="n">can</span> <span class="n">also</span> <span class="n">be</span> <span class="n">caused</span> <span class="n">by</span> <span class="n">a</span> <span class="n">hang</span> <span class="ow">in</span> <span class="n">a</span> <span class="n">subset</span> <span class="n">of</span> <span class="n">devices</span> <span class="ow">and</span> <span class="n">the</span> <span class="n">unaffected</span> <span class="n">devices</span> <span class="n">have</span> <span class="n">moved</span> <span class="n">on</span> <span class="n">to</span> <span class="n">the</span> <span class="nb">next</span> <span class="n">program</span><span class="o">.</span> <span class="n">Please</span> <span class="n">inspect</span> <span class="n">the</span> <span class="n">digest</span> <span class="n">below</span> <span class="n">to</span> <span class="n">further</span> <span class="n">root</span> <span class="n">cause</span> <span class="n">the</span> <span class="n">hang</span><span class="o">.</span>
+<span class="n">Example</span> <span class="n">hosts</span> <span class="n">that</span> <span class="n">have</span> <span class="n">different</span> <span class="n">HLO</span> <span class="n">modules</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+<span class="n">Full</span> <span class="n">error</span> <span class="n">digest</span><span class="p">:</span>
+  <span class="n">Potential</span> <span class="n">cause</span><span class="p">:</span> <span class="n">Different</span> <span class="n">module</span>
+  <span class="n">Potential</span> <span class="n">culprit</span> <span class="n">workers</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+  <span class="n">TPU</span> <span class="n">stats</span><span class="p">:</span>
+    <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">pc</span><span class="o">&gt;</span>
+  <span class="n">TPU</span> <span class="n">states</span><span class="p">:</span>
+    <span class="n">Module</span><span class="p">:</span> <span class="n">jit_loss_and_grad</span>
+    <span class="n">Fingerprint</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">fingerprint</span><span class="o">&gt;</span>
+    <span class="n">Launch</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">193</span>
+      <span class="o">&lt;</span><span class="n">tag</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">pc</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&lt;</span><span class="n">hlo</span><span class="o">&gt;</span><span class="p">):</span> <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+    <span class="n">Module</span><span class="p">:</span> <span class="n">jit_optimizer_apply</span>
+    <span class="n">Fingerprint</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">fingerprint</span><span class="o">&gt;</span>
+    <span class="n">Launch</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">0</span>
+      <span class="o">&lt;</span><span class="n">tag</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">pc</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&lt;</span><span class="n">hlo</span><span class="o">&gt;</span><span class="p">):</span> <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This error may indicate that a hang has occurred in a subset of workers, causing
+those workers to be stuck at the current module while unaffected workers advance
+to the next module. To identify the root cause, inspect the digest printed by
+RapidEye in the logs.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">TPU</span> <span class="pre">states</span></code> section of the logs shows which modules are running on which
+workers. In the example above, workers are running different modules:
+<code class="docutils literal notranslate"><span class="pre">jit_loss_and_grad</span></code> and <code class="docutils literal notranslate"><span class="pre">jit_optimizer_apply</span></code>.</p>
+</section>
+<section id="fingerprint-mismatch-for-hlo-module">
+<h3>Fingerprint mismatch for HLO module<a class="headerlink" href="#fingerprint-mismatch-for-hlo-module" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Megascale</span> <span class="n">detects</span> <span class="n">a</span> <span class="n">hang</span> <span class="n">that</span> <span class="ow">is</span> <span class="n">likely</span> <span class="n">caused</span> <span class="n">by</span> <span class="n">inconsistent</span> <span class="n">HLO</span> <span class="n">module</span> <span class="n">compilation</span> <span class="n">across</span> <span class="n">workers</span><span class="o">.</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">likely</span> <span class="n">a</span> <span class="n">bug</span> <span class="ow">in</span> <span class="n">JAX</span> <span class="n">tracing</span> <span class="ow">or</span> <span class="n">XLA</span> <span class="n">compiler</span><span class="o">.</span> <span class="n">Please</span> <span class="n">inspect</span> <span class="n">the</span> <span class="n">HLO</span> <span class="n">dumps</span> <span class="n">to</span> <span class="n">confirm</span> <span class="n">the</span> <span class="n">root</span> <span class="n">cause</span><span class="o">.</span>
+  <span class="n">Example</span> <span class="n">hosts</span> <span class="n">that</span> <span class="n">have</span> <span class="n">different</span> <span class="n">HLO</span> <span class="n">fingerprints</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+  <span class="n">Full</span> <span class="n">error</span> <span class="n">digest</span><span class="p">:</span>
+    <span class="n">Potential</span> <span class="n">cause</span><span class="p">:</span> <span class="n">Fingerprint</span> <span class="n">mismatch</span>
+  <span class="n">Potential</span> <span class="n">culprit</span> <span class="n">workers</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+  <span class="n">TPU</span> <span class="n">stats</span><span class="p">:</span>
+    <span class="n">Module</span><span class="p">:</span> <span class="n">reduce</span><span class="mf">.31</span>
+    <span class="n">Fingerprint</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">fingerprint_1</span><span class="o">&gt;</span>
+    <span class="n">Launch</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">37</span>
+      <span class="o">&lt;</span><span class="n">tag</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">pc</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&lt;</span><span class="n">hlo</span><span class="o">&gt;</span><span class="p">):</span> <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+    <span class="n">Module</span><span class="p">:</span> <span class="n">reduce</span><span class="mf">.31</span>
+    <span class="n">Fingerprint</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">fingerprint_2</span><span class="o">&gt;</span>
+    <span class="n">Launch</span> <span class="n">ID</span><span class="p">:</span> <span class="mi">40</span>
+      <span class="o">&lt;</span><span class="n">tag</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">pc</span><span class="o">&gt;</span><span class="p">(</span><span class="o">&lt;</span><span class="n">hlo</span><span class="o">&gt;</span><span class="p">):</span> <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This log message indicates the hang was likely caused by inconsistent HLO module
+compilation across workers, possibly due to an issue with JAX tracing or the XLA
+compiler. If you see this log, follow <a class="reference external" href="https://openxla.org/xla/hlo_dumps">these
+steps</a> to collect HLO dumps from the culprit
+workers for further debugging.</p>
+</section>
+<section id="data-input-stall">
+<h3>Data input stall<a class="headerlink" href="#data-input-stall" title="Link to this heading">#</a></h3>
+<p><strong>Note:</strong> This error is not yet implemented.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Megascale</span> <span class="n">detects</span> <span class="n">a</span> <span class="n">hang</span> <span class="n">that</span> <span class="ow">is</span> <span class="n">likely</span> <span class="n">caused</span> <span class="n">by</span> <span class="n">data</span> <span class="nb">input</span> <span class="n">stall</span> <span class="n">on</span> <span class="n">the</span>
+<span class="n">following</span> <span class="n">hosts</span><span class="o">.</span> <span class="n">Please</span> <span class="n">check</span> <span class="n">the</span> <span class="n">workers</span> <span class="n">to</span> <span class="n">make</span> <span class="n">sure</span> <span class="n">the</span> <span class="n">data</span> <span class="nb">input</span> <span class="n">pipeline</span>
+<span class="ow">is</span> <span class="n">working</span> <span class="n">properly</span><span class="o">.</span>
+  <span class="n">The</span> <span class="n">host</span> <span class="n">that</span> <span class="n">have</span> <span class="n">data</span> <span class="nb">input</span> <span class="n">stalls</span> <span class="n">are</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">host_name</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This error means that all devices launched the same program, but that input data
+was not provided to the program before the system timed out. To fix this issue,
+confirm that:</p>
+<ol class="arabic simple">
+<li><p>The identified hosts can access the input datasource.</p></li>
+<li><p>The identified hosts are properly loading/parsing the input datasource.</p></li>
+<li><p>Confirm identified hosts are not throttled on reads to the input datasource.</p></li>
+</ol>
+</section>
+<section id="unrecoverable-error">
+<h3>Unrecoverable error<a class="headerlink" href="#unrecoverable-error" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Some</span> <span class="n">workers</span> <span class="n">have</span> <span class="n">halted</span> <span class="k">with</span> <span class="n">an</span> <span class="n">unrecoverable</span> <span class="n">error</span><span class="p">:</span>
+  <span class="o">&lt;</span><span class="n">worker</span><span class="o">&gt;</span> <span class="p">:</span> <span class="p">{</span><span class="n">some</span> <span class="n">error</span><span class="p">}</span>
+  <span class="n">Please</span> <span class="n">inspect</span> <span class="n">the</span> <span class="n">error</span> <span class="n">log</span> <span class="n">of</span> <span class="n">these</span> <span class="n">workers</span><span class="p">:</span>
+  <span class="o">&lt;</span><span class="n">worker</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>This error means that there was an issue that prevented the program from
+properly executing and could not be recovered automatically. This error was
+unable to be specifically categorized. Further information can be obtained from
+checking the logs of the worker(s) mentioned in the error report.</p>
+<p>If the error appears to be specific to the given machine (ex. failure to copy
+data from TPU to host), then you can configure your job to avoid those hosts.</p>
+</section>
+<section id="unknown-error">
+<h3>Unknown Error<a class="headerlink" href="#unknown-error" title="Link to this heading">#</a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Megascale</span> <span class="n">detects</span> <span class="n">a</span> <span class="n">hang</span> <span class="n">but</span> <span class="n">cannot</span> <span class="n">determine</span> <span class="n">the</span> <span class="n">root</span> <span class="n">cause</span><span class="o">.</span> <span class="n">Please</span> <span class="n">inspect</span> <span class="n">the</span>
+<span class="n">full</span> <span class="n">digest</span> <span class="n">below</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>This error means that there was an issue that prevented the program from
+properly executing and could not be recovered automatically. This error was
+unable to be specifically categorized and there is no further error information
+available.</p>
+<!-- linter style on -->
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./megascale"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#locate-the-megascale-hang-detected-error">Locate the Megascale Hang Detected Error</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diagnosis">Diagnosis</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bad-tpu-chip-tensor-core-or-sparse-core">Bad TPU Chip (tensor core or sparse core)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#networking-issue">Networking issue</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#different-modules">Different modules</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#fingerprint-mismatch-for-hlo-module">Fingerprint mismatch for HLO module</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-input-stall">Data input stall</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unrecoverable-error">Unrecoverable error</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#unknown-error">Unknown Error</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By XLA Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
